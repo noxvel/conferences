@@ -20,7 +20,7 @@ public class UserDAOJDBC implements UserDAO{
     private static final String SQL_FIND_BY_ID =
             "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
-                    "WHERE id = ?";
+                    "WHERE u.id = ?";
     private static final String SQL_FIND_BY_EMAIL_AND_PASSWORD =
             "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
@@ -30,15 +30,15 @@ public class UserDAOJDBC implements UserDAO{
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
                     "ORDER BY u.id";
     private static final String SQL_INSERT =
-            "INSERT INTO User (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
+            "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
     private static final String SQL_UPDATE =
-            "UPDATE User SET email = ?, first_name = ?, last_name = ?, user_role_id = ? WHERE id = ?";
+            "UPDATE user SET email = ?, first_name = ?, last_name = ?, user_role_id = ? WHERE id = ?";
     private static final String SQL_DELETE =
-            "DELETE FROM User WHERE id = ?";
+            "DELETE FROM user WHERE id = ?";
     private static final String SQL_EXIST_EMAIL =
-            "SELECT id FROM User WHERE email = ?";
+            "SELECT id FROM user WHERE email = ?";
     private static final String SQL_CHANGE_PASSWORD =
-            "UPDATE User SET password = MD5(?) WHERE id = ?";
+            "UPDATE user SET password = MD5(?) WHERE id = ?";
 
     // Vars ---------------------------------------------------------------------------------------
 

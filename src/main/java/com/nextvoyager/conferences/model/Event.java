@@ -21,6 +21,14 @@ public class Event {
     private List<Report> reports;
     private Set<User> participants;
 
+    public Event() {
+
+    }
+
+    public Event(Integer id) {
+        this.id = id;
+    }
+
     public Event(Integer id, String name, String place, Date beginDate, Date endDate, Integer participantsCame, List<Report> reports, Set<User> participants) {
         this.id = id;
         this.name = name;
@@ -30,5 +38,10 @@ public class Event {
         this.participantsCame = participantsCame;
         this.reports = reports;
         this.participants = participants;
+    }
+
+    public Event(int event_id, String event_name) {
+        this.id = id;
+        this.name = event_name;
     }
 }

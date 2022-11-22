@@ -25,6 +25,14 @@ public class User implements Serializable {
 
     private Set<Event> events;
 
+    public User() {
+
+    }
+
+    public User(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

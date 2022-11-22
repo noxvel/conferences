@@ -4,28 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="560fc31e-011c-4e18-8610-bf29de6dbd6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOProperties.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/exeption/DAOConfigurationException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/exeption/DAOException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/user/UserDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/user/UserDAOJDBC.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Event.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Report.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+    <list default="true" id="560fc31e-011c-4e18-8610-bf29de6dbd6c" name="Changes" comment="init commit">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/EventController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/LoginController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/MainPageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/RegistrationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/ReportController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAOJDBC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/report/ReportDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/report/ReportDAOJDBC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/event.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/footer.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/header.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/registration.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/report.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/user/UserDAOJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/user/UserDAOJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +38,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -61,6 +64,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -68,7 +72,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Other File Types&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -77,11 +81,11 @@
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\WEB-INF" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\resources" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\java" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\target\conferences" />
-      <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.nextvoyager.conferences.model" />
@@ -101,7 +105,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="conferences [package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+    <configuration name="conferences [clean,package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
         <option name="myRunnerSettings" />
@@ -112,6 +116,7 @@
             </option>
             <option name="goals">
               <list>
+                <option value="clean" />
                 <option value="package" />
               </list>
             </option>
@@ -143,12 +148,12 @@
       </option>
       <option name="vmOptions" value="" />
       <method v="2">
-        <option name="Make" enabled="true" />
+        <option name="MakeProject" enabled="true" />
       </method>
     </configuration>
     <list>
       <item itemvalue="Application.TestDAO" />
-      <item itemvalue="Maven.conferences [package]" />
+      <item itemvalue="Maven.conferences [clean,package]" />
       <item itemvalue="Smart Tomcat.Tomcat10" />
     </list>
     <recent_temporary>
@@ -166,6 +171,14 @@
       <option name="presentableId" value="Default" />
       <updated>1668424010746</updated>
     </task>
+    <task id="LOCAL-00001" summary="init commit">
+      <created>1668779966899</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1668779966899</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -178,6 +191,21 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="init commit" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/ReportController.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

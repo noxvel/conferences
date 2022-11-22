@@ -1,6 +1,10 @@
 package com.nextvoyager.conferences.dao;
 
+import com.nextvoyager.conferences.dao.event.EventDAO;
+import com.nextvoyager.conferences.dao.event.EventDAOJDBC;
 import com.nextvoyager.conferences.dao.exeption.*;
+import com.nextvoyager.conferences.dao.report.ReportDAO;
+import com.nextvoyager.conferences.dao.report.ReportDAOJDBC;
 import com.nextvoyager.conferences.dao.user.UserDAO;
 import com.nextvoyager.conferences.dao.user.UserDAOJDBC;
 
@@ -135,7 +139,13 @@ public abstract class DAOFactory {
         return new UserDAOJDBC(this);
     }
 
-    // You can add more DAO implementation getters here.
+    public EventDAO getEventDAO() {
+        return new EventDAOJDBC(this);
+    }
+
+    public ReportDAO getReportDAO() {
+        return new ReportDAOJDBC(this);
+    }
 
 }
 
