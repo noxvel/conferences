@@ -8,7 +8,13 @@
     <main>
 
         <section class="py-3 text-center container">
-            <div class="col-6 col-md-8">
+            <div class="input-group">
+              <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                <option selected value="date" >by date</option>
+                <option value="reports">by number of reports</option>
+                <option value="participants">by number of participants</option>
+              </select>
+              <button class="btn btn-outline-secondary" type="button">Sort</button>
             </div>
         </section>
 

@@ -40,8 +40,8 @@ public class Event {
         this.participants = participants;
     }
 
-    public Event(int event_id, String event_name) {
+    public Event(int id, String name) {
         this.id = id;
-        this.name = event_name;
+        this.name = name;
     }
 }
