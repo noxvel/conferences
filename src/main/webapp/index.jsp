@@ -8,14 +8,16 @@
     <main>
 
         <section class="py-3 text-center container">
-            <div class="input-group">
-              <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                <option selected value="date" >by date</option>
-                <option value="reports">by number of reports</option>
-                <option value="participants">by number of participants</option>
-              </select>
-              <button class="btn btn-outline-secondary" type="button">Sort</button>
-            </div>
+            <form action="" method="post">
+                <div class="input-group">
+                  <select name="orderType" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                    <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
+                    <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
+                    <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
+                  </select>
+                  <button class="btn btn-outline-secondary" type="submit">Sort</button>
+                </div>
+            </form>
         </section>
 
         <div class="album py-5 bg-light">
@@ -35,14 +37,33 @@
                                             <a role="button" href="event?eventID=${event.id}" class="btn btn-sm btn-outline-primary">View</a>
                                             <a role="button" href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
                                         </div>
-                                        <small class="text-muted">${event.participantsCame} participants</small>
+                                        <small class="text-muted">${event.reportsCount} reports</small>
+                                        <small class="text-muted">${event.participantsCount} participants</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
                     
+                 
                 </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
 

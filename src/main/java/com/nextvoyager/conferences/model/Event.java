@@ -16,6 +16,8 @@ public class Event {
     private String place;
     private Date beginDate;
     private Date endDate;
+    private Integer reportsCount;
+    private Integer participantsCount;
     private Integer participantsCame;
 
     private List<Report> reports;

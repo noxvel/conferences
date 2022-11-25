@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="560fc31e-011c-4e18-8610-bf29de6dbd6c" name="Changes" comment="Added view layer">
+    <list default="true" id="560fc31e-011c-4e18-8610-bf29de6dbd6c" name="Changes" comment="Fixed some view issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/MainPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/MainPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAOJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAOJDBC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/header.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/report.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/report.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,11 +51,11 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/s.bogevskiy/IdeaProjects/conferences",
+    "last_opened_file_path": "C:/Users/s.bogevskiy/IdeaProjects/topic07-task02",
     "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Other File Types"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -74,19 +75,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Maven.conferences [clean,package]">
-    <configuration name="TestDAO" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.nextvoyager.conferences.TestDAO" />
-      <module name="conferences" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.nextvoyager.conferences.controller.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="conferences [clean,package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -121,6 +109,9 @@
       <predefined_log_file id="Tomcat Host Manager Log" />
       <option name="contextPath" value="/conferences" />
       <option name="docBase" value="$PROJECT_DIR$/src/main/webapp" />
+      <option name="envOptions">
+        <map />
+      </option>
       <option name="tomcatInfo">
         <TomcatInfo>
           <option name="name" value="Apache Tomcat/10.1.1" />
@@ -130,19 +121,13 @@
       </option>
       <option name="vmOptions" value="" />
       <method v="2">
-        <option name="MakeProject" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="package" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.TestDAO" />
       <item itemvalue="Maven.conferences [clean,package]" />
       <item itemvalue="Smart Tomcat.Tomcat10" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.TestDAO" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -167,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669132484287</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Fixed some view issues">
+      <created>1669216999820</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669216999820</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -184,7 +176,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init commit" />
     <MESSAGE value="Added view layer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added view layer" />
+    <MESSAGE value="Fixed some view issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed some view issues" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

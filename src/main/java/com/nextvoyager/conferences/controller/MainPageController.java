@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.controller;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.event.EventDAO;
+import com.nextvoyager.conferences.dao.event.EventDAOJDBC;
 import com.nextvoyager.conferences.model.Event;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,9 +24,10 @@ public class MainPageController extends HttpServlet {
         // Obtain UserDAO.
         EventDAO eventDAO = javabase.getEventDAO();
 
-        List<Event> events = eventDAO.list();
+        List<Event> events = eventDAO.list(EventDAO.OrderType.Date);
 
         req.setAttribute("events", events);
+        req.setAttribute("orderType", EventDAO.OrderType.Date);
         req.getRequestDispatcher("index.jsp").forward(req,resp);
 
 //
@@ -100,4 +102,22 @@ public class MainPageController extends HttpServlet {
 //
 //        resp.getWriter().println("Hi new User!!!");
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EventDAO.OrderType orderType = EventDAO.OrderType.valueOf(req.getParameter("orderType"));
+
+        // Obtain DAOFactory.
+        DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
+
+        // Obtain UserDAO.
+        EventDAO eventDAO = javabase.getEventDAO();
+
+        List<Event> events = eventDAO.list(orderType);
+
+        req.setAttribute("events", events);
+        req.setAttribute("orderType", orderType);
+        req.getRequestDispatcher("index.jsp").forward(req,resp);
+    }
+
 }
