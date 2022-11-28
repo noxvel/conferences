@@ -2,7 +2,6 @@ package com.nextvoyager.conferences.controller;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.event.EventDAO;
-import com.nextvoyager.conferences.dao.event.EventDAOJDBC;
 import com.nextvoyager.conferences.model.Event;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,10 +12,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("")
-public class MainPageController extends HttpServlet {
+@WebServlet("/home")
+public class HomePageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String orderTypeParam = req.getParameter("orderType");
+        String pageParam = req.getParameter("page");
+
+        // Default values for list of events
+        EventDAO.OrderType orderType = EventDAO.OrderType.Date;
+        Integer page = 1;
+        Integer limit = 6;
+
+        if (orderTypeParam != null) {
+            orderType = EventDAO.OrderType.valueOf(orderTypeParam);
+        }
+        if (pageParam != null) {
+            page = Integer.valueOf(pageParam);
+        }
 
         // Obtain DAOFactory.
         DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
@@ -24,11 +37,16 @@ public class MainPageController extends HttpServlet {
         // Obtain UserDAO.
         EventDAO eventDAO = javabase.getEventDAO();
 
-        List<Event> events = eventDAO.list(EventDAO.OrderType.Date);
+//        List<Event> events = eventDAO.list(orderType);
+        EventDAO.ListWithCountResult countAndList = eventDAO.listWithPagination(orderType, page, limit);
 
-        req.setAttribute("events", events);
-        req.setAttribute("orderType", EventDAO.OrderType.Date);
-        req.getRequestDispatcher("index.jsp").forward(req,resp);
+        req.setAttribute("events", countAndList.getList());
+        req.setAttribute("eventCount", countAndList.getCount());
+        req.setAttribute("limit", limit);
+        req.setAttribute("page", page);
+        req.setAttribute("orderType", orderType);
+        req.setAttribute("numOfPages", (int)Math.ceil((double)countAndList.getCount()/limit));
+        req.getRequestDispatcher("home.jsp").forward(req,resp);
 
 //
 //        // Obtain DAOFactory.
@@ -101,23 +119,6 @@ public class MainPageController extends HttpServlet {
 //        System.out.println("Thus, amount of users in database is: " + users.size());
 //
 //        resp.getWriter().println("Hi new User!!!");
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        EventDAO.OrderType orderType = EventDAO.OrderType.valueOf(req.getParameter("orderType"));
-
-        // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
-
-        // Obtain UserDAO.
-        EventDAO eventDAO = javabase.getEventDAO();
-
-        List<Event> events = eventDAO.list(orderType);
-
-        req.setAttribute("events", events);
-        req.setAttribute("orderType", orderType);
-        req.getRequestDispatcher("index.jsp").forward(req,resp);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.nextvoyager.conferences.dao.event;
 
-import com.nextvoyager.conferences.controller.MainPageController;
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.Event;
+import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +33,7 @@ public interface EventDAO {
      * @return A list of all events from the database ordered by event ID.
      * @throws DAOException If something fails at database level.
      */
-    public Map<Integer,List<Event>> listWithPagination(OrderType orderType, Integer limit, Integer offset) throws DAOException;
+    public ListWithCountResult listWithPagination(OrderType orderType, Integer page, Integer limit) throws DAOException;
 
     /**
      * Create the given event in the database. The event ID must be null, otherwise it will throw
@@ -66,5 +66,12 @@ public interface EventDAO {
         Date,
         ReportsCount,
         ParticipantsCount
+    }
+
+
+    @Data
+    public static class ListWithCountResult{
+        private Integer count;
+        private List<Event> list;
     }
 }

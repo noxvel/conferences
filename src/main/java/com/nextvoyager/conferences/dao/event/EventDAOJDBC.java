@@ -1,11 +1,11 @@
 package com.nextvoyager.conferences.dao.event;
 
-import com.nextvoyager.conferences.controller.MainPageController;
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.dao.report.ReportDAOJDBC;
 import com.nextvoyager.conferences.model.Event;
 import com.nextvoyager.conferences.model.Report;
+import lombok.Data;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class EventDAOJDBC implements EventDAO{
                 ResultSet resultSet = statement.executeQuery();
         ) {
             while (resultSet.next()) {
-                events.add(map(resultSet));
+                events.add(mapForList(resultSet));
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
@@ -141,9 +141,10 @@ public class EventDAOJDBC implements EventDAO{
     }
 
     @Override
-    public Map<Integer, List<Event>> listWithPagination(OrderType orderType, Integer limit, Integer offset) throws DAOException {
-        Map<Integer, List<Event>> countAndList = new HashMap<>();
+    public ListWithCountResult listWithPagination(OrderType orderType, Integer page, Integer limit) throws DAOException {
+        ListWithCountResult result = new ListWithCountResult();
         List<Event> events = new ArrayList<>();
+        result.setList(events);
 
         String currentSQL = SQL_LIST_ORDER_BY_BEGIN_DATE;
         switch (orderType) {
@@ -155,7 +156,10 @@ public class EventDAOJDBC implements EventDAO{
                 break;
         }
 
-        Object[] valuesPagination = {limit,offset};
+        Integer offset = 0;
+        offset = (page - 1) * limit;
+
+        Object[] valuesPagination = {offset,limit};
         currentSQL += "LIMIT ?, ? ";
 
         try (
@@ -165,17 +169,17 @@ public class EventDAOJDBC implements EventDAO{
                 PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
                 ResultSet resultSetList = statementList.executeQuery();
         ) {
-            while (resultSetList.next()) {
-                events.add(map(resultSetList));
-            }
-            if (resultSetCountAll.first()) {
-                countAndList.put(resultSetCountAll.getInt("count_all"), events);
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    events.add(mapForList(resultSetList));
+                }
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
 
-        return countAndList;
+        return result;
     }
 
     @Override
@@ -279,10 +283,22 @@ public class EventDAOJDBC implements EventDAO{
         event.setBeginDate(resultSet.getDate("begin_date"));
         event.setEndDate(resultSet.getDate("end_date"));
         event.setParticipantsCame(resultSet.getInt("participants_came"));
+        return event;
+    }
+
+    private static Event mapForList(ResultSet resultSet) throws SQLException {
+        Event event = new Event();
+        event.setId(resultSet.getInt("id"));
+        event.setName(resultSet.getString("name"));
+        event.setPlace(resultSet.getString("place"));
+        event.setBeginDate(resultSet.getDate("begin_date"));
+        event.setEndDate(resultSet.getDate("end_date"));
+        event.setParticipantsCame(resultSet.getInt("participants_came"));
         event.setReportsCount(resultSet.getInt("r_count"));
         event.setParticipantsCount(resultSet.getInt("p_count"));
         return event;
     }
+
 
 
 
