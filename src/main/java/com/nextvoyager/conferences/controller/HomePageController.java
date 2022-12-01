@@ -32,7 +32,7 @@ public class HomePageController extends HttpServlet {
         }
 
         // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
+        DAOFactory javabase = DAOFactory.getInstance();
 
         // Obtain UserDAO.
         EventDAO eventDAO = javabase.getEventDAO();

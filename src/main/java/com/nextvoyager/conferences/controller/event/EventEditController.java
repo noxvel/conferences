@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller;
+package com.nextvoyager.conferences.controller.event;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.event.EventDAO;
@@ -10,16 +10,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 
-@WebServlet("/event")
-public class EventController extends HttpServlet {
+@WebServlet("/event/edit")
+public class EventEditController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer eventID = Integer.valueOf(req.getParameter("eventID"));
 
         // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
+        DAOFactory javabase = DAOFactory.getInstance();
 
         // Obtain UserDAO.
         EventDAO eventDAO = javabase.getEventDAO();
@@ -27,6 +29,12 @@ public class EventController extends HttpServlet {
         Event event = eventDAO.find(eventID);
 
         req.setAttribute("event", event);
-        req.getRequestDispatcher("event.jsp").forward(req,resp);
+
+        req.getRequestDispatcher("event-edit.jsp").forward(req,resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }

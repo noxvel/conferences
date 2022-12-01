@@ -5,13 +5,10 @@ import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.dao.report.ReportDAOJDBC;
 import com.nextvoyager.conferences.model.Event;
 import com.nextvoyager.conferences.model.Report;
-import lombok.Data;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.nextvoyager.conferences.dao.DAOUtil.prepareStatement;
 import static com.nextvoyager.conferences.dao.DAOUtil.toSqlDate;
@@ -21,12 +18,12 @@ public class EventDAOJDBC implements EventDAO{
     // Constants ----------------------------------------------------------------------------------
 
     private static final String SQL_FIND_BY_ID =
-            "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came FROM event AS e " +
+            "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came, e.description FROM event AS e " +
                     "WHERE e.id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO event (name, place, begin_date, end_date, participants_came) VALUES (?, ?, ?, ?, ?)";
+            "INSERT INTO event (name, place, begin_date, end_date, participants_came, description) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE =
-            "UPDATE event SET name = ?, place = ?, begin_date = ?, end_date = ?, participants_came = ? WHERE id = ?";
+            "UPDATE event SET name = ?, place = ?, begin_date = ?, end_date = ?, participants_came = ?, description = ? WHERE id = ?";
     private static final String SQL_DELETE =
             "DELETE FROM event WHERE id = ?";
     private static final String SQL_LIST =
@@ -38,7 +35,8 @@ public class EventDAOJDBC implements EventDAO{
     private static final String SQL_LIST_ORDER_BY_REPORTS = SQL_LIST + "ORDER BY r_count ";
     private static final String SQL_LIST_ORDER_BY_PARTICIPANTS = SQL_LIST + "ORDER BY p_count ";
     private static final String SQL_LIST_EVENT_REPORTS =
-            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, s.name AS report_status_name, e.name AS event_name FROM report AS r " +
+            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, r.description, " +
+                            "s.name AS report_status_name, e.name AS event_name FROM report AS r " +
                     "LEFT JOIN report_status AS s ON r.report_status_id = s.id " +
                     "LEFT JOIN event AS e ON r.event_id = e.id " +
                     "WHERE r.event_id = ? " +
@@ -156,7 +154,7 @@ public class EventDAOJDBC implements EventDAO{
                 break;
         }
 
-        Integer offset = 0;
+        int offset = 0;
         offset = (page - 1) * limit;
 
         Object[] valuesPagination = {offset,limit};
@@ -193,7 +191,8 @@ public class EventDAOJDBC implements EventDAO{
                 event.getPlace(),
                 toSqlDate(event.getBeginDate()),
                 toSqlDate(event.getEndDate()),
-                event.getParticipantsCame()
+                event.getParticipantsCame(),
+                event.getDescription()
         };
 
         try (
@@ -229,6 +228,7 @@ public class EventDAOJDBC implements EventDAO{
                 toSqlDate(event.getBeginDate()),
                 toSqlDate(event.getEndDate()),
                 event.getParticipantsCame(),
+                event.getDescription(),
                 event.getId()
         };
 
@@ -283,6 +283,7 @@ public class EventDAOJDBC implements EventDAO{
         event.setBeginDate(resultSet.getDate("begin_date"));
         event.setEndDate(resultSet.getDate("end_date"));
         event.setParticipantsCame(resultSet.getInt("participants_came"));
+        event.setDescription(resultSet.getString("description"));
         return event;
     }
 

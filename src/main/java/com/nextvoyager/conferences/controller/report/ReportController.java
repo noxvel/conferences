@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller;
+package com.nextvoyager.conferences.controller.report;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.report.ReportDAO;
@@ -11,14 +11,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/report")
+@WebServlet("/event/report/view")
 public class ReportController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
 
         // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
+        DAOFactory javabase = DAOFactory.getInstance();
 
         // Obtain UserDAO.
         ReportDAO reportDAO = javabase.getReportDAO();
@@ -26,6 +26,6 @@ public class ReportController extends HttpServlet {
         Report report = reportDAO.find(reportID);
 
         req.setAttribute("report", report);
-        req.getRequestDispatcher("report.jsp").forward(req,resp);
+        req.getRequestDispatcher("report-view.jsp").forward(req,resp);
     }
 }

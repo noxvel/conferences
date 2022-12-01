@@ -16,6 +16,7 @@ public class Report {
     private User speaker;
     private Report.Status status;
     private Event event;
+    private String description;
 
     @Getter
     @ToString

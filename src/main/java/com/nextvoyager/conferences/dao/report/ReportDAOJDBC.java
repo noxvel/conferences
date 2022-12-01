@@ -20,19 +20,21 @@ public class ReportDAOJDBC implements ReportDAO {
     // Constants ----------------------------------------------------------------------------------
 
     private static final String SQL_FIND_BY_ID =
-            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, s.name AS report_status_name, e.name AS event_name FROM report AS r " +
+            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, r.description, " +
+                            "s.name AS report_status_name, e.name AS event_name FROM report AS r " +
                     "LEFT JOIN report_status AS s ON r.report_status_id = s.id " +
                     "LEFT JOIN event AS e ON r.event_id = e.id " +
                     "WHERE r.id = ?";
     private static final String SQL_LIST_ORDER_BY_ID =
-            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, s.name AS report_status_name, e.name AS event_name FROM report AS r " +
+            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, r.description, " +
+                            "s.name AS report_status_name, e.name AS event_name FROM report AS r " +
                     "LEFT JOIN report_status AS s ON r.report_status_id = s.id " +
                     "LEFT JOIN event AS e ON r.event_id = e.id " +
                     "ORDER BY r.id";
     private static final String SQL_INSERT =
-            "INSERT INTO report (topic, speaker_id, event_id, report_status_id) VALUES (?, ?, ?, ?)";
+            "INSERT INTO report (topic, speaker_id, event_id, report_status_id, description) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE =
-            "UPDATE report SET topic = ?, speaker_id = ?, event_id = ?, report_status_id = ? WHERE id = ?";
+            "UPDATE report SET topic = ?, speaker_id = ?, event_id = ?, report_status_id = ?, description = ? WHERE id = ?";
     private static final String SQL_DELETE =
             "DELETE FROM report WHERE id = ?";
 
@@ -116,6 +118,7 @@ public class ReportDAOJDBC implements ReportDAO {
                 report.getSpeaker().getId(),
                 report.getEvent().getId(),
                 report.getStatus().getId(),
+                report.getDescription()
         };
 
         try (
@@ -150,6 +153,7 @@ public class ReportDAOJDBC implements ReportDAO {
                 report.getSpeaker().getId(),
                 report.getEvent().getId(),
                 report.getStatus().getId(),
+                report.getDescription(),
                 report.getId()
         };
 
@@ -203,6 +207,7 @@ public class ReportDAOJDBC implements ReportDAO {
         report.setSpeaker(new User(resultSet.getInt("speaker_id")));
         report.setEvent(new Event(resultSet.getInt("event_id"),resultSet.getString("event_name")));
         report.setStatus(Report.Status.valueOf(resultSet.getString("report_status_name")));
+        report.setDescription(resultSet.getString("description"));
         return report;
     }
 

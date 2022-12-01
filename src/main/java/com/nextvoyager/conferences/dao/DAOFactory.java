@@ -69,7 +69,13 @@ public abstract class DAOFactory {
     private static final String PROPERTY_USERNAME = "username";
     private static final String PROPERTY_PASSWORD = "password";
 
+    private static final String DATABASE_NAME = "conferences.jndi";
+
     // Actions ------------------------------------------------------------------------------------
+
+    public static DAOFactory getInstance() throws DAOConfigurationException {
+        return getInstance(DATABASE_NAME);
+    }
 
     /**
      * Returns a new DAOFactory instance for the given database name.

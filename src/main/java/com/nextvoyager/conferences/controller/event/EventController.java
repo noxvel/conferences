@@ -1,8 +1,8 @@
-package com.nextvoyager.conferences.controller;
+package com.nextvoyager.conferences.controller.event;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.User;
+import com.nextvoyager.conferences.dao.event.EventDAO;
+import com.nextvoyager.conferences.model.Event;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,23 +10,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/login")
-public class LoginController extends HttpServlet {
+@WebServlet("/event/view")
+public class EventController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer eventID = Integer.valueOf(req.getParameter("eventID"));
+
         // Obtain DAOFactory.
         DAOFactory javabase = DAOFactory.getInstance();
 
         // Obtain UserDAO.
-        UserDAO userDAO = javabase.getUserDAO();
+        EventDAO eventDAO = javabase.getEventDAO();
 
-        List<User> users = userDAO.list();
+        Event event = eventDAO.find(eventID);
 
-        req.setAttribute("users", users);
-        req.getRequestDispatcher("login.jsp").forward(req,resp);
-
+        req.setAttribute("event", event);
+        req.getRequestDispatcher("event-view.jsp").forward(req,resp);
     }
 }

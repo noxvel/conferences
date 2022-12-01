@@ -7,13 +7,12 @@
             <p class="col-md-4 mb-0 text-muted">© 2022 Company, Inc</p>
 
             <ul class="nav col-md-4 justify-content-end">
-                <li class="nav-item"><a href="home" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="${contextPath}/home" class="nav-link px-2 text-muted">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
             </ul>
             </footer>
         </div>
 
-        <script type="text/javascript" src="${contextPath}/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

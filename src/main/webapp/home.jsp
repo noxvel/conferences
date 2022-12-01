@@ -10,16 +10,25 @@
     <main>
 
         <section class="py-3 text-center container">
-            <form action="home" method="get">
-                <div class="input-group">
-                  <select name="orderType" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                    <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
-                    <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
-                    <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
-                  </select>
-                  <button class="btn btn-outline-secondary" type="submit">Sort</button>
+            <div class="d-flex flex-row">
+                <div class="d-grid gap-2 d-md-block">
+                    <a role="button" href="event/create" class="btn btn-success">Create new event</a>
+                    <%-- <button class="btn btn-success" type="button">Create new event</button> --%>
+                    <button class="btn btn-primary" type="button">Button</button>
                 </div>
-            </form>
+                <div class="ms-2">
+                    <form action="home" method="get">
+                        <div class="input-group">
+                        <select name="orderType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
+                            <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
+                            <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
+                            <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
+                        </select>
+                        <button class="btn btn-outline-secondary" type="submit">Sort</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </section>
 
         <div class="album py-5 bg-light">
@@ -36,8 +45,8 @@
                                     <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <a role="button" href="event?eventID=${event.id}" class="btn btn-sm btn-outline-primary">View</a>
-                                            <a role="button" href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                            <a role="button" href="event/view?eventID=${event.id}" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a role="button" href="event/edit?eventID=${event.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
                                         </div>
                                         <small class="text-muted">${event.reportsCount} reports</small>
                                         <small class="text-muted">${event.participantsCount} participants</small>
@@ -53,7 +62,7 @@
                     <%-- <fmt:formatNumber var="numOfPages" value="${(eventCount/limit)}" maxFractionDigits="0" />  --%>
                     <ul class="pagination justify-content-center">
                         <li class="${(page == 1) ? 'page-item disabled' : 'page-item'}">
-                            <a class="page-link" href="home?page=${page == 1 ? page : page - 1}">Previous</a>
+                            <a class="page-link" href="home?page=${page == 1 ? page : page - 1}"><span aria-hidden="true">&laquo;</span></a>
                         </li>
 
                         <c:forEach begin="1" end="${numOfPages}" varStatus="loop">
@@ -65,7 +74,7 @@
                         </c:forEach>
 
                         <li class="${numOfPages == page ? 'page-item disabled' : 'page-item'}">
-                            <a class="page-link" href="home?page=${numOfPages == page ? page : page + 1}">Next</a>
+                            <a class="page-link" href="home?page=${numOfPages == page ? page : page + 1}"><span aria-hidden="true">&raquo;</span></a>
                         </li>
 
                     </ul>
