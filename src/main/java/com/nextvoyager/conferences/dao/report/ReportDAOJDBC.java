@@ -1,19 +1,18 @@
 package com.nextvoyager.conferences.dao.report;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
+import com.nextvoyager.conferences.dao.DAOUtil;
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.Event;
 import com.nextvoyager.conferences.model.Report;
 import com.nextvoyager.conferences.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.nextvoyager.conferences.dao.DAOUtil.prepareStatement;
+import static com.nextvoyager.conferences.dao.DAOUtil.ValueDAO;
 
 public class ReportDAOJDBC implements ReportDAO {
 
@@ -41,12 +40,12 @@ public class ReportDAOJDBC implements ReportDAO {
 
     // Vars ---------------------------------------------------------------------------------------
 
-    private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
     // Constructors -------------------------------------------------------------------------------
 
     /**
-     * Construct an Report DAO for the given DAOFactory. Package private so that it can be constructed
+     * Construct a Report DAO for the given DAOFactory. Package private so that it can be constructed
      * inside the DAO package only.
      *
      * @param daoFactory The DAOFactory to construct this Report DAO for.
@@ -59,7 +58,7 @@ public class ReportDAOJDBC implements ReportDAO {
 
     @Override
     public Report find(Integer id) throws DAOException {
-        return find(SQL_FIND_BY_ID, id);
+        return find(SQL_FIND_BY_ID, new ValueDAO(id,Types.INTEGER));
     }
 
     /**
@@ -70,13 +69,13 @@ public class ReportDAOJDBC implements ReportDAO {
      * @return The report from the database matching the given SQL query with the given values.
      * @throws DAOException If something fails at database level.
      */
-    private Report find(String sql, Object... values) throws DAOException {
+    private Report find(String sql, ValueDAO... values) throws DAOException {
         Report report = null;
 
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = prepareStatement(connection, sql, false, values);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) {
                 report = map(resultSet);
@@ -95,7 +94,7 @@ public class ReportDAOJDBC implements ReportDAO {
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_LIST_ORDER_BY_ID);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
                 reports.add(map(resultSet));
@@ -113,17 +112,23 @@ public class ReportDAOJDBC implements ReportDAO {
             throw new IllegalArgumentException("Report is already created, the report ID is not null.");
         }
 
-        Object[] values = {
-                report.getTopic(),
-                report.getSpeaker().getId(),
-                report.getEvent().getId(),
-                report.getStatus().getId(),
-                report.getDescription()
+        // if speaker field is null
+        ValueDAO speakerValue = new ValueDAO(null, Types.INTEGER);
+        if (report.getSpeaker() != null) {
+            speakerValue.setValue(report.getSpeaker().getId());
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(report.getTopic(),Types.VARCHAR),
+                speakerValue,
+                new ValueDAO(report.getEvent().getId(),Types.INTEGER),
+                new ValueDAO(report.getStatus().getId(),Types.INTEGER),
+                new ValueDAO(report.getDescription(),Types.VARCHAR)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -148,18 +153,18 @@ public class ReportDAOJDBC implements ReportDAO {
             throw new IllegalArgumentException("Report is not created yet, the report ID is null.");
         }
 
-        Object[] values = {
-                report.getTopic(),
-                report.getSpeaker().getId(),
-                report.getEvent().getId(),
-                report.getStatus().getId(),
-                report.getDescription(),
-                report.getId()
+        ValueDAO[] values = {
+                new ValueDAO(report.getTopic(),Types.VARCHAR),
+                new ValueDAO(report.getSpeaker().getId(),Types.INTEGER),
+                new ValueDAO(report.getEvent().getId(),Types.INTEGER),
+                new ValueDAO(report.getStatus().getId(),Types.INTEGER),
+                new ValueDAO(report.getDescription(),Types.VARCHAR),
+                new ValueDAO(report.getId(),Types.INTEGER),
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -172,13 +177,13 @@ public class ReportDAOJDBC implements ReportDAO {
 
     @Override
     public void delete(Report report) throws DAOException {
-        Object[] values = {
-                report.getId()
+        ValueDAO[] values = {
+                new ValueDAO(report.getId(),Types.INTEGER),
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -196,7 +201,7 @@ public class ReportDAOJDBC implements ReportDAO {
     /**
      * Map the current row of the given ResultSet to a Report.
      *
-     * @param resultSet The ResultSet of which the current row is to be mapped to an Report.
+     * @param resultSet The ResultSet of which the current row is to be mapped to a Report.
      * @return The mapped Report from the current row of the given ResultSet.
      * @throws SQLException If something fails at database level.
      */

@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.nextvoyager.conferences.dao.DAOUtil.prepareStatement;
 import static com.nextvoyager.conferences.dao.DAOUtil.toSqlDate;
+import static com.nextvoyager.conferences.dao.DAOUtil.ValueDAO;
 
 public class EventDAOJDBC implements EventDAO{
 
@@ -46,7 +47,7 @@ public class EventDAOJDBC implements EventDAO{
 
     // Vars ---------------------------------------------------------------------------------------
 
-    private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
     // Constructors -------------------------------------------------------------------------------
 
@@ -64,7 +65,7 @@ public class EventDAOJDBC implements EventDAO{
 
     @Override
     public Event find(Integer id) throws DAOException {
-        return find(SQL_FIND_BY_ID, id);
+        return find(SQL_FIND_BY_ID, new ValueDAO(id, Types.INTEGER));
     }
 
     /**
@@ -75,13 +76,13 @@ public class EventDAOJDBC implements EventDAO{
      * @return The event from the database matching the given SQL query with the given values.
      * @throws DAOException If something fails at database level.
      */
-    private Event find(String sql, Object... values) throws DAOException {
+    private Event find(String sql, ValueDAO... values) throws DAOException {
         Event event = null;
 
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = prepareStatement(connection, sql, false, values);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) {
                 event = map(resultSet);
@@ -94,7 +95,7 @@ public class EventDAOJDBC implements EventDAO{
             try (
                     Connection connection = daoFactory.getConnection();
                     PreparedStatement statement = prepareStatement(connection, SQL_LIST_EVENT_REPORTS, false, values);
-                    ResultSet resultSet = statement.executeQuery();
+                    ResultSet resultSet = statement.executeQuery()
             ) {
                 List<Report> reportsList = new ArrayList<>();
                 while (resultSet.next()) {
@@ -126,7 +127,7 @@ public class EventDAOJDBC implements EventDAO{
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = connection.prepareStatement(currentSQL);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
                 events.add(mapForList(resultSet));
@@ -154,10 +155,13 @@ public class EventDAOJDBC implements EventDAO{
                 break;
         }
 
-        int offset = 0;
+        int offset;
         offset = (page - 1) * limit;
 
-        Object[] valuesPagination = {offset,limit};
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
         currentSQL += "LIMIT ?, ? ";
 
         try (
@@ -165,7 +169,7 @@ public class EventDAOJDBC implements EventDAO{
                 Statement stmtCount = connection.createStatement();
                 ResultSet resultSetCountAll = stmtCount.executeQuery(SQL_LIST_COUNT_ALL);
                 PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
-                ResultSet resultSetList = statementList.executeQuery();
+                ResultSet resultSetList = statementList.executeQuery()
         ) {
             if (resultSetCountAll.next()) {
                 result.setCount(resultSetCountAll.getInt("count_all"));
@@ -186,18 +190,18 @@ public class EventDAOJDBC implements EventDAO{
             throw new IllegalArgumentException("Event is already created, the event ID is not null.");
         }
 
-        Object[] values = {
-                event.getName(),
-                event.getPlace(),
-                toSqlDate(event.getBeginDate()),
-                toSqlDate(event.getEndDate()),
-                event.getParticipantsCame(),
-                event.getDescription()
+        ValueDAO[] values = {
+                new ValueDAO(event.getName(), Types.VARCHAR),
+                new ValueDAO(event.getPlace(), Types.VARCHAR),
+                new ValueDAO(toSqlDate(event.getBeginDate()), Types.DATE),
+                new ValueDAO(toSqlDate(event.getEndDate()), Types.DATE),
+                new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
+                new ValueDAO(event.getDescription(), Types.VARCHAR)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -222,19 +226,19 @@ public class EventDAOJDBC implements EventDAO{
             throw new IllegalArgumentException("Event is not created yet, the event ID is null.");
         }
 
-        Object[] values = {
-                event.getName(),
-                event.getPlace(),
-                toSqlDate(event.getBeginDate()),
-                toSqlDate(event.getEndDate()),
-                event.getParticipantsCame(),
-                event.getDescription(),
-                event.getId()
+        ValueDAO[] values = {
+                new ValueDAO(event.getName(), Types.VARCHAR),
+                new ValueDAO(event.getPlace(), Types.VARCHAR),
+                new ValueDAO(toSqlDate(event.getBeginDate()), Types.DATE),
+                new ValueDAO(toSqlDate(event.getEndDate()), Types.DATE),
+                new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
+                new ValueDAO(event.getDescription(), Types.VARCHAR),
+                new ValueDAO(event.getId(), Types.INTEGER)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -247,13 +251,13 @@ public class EventDAOJDBC implements EventDAO{
 
     @Override
     public void delete(Event event) throws DAOException {
-        Object[] values = {
-                event.getId()
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {

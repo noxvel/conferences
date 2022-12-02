@@ -35,6 +35,36 @@ public class EventEditController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String idParam = req.getParameter("eventID");
+        String nameParam = req.getParameter("name");
+        String placeParam = req.getParameter("place");
+        String beginDateParam = req.getParameter("beginDateISO");
+        String endDateParam = req.getParameter("endDateISO");
+        String descriptionParam = req.getParameter("description");
 
+        // TODO: 01.12.2022 create validation to input data
+
+        Event event = new Event();
+        event.setId(Integer.valueOf(idParam));
+        event.setName(nameParam);
+        event.setPlace(placeParam);
+        event.setBeginDate(Date.from(Instant.parse(beginDateParam)));
+        event.setEndDate(Date.from(Instant.parse(endDateParam)));
+        event.setDescription(descriptionParam);
+
+        // Obtain DAOFactory.
+        DAOFactory javabase = DAOFactory.getInstance();
+
+        // Obtain UserDAO.
+        EventDAO eventDAO = javabase.getEventDAO();
+
+        eventDAO.update(event);
+
+//        StringJoiner sb = new StringJoiner(" - ");
+//        sb.add(nameParam).add(placeParam).add(beginDateParam).add(endDateParam).add(descriptionParam);
+//
+//        System.out.println(sb.toString());
+
+        resp.sendRedirect("view?eventID=" + event.getId());
     }
 }

@@ -34,6 +34,8 @@ public interface UserDAO {
      */
     public List<User> list() throws DAOException;
 
+    List<User> listWithOneRole(User.Role userRole) throws DAOException;
+
     /**
      * Create the given user in the database. The user ID must be null, otherwise it will throw
      * IllegalArgumentException. After creating, the DAO will set the obtained ID in the given user.

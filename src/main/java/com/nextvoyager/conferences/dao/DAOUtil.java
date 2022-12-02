@@ -1,5 +1,8 @@
 package com.nextvoyager.conferences.dao;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.*;
 
 public class DAOUtil {
@@ -22,7 +25,7 @@ public class DAOUtil {
      * @throws SQLException If something fails during creating the PreparedStatement.
      */
     public static PreparedStatement prepareStatement
-    (Connection connection, String sql, boolean returnGeneratedKeys, Object... values)
+    (Connection connection, String sql, boolean returnGeneratedKeys, ValueDAO... values)
             throws SQLException
     {
         PreparedStatement statement = connection.prepareStatement(sql,
@@ -37,11 +40,12 @@ public class DAOUtil {
      * @param values The parameter values to be set in the created PreparedStatement.
      * @throws SQLException If something fails during setting the PreparedStatement values.
      */
-    public static void setValues(PreparedStatement statement, Object... values)
+    public static void setValues(PreparedStatement statement, ValueDAO... values)
             throws SQLException
     {
         for (int i = 0; i < values.length; i++) {
-            statement.setObject(i + 1, values[i]);
+            statement.setObject(i + 1, values[i].getValue(), values[i].getType());
+
         }
     }
 
@@ -52,6 +56,19 @@ public class DAOUtil {
      */
     public static Date toSqlDate(java.util.Date date) {
         return (date != null) ? new Date(date.getTime()) : null;
+    }
+
+    @Getter
+    @Setter
+    public static class ValueDAO {
+        Object value;
+        int type;
+
+        public ValueDAO(Object value, int type) {
+            this.value = value;
+            this.type = type;
+        }
+
     }
 
 }

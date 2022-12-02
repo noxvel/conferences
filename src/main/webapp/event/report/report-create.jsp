@@ -7,49 +7,36 @@
 
         <div class="container d-flex flex-column">
 
-            <form class="row g-3">
-            <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4">
-            </div>
-            <div class="col-md-6">
-                <label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword4">
-            </div>
-            <div class="col-12">
-                <label for="inputAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="col-12">
-                <label for="inputAddress2" class="form-label">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-            </div>
-            <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity">
-            </div>
-            <div class="col-md-4">
-                <label for="inputState" class="form-label">State</label>
-                <select id="inputState" class="form-select">
-                <option selected>Choose...</option>
-                <option>...</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label for="inputZip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
-            </div>
-            <div class="col-12">
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Check me out
-                </label>
+            <form id="createReport" class="row g-3" action="create" method="post">
+                <div class="col-12">
+                    <label for="topic" class="form-label">Topic</label>
+                    <input name="topic" type="text" class="form-control" id="topic" placeholder="Reports topic" value="Basic topic">
                 </div>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Sign in</button>
-            </div>
+                <div class="col-md-8">
+                    <label for="speaker" class="form-label">Speaker</label>
+                    <select name="speaker" id="speaker" class="form-select">
+                        <option value="">Vacant</option>
+                        <c:forEach var="speaker" items="${speakers}">
+                            <option value="${speaker.id}">${speaker.email}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <c:forEach var="status" items="${statuses}">
+                            <option value="${status}">${status.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Description</span>
+                    <textarea name="description" class="form-control" rows="6 aria-label="Description" >Interesting description of the new report</textarea>
+                </div>
+                <input type="hidden" id="event" name="event" value="${eventID}" />
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
             </form>
 
         </div>

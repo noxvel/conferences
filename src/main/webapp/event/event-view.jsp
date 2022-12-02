@@ -14,9 +14,8 @@
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
                     <div class="d-grid gap-2 d-md-block">
-                        <a role="button" href="report/create" class="btn btn-success">Create new report</a>
-                        <%-- <button class="btn btn-success" type="button">Create new event</button> --%>
-                        <button class="btn btn-primary" type="button">Button</button>
+                        <a role="button" href="report/create?eventID=${event.id}" class="btn btn-success">Create new report</a>
+                        <a role="button" href="edit?eventID=${event.id}" class="btn btn-secondary">Edit</a>
                     </div>
                     <%-- <div class="ms-2">
                         <form action="home" method="get">

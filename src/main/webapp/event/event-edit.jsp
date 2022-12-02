@@ -1,7 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
+<fmt:formatDate value="${event.beginDate}" var="beginDate" pattern="yyyy-MM-dd'T'HH:mm"/>
+<fmt:formatDate value="${event.endDate}" var="endDate" pattern="yyyy-MM-dd'T'HH:mm"/>
 
     <jsp:include page="/header.jsp"/>
 
@@ -18,12 +20,12 @@
                 </div>
                 <div class="col-md-6">
                     <label for="beginDate" class="form-label">Begin date</label>
-                    <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="${event.beginDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
+                    <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="${beginDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
                 </div>
                 <input type="hidden" id="beginDateISO" name="beginDateISO" value="" />
                 <div class="col-md-6">
                     <label for="endDate" class="form-label">End date</label>
-                    <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="${event.endDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
+                    <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="${endDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
                 </div>
                 <input type="hidden" id="endDateISO" name="endDateISO" value="" />
                 <div class="input-group">
@@ -31,6 +33,7 @@
                     <textarea name="description" class="form-control" rows="6 aria-label="Description" >${event.description}</textarea>
                 </div>
                 <%-- <input type="hidden" id="timezone" name="timezone" value="-08:00" /> --%>
+                <input type="hidden" id="eventID" name="eventID" value="${event.id}" />
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Edit</button>
                 </div>

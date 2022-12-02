@@ -4,14 +4,12 @@ import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.nextvoyager.conferences.dao.DAOUtil.prepareStatement;
+import static com.nextvoyager.conferences.dao.DAOUtil.ValueDAO;
 
 public class UserDAOJDBC implements UserDAO{
 
@@ -29,6 +27,11 @@ public class UserDAOJDBC implements UserDAO{
             "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
                     "ORDER BY u.id";
+    private static final String SQL_LIST_WITH_ONLY_ONE_ROLE =
+            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
+                    "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
+                    "WHERE u.user_role_id = ? " +
+                    "ORDER BY u.id";
     private static final String SQL_INSERT =
             "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
     private static final String SQL_UPDATE =
@@ -42,12 +45,12 @@ public class UserDAOJDBC implements UserDAO{
 
     // Vars ---------------------------------------------------------------------------------------
 
-    private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
     // Constructors -------------------------------------------------------------------------------
 
     /**
-     * Construct an User DAO for the given DAOFactory. Package private so that it can be constructed
+     * Construct a User DAO for the given DAOFactory. Package private so that it can be constructed
      * inside the DAO package only.
      * @param daoFactory The DAOFactory to construct this User DAO for.
      */
@@ -59,12 +62,12 @@ public class UserDAOJDBC implements UserDAO{
 
     @Override
     public User find(Long id) throws DAOException {
-        return find(SQL_FIND_BY_ID, id);
+        return find(SQL_FIND_BY_ID, new ValueDAO(id, Types.INTEGER));
     }
 
     @Override
     public User find(String email, String password) throws DAOException {
-        return find(SQL_FIND_BY_EMAIL_AND_PASSWORD, email, password);
+        return find(SQL_FIND_BY_EMAIL_AND_PASSWORD, new ValueDAO(email,Types.VARCHAR), new ValueDAO(password, Types.VARCHAR));
     }
 
     /**
@@ -74,13 +77,13 @@ public class UserDAOJDBC implements UserDAO{
      * @return The user from the database matching the given SQL query with the given values.
      * @throws DAOException If something fails at database level.
      */
-    private User find(String sql, Object... values) throws DAOException {
+    private User find(String sql, ValueDAO... values) throws DAOException {
         User user = null;
 
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = prepareStatement(connection, sql, false, values);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) {
                 user = map(resultSet);
@@ -99,7 +102,30 @@ public class UserDAOJDBC implements UserDAO{
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_LIST_ORDER_BY_ID);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            while (resultSet.next()) {
+                users.add(map(resultSet));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return users;
+    }
+
+    @Override
+    public List<User> listWithOneRole(User.Role userRole) throws DAOException {
+        List<User> users = new ArrayList<>();
+
+        ValueDAO[] values = {
+                new ValueDAO(userRole.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_LIST_WITH_ONLY_ONE_ROLE, false, values);
+                ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
                 users.add(map(resultSet));
@@ -117,17 +143,17 @@ public class UserDAOJDBC implements UserDAO{
             throw new IllegalArgumentException("User is already created, the user ID is not null.");
         }
 
-        Object[] values = {
-                user.getEmail(),
-                user.getPassword(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getRole().getId()
+        ValueDAO[] values = {
+                new ValueDAO(user.getEmail(), Types.VARCHAR),
+                new ValueDAO(user.getPassword(),Types.VARCHAR),
+                new ValueDAO(user.getFirstName(),Types.VARCHAR),
+                new ValueDAO(user.getLastName(),Types.VARCHAR),
+                new ValueDAO(user.getRole().getId(),Types.INTEGER),
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -152,17 +178,17 @@ public class UserDAOJDBC implements UserDAO{
             throw new IllegalArgumentException("User is not created yet, the user ID is null.");
         }
 
-        Object[] values = {
-                user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getRole().getId(),
-                user.getId()
+        ValueDAO[] values = {
+                new ValueDAO(user.getEmail(), Types.VARCHAR),
+                new ValueDAO(user.getFirstName(),Types.VARCHAR),
+                new ValueDAO(user.getLastName(),Types.VARCHAR),
+                new ValueDAO(user.getRole().getId(),Types.INTEGER),
+                new ValueDAO(user.getId(),Types.INTEGER)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -175,13 +201,13 @@ public class UserDAOJDBC implements UserDAO{
 
     @Override
     public void delete(User user) throws DAOException {
-        Object[] values = {
-                user.getId()
+        ValueDAO[] values = {
+                new ValueDAO(user.getId(),Types.INTEGER)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -196,8 +222,8 @@ public class UserDAOJDBC implements UserDAO{
 
     @Override
     public boolean existEmail(String email) throws DAOException {
-        Object[] values = {
-                email
+        ValueDAO[] values = {
+                new ValueDAO(email,Types.VARCHAR)
         };
 
         boolean exist = false;
@@ -205,7 +231,7 @@ public class UserDAOJDBC implements UserDAO{
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = prepareStatement(connection, SQL_EXIST_EMAIL, false, values);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             exist = resultSet.next();
         } catch (SQLException | ClassNotFoundException e) {
@@ -221,14 +247,14 @@ public class UserDAOJDBC implements UserDAO{
             throw new IllegalArgumentException("User is not created yet, the user ID is null.");
         }
 
-        Object[] values = {
-                user.getPassword(),
-                user.getId()
+        ValueDAO[] values = {
+                new ValueDAO(user.getPassword(),Types.VARCHAR),
+                new ValueDAO(user.getId(),Types.VARCHAR)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_CHANGE_PASSWORD, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_CHANGE_PASSWORD, false, values)
         ) {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -242,8 +268,8 @@ public class UserDAOJDBC implements UserDAO{
     // Helpers ------------------------------------------------------------------------------------
 
     /**
-     * Map the current row of the given ResultSet to an User.
-     * @param resultSet The ResultSet of which the current row is to be mapped to an User.
+     * Map the current row of the given ResultSet to a User.
+     * @param resultSet The ResultSet of which the current row is to be mapped to a User.
      * @return The mapped User from the current row of the given ResultSet.
      * @throws SQLException If something fails at database level.
      */
