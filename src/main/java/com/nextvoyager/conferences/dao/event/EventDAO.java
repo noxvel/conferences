@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.dao.event;
 
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.Event;
+import com.nextvoyager.conferences.model.User;
 import lombok.Data;
 
 import java.util.List;
@@ -60,6 +61,10 @@ public interface EventDAO {
      * @throws DAOException If something fails at database level.
      */
     public void delete(Event event) throws DAOException;
+
+    void registerUser(Integer eventID, User user, boolean register);
+
+    boolean isUserRegisterEvent(Event event, User user);
 
 
     public enum OrderType{

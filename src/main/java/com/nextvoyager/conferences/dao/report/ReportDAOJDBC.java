@@ -1,7 +1,6 @@
 package com.nextvoyager.conferences.dao.report;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.DAOUtil;
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.Event;
 import com.nextvoyager.conferences.model.Report;
@@ -29,13 +28,16 @@ public class ReportDAOJDBC implements ReportDAO {
                             "s.name AS report_status_name, e.name AS event_name FROM report AS r " +
                     "LEFT JOIN report_status AS s ON r.report_status_id = s.id " +
                     "LEFT JOIN event AS e ON r.event_id = e.id " +
-                    "ORDER BY r.id";
+                    "WHERE r.event_id = ? " +
+                    "ORDER BY r.id ";
     private static final String SQL_INSERT =
             "INSERT INTO report (topic, speaker_id, event_id, report_status_id, description) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE =
             "UPDATE report SET topic = ?, speaker_id = ?, event_id = ?, report_status_id = ?, description = ? WHERE id = ?";
     private static final String SQL_DELETE =
             "DELETE FROM report WHERE id = ?";
+    private static final String SQL_LIST_WITH_PAGINATION = SQL_LIST_ORDER_BY_ID + "LIMIT ?, ? ";
+    private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM report WHERE event_id = ? ";
 
 
     // Vars ---------------------------------------------------------------------------------------
@@ -88,12 +90,12 @@ public class ReportDAOJDBC implements ReportDAO {
     }
 
     @Override
-    public List<Report> list() throws DAOException {
+    public List<Report> list(Integer eventID) throws DAOException {
         List<Report> reports = new ArrayList<>();
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_LIST_ORDER_BY_ID);
+                PreparedStatement statement = prepareStatement(connection, SQL_LIST_ORDER_BY_ID, false, new ValueDAO(eventID, Types.INTEGER));
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
@@ -106,6 +108,40 @@ public class ReportDAOJDBC implements ReportDAO {
         return reports;
     }
 
+    @Override
+    public ListWithCountResult listWithPagination(Integer eventID, Integer page, Integer limit) throws DAOException {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Report> reports = new ArrayList<>();
+        result.setList(reports);
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, SQL_LIST_COUNT_ALL, false, new ValueDAO(eventID,Types.INTEGER));
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, SQL_LIST_WITH_PAGINATION, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    reports.add(map(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+    }
     @Override
     public void create(Report report) throws IllegalArgumentException, DAOException {
         if (report.getId() != null) {

@@ -2,9 +2,8 @@ package com.nextvoyager.conferences.dao.event;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.exeption.DAOException;
-import com.nextvoyager.conferences.dao.report.ReportDAOJDBC;
 import com.nextvoyager.conferences.model.Event;
-import com.nextvoyager.conferences.model.Report;
+import com.nextvoyager.conferences.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -35,15 +34,10 @@ public class EventDAOJDBC implements EventDAO{
     private static final String SQL_LIST_ORDER_BY_BEGIN_DATE = SQL_LIST + "ORDER BY e.begin_date ";
     private static final String SQL_LIST_ORDER_BY_REPORTS = SQL_LIST + "ORDER BY r_count ";
     private static final String SQL_LIST_ORDER_BY_PARTICIPANTS = SQL_LIST + "ORDER BY p_count ";
-    private static final String SQL_LIST_EVENT_REPORTS =
-            "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, r.description, " +
-                            "s.name AS report_status_name, e.name AS event_name FROM report AS r " +
-                    "LEFT JOIN report_status AS s ON r.report_status_id = s.id " +
-                    "LEFT JOIN event AS e ON r.event_id = e.id " +
-                    "WHERE r.event_id = ? " +
-                    "ORDER BY r.id";
     private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM event";
-
+    private static final String SQL_REGISTER_USER_TO_EVENT = "INSERT INTO event_has_participant (event_id, user_id) VALUES (?, ?)" ;
+    private static final String SQL_UNREGISTER_USER_TO_EVENT = "DELETE FROM event_has_participant WHERE event_id = ? AND user_id = ?";
+    private static final String SQL_IS_USER_REGISTER = "SELECT * FROM event_has_participant WHERE event_id = ? AND user_id = ?";
 
     // Vars ---------------------------------------------------------------------------------------
 
@@ -89,22 +83,6 @@ public class EventDAOJDBC implements EventDAO{
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
-        }
-
-        if (event != null) {
-            try (
-                    Connection connection = daoFactory.getConnection();
-                    PreparedStatement statement = prepareStatement(connection, SQL_LIST_EVENT_REPORTS, false, values);
-                    ResultSet resultSet = statement.executeQuery()
-            ) {
-                List<Report> reportsList = new ArrayList<>();
-                while (resultSet.next()) {
-                    reportsList.add(ReportDAOJDBC.map(resultSet));
-                }
-                event.setReports(reportsList);
-            } catch (SQLException | ClassNotFoundException e) {
-                throw new DAOException(e);
-            }
         }
 
         return event;
@@ -268,6 +246,56 @@ public class EventDAOJDBC implements EventDAO{
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public void registerUser(Integer eventID, User user, boolean register) {
+
+        String currentSql = SQL_REGISTER_USER_TO_EVENT;
+        if (!register) {
+            currentSql = SQL_UNREGISTER_USER_TO_EVENT;
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(user.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, currentSql, false, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Deleting event failed, no rows affected.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public boolean isUserRegisterEvent(Event event, User user) {
+        boolean result = false;
+
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(user.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_IS_USER_REGISTER, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            if (resultSet.next()) {
+                result = true;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
     }
 
     // Helpers ------------------------------------------------------------------------------------

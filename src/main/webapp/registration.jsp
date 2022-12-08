@@ -2,9 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-
-
-        <jsp:include page="header.jsp"/>
+        <jsp:include page="/header.jsp"/>
 
         <div class="container">
 
@@ -12,33 +10,50 @@
               <div class="d-flex flex-column">
 
                 <h2 class="text-center">Sign up now</h2>
-                <form calss="w-50">
+                <form class="needs-validation" novalidate id="registerUser" action="registration" method="post">
+                    <c:if test="${requestScope.message != null}">
+                        <div class="alert alert-danger" role="alert">
+                            ${requestScope.message}
+                        </div>
+                    </c:if>
                     <!-- layout with text inputs for the first and last names -->
                     <div class="row">
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
-                          <label class="form-label" for="form3Example1">First name</label>
-                          <input type="text" id="form3Example1" class="form-control" />
+                          <label class="form-label" for="firstName">First name</label>
+                          <input name="firstName" type="text" id="firstName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
-                          <label class="form-label" for="form3Example2">Last name</label>
-                          <input type="text" id="form3Example2" class="form-control" />
+                          <label class="form-label" for="lastName">Last name</label>
+                          <input name="lastName" type="text" id="lastName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-                      <label class="form-label" for="form3Example3">Email address</label>
-                      <input type="email" id="form3Example3" class="form-control" />
+                      <label class="form-label" for="email">Email address</label>
+                      <input name="email" type="email" id="email" class="form-control" autoComplete="off" pattern="^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$" required />
+                      <div class="invalid-feedback">
+                        Bad email!
+                      </div>
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-4">
-                      <label class="form-label" for="form3Example4">Password</label>
-                      <input type="password" id="form3Example4" class="form-control" />
+                      <label class="form-label" for="password">Password</label>
+                      <input name="password" type="password" id="password" class="form-control" autoComplete="off" pattern=".{4,60}" required />
+                      <div class="invalid-feedback">
+                        Bad password!
+                      </div>
                     </div>
 
                     <!-- Submit button -->
@@ -52,4 +67,18 @@
 
         </div>
 
-        <jsp:include page="footer.jsp"/>
+        <script>
+
+            $(document).ready(function() {
+                $("#registerUser").submit(function( event ) {
+                  if (!event.target.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                  }
+                  event.target.classList.add('was-validated')
+                });
+            });
+
+        </script>
+
+        <jsp:include page="/footer.jsp"/>

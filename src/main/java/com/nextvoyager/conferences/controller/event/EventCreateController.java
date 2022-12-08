@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.StringJoiner;
 
 @WebServlet("/event/create")
 public class EventCreateController extends HttpServlet {
@@ -46,11 +45,6 @@ public class EventCreateController extends HttpServlet {
         EventDAO eventDAO = javabase.getEventDAO();
 
         eventDAO.create(event);
-
-//        StringJoiner sb = new StringJoiner(" - ");
-//        sb.add(nameParam).add(placeParam).add(beginDateParam).add(endDateParam).add(descriptionParam);
-//
-//        System.out.println(sb.toString());
 
         resp.sendRedirect("view?eventID=" + event.getId());
     }

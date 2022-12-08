@@ -2,7 +2,6 @@ package com.nextvoyager.conferences.controller;
 
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.event.EventDAO;
-import com.nextvoyager.conferences.model.Event;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/home")
 public class HomePageController extends HttpServlet {
@@ -21,14 +19,14 @@ public class HomePageController extends HttpServlet {
 
         // Default values for list of events
         EventDAO.OrderType orderType = EventDAO.OrderType.Date;
-        Integer page = 1;
-        Integer limit = 6;
+        int page = 1;
+        int limit = 6;
 
         if (orderTypeParam != null) {
             orderType = EventDAO.OrderType.valueOf(orderTypeParam);
         }
         if (pageParam != null) {
-            page = Integer.valueOf(pageParam);
+            page = Integer.parseInt(pageParam);
         }
 
         // Obtain DAOFactory.
@@ -39,13 +37,14 @@ public class HomePageController extends HttpServlet {
 
 //        List<Event> events = eventDAO.list(orderType);
         EventDAO.ListWithCountResult countAndList = eventDAO.listWithPagination(orderType, page, limit);
+        int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
         req.setAttribute("events", countAndList.getList());
-        req.setAttribute("eventCount", countAndList.getCount());
-        req.setAttribute("limit", limit);
+//        req.setAttribute("eventCount", countAndList.getCount());
+//        req.setAttribute("limit", limit);
         req.setAttribute("page", page);
         req.setAttribute("orderType", orderType);
-        req.setAttribute("numOfPages", (int)Math.ceil((double)countAndList.getCount()/limit));
+        req.setAttribute("numOfPages", numOfPages);
         req.getRequestDispatcher("home.jsp").forward(req,resp);
 
 //

@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/event/report/view")
-public class ReportController extends HttpServlet {
+public class ReportViewController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));

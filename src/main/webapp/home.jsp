@@ -5,6 +5,8 @@
 <%-- <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %> --%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
+
     <jsp:include page="header.jsp"/>
 
     <main>
@@ -12,7 +14,9 @@
         <section class="py-3 text-center container">
             <div class="d-flex flex-row">
                 <div class="d-grid gap-2 d-md-block">
-                    <a role="button" href="event/create" class="btn btn-success">Create new event</a>
+                    <c:if test="${isModerator}">
+                        <a role="button" href="event/create" class="btn btn-success">Create new event</a>
+                    </c:if>
                     <%-- <button class="btn btn-success" type="button">Create new event</button> --%>
                     <button class="btn btn-primary" type="button">Button</button>
                 </div>
@@ -46,7 +50,9 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
                                             <a role="button" href="event/view?eventID=${event.id}" class="btn btn-sm btn-outline-primary">View</a>
-                                            <a role="button" href="event/edit?eventID=${event.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                            <c:if test="${isModerator}">
+                                                <a role="button" href="event/edit?eventID=${event.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                            </c:if>
                                         </div>
                                         <small class="text-muted">${event.reportsCount} reports</small>
                                         <small class="text-muted">${event.participantsCount} participants</small>
@@ -59,7 +65,6 @@
                  
                 </div>
                 <nav aria-label="Home page navigation" class="p-3">
-                    <%-- <fmt:formatNumber var="numOfPages" value="${(eventCount/limit)}" maxFractionDigits="0" />  --%>
                     <ul class="pagination justify-content-center">
                         <li class="${(page == 1) ? 'page-item disabled' : 'page-item'}">
                             <a class="page-link" href="home?page=${page == 1 ? page : page - 1}"><span aria-hidden="true">&laquo;</span></a>

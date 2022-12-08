@@ -26,9 +26,28 @@
                     <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
                 </ul>
 
-                <div class="col-md-3 text-end">
-                    <a role="button" href="login" class="btn btn-outline-primary me-2">Login</a>
-                    <a role="button" href="registration" class="btn btn-primary">Sign-up</a>
-                </div>
+                <c:choose>
+                    <c:when test="${sessionScope.user != null}">
+                        <div class="dropdown text-end">
+                            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+                                <c:out value="${sessionScope.user.firstName} ${sessionScope.user.lastName}"/>
+                            </a>
+                            <ul class="dropdown-menu text-small" data-popper-placement="top-start">
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="signout">Sign out</a></li>
+                            </ul>
+                        </div>
+                    </c:when>    
+                    <c:otherwise>
+                        <div class="col-md-3 text-end">
+                            <a role="button" href="${contextPath}/login" class="btn btn-outline-primary me-2">Login</a>
+                            <a role="button" href="${contextPath}/registration" class="btn btn-primary">Sign-up</a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
             </header>
         </div>

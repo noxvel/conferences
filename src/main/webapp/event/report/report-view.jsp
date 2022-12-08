@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="currentUser" value="${sessionScope.user}" />
 
 
     <jsp:include page="/header.jsp"/>
@@ -16,7 +17,9 @@
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
                     <div class="d-grid gap-2 d-md-block">
-                        <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">Edit</a>
+                        <c:if test="${not empty currentUser and (currentUser.role == 'MODERATOR' or (currentUser.role == 'SPEAKER' and currentUser.id == report.speaker.id))}">
+                            <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">Edit</a>
+                        </c:if>
                     </div>
                     <%-- <div class="ms-2">
                         <form action="home" method="get">

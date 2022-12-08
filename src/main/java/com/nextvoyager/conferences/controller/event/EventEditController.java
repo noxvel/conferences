@@ -60,11 +60,6 @@ public class EventEditController extends HttpServlet {
 
         eventDAO.update(event);
 
-//        StringJoiner sb = new StringJoiner(" - ");
-//        sb.add(nameParam).add(placeParam).add(beginDateParam).add(endDateParam).add(descriptionParam);
-//
-//        System.out.println(sb.toString());
-
         resp.sendRedirect("view?eventID=" + event.getId());
     }
 }

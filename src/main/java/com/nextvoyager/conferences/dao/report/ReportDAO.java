@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.dao.report;
 
 import com.nextvoyager.conferences.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.Report;
+import lombok.Data;
 
 import java.util.List;
 
@@ -23,7 +24,9 @@ public interface ReportDAO {
      * @return A list of all reports from the database ordered by report ID.
      * @throws DAOException If something fails at database level.
      */
-    public List<Report> list() throws DAOException;
+    public List<Report> list(Integer eventID) throws DAOException;
+
+    ListWithCountResult listWithPagination(Integer eventID, Integer page, Integer limit) throws DAOException;
 
     /**
      * Create the given report in the database. The report ID must be null, otherwise it will throw
@@ -51,4 +54,9 @@ public interface ReportDAO {
      */
     public void delete(Report report) throws DAOException;
 
+    @Data
+    public static class ListWithCountResult{
+        private Integer count;
+        private List<Report> list;
+    }
 }
