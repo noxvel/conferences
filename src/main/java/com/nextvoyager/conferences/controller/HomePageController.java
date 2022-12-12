@@ -1,30 +1,29 @@
 package com.nextvoyager.conferences.controller;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
 import com.nextvoyager.conferences.dao.DAOFactory;
 import com.nextvoyager.conferences.dao.event.EventDAO;
+import com.nextvoyager.conferences.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet("/home")
 public class HomePageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String orderTypeParam = req.getParameter("orderType");
         String pageParam = req.getParameter("page");
 
         // Default values for list of events
-        EventDAO.OrderType orderType = EventDAO.OrderType.Date;
         int page = 1;
         int limit = 6;
 
-        if (orderTypeParam != null) {
-            orderType = EventDAO.OrderType.valueOf(orderTypeParam);
-        }
         if (pageParam != null) {
             page = Integer.parseInt(pageParam);
         }
@@ -36,14 +35,32 @@ public class HomePageController extends HttpServlet {
         EventDAO eventDAO = javabase.getEventDAO();
 
 //        List<Event> events = eventDAO.list(orderType);
-        EventDAO.ListWithCountResult countAndList = eventDAO.listWithPagination(orderType, page, limit);
+        EventDAO.ListWithCountResult countAndList;
+
+
+        HttpSession currentSession = req.getSession();
+
+        EventDAO.OrderType eventListOrderType = Optional.ofNullable((EventDAO.OrderType) currentSession.getAttribute("eventListOrderType"))
+                                        .orElse(EventDAO.OrderType.Date);
+
+        Boolean showSpeakerEventParticipated = Optional.ofNullable((Boolean) currentSession.getAttribute("filterBySpeakerParticipated"))
+                                        .orElse(Boolean.FALSE);
+
+//        Boolean showSpeakerEventParticipated = (Boolean) currentSession.getAttribute("filterBySpeakerParticipated");
+        User user = (User) currentSession.getAttribute("user");
+        if (showSpeakerEventParticipated && user != null) {
+            countAndList = eventDAO.listWithPaginationSpeakerParticipated(eventListOrderType, page, limit, user);
+        } else {
+            countAndList = eventDAO.listWithPagination(eventListOrderType, page, limit);
+        }
+        //------------------------------------------------------------------------------------------------
+
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
         req.setAttribute("events", countAndList.getList());
-//        req.setAttribute("eventCount", countAndList.getCount());
-//        req.setAttribute("limit", limit);
         req.setAttribute("page", page);
-        req.setAttribute("orderType", orderType);
+        req.setAttribute("orderType", eventListOrderType);
+        req.setAttribute("showSpeakerEventParticipated", showSpeakerEventParticipated);
         req.setAttribute("numOfPages", numOfPages);
         req.getRequestDispatcher("home.jsp").forward(req,resp);
 

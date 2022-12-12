@@ -6,6 +6,7 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
+<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
 
     <jsp:include page="header.jsp"/>
 
@@ -17,19 +18,31 @@
                     <c:if test="${isModerator}">
                         <a role="button" href="event/create" class="btn btn-success">Create new event</a>
                     </c:if>
-                    <%-- <button class="btn btn-success" type="button">Create new event</button> --%>
-                    <button class="btn btn-primary" type="button">Button</button>
                 </div>
-                <div class="ms-2">
-                    <form action="home" method="get">
+                <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">
+                    <form action="event-list-sort" method="get">
                         <div class="input-group">
-                        <select name="orderType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
-                            <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
-                            <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
-                            <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
-                        </select>
-                        <button class="btn btn-outline-secondary" type="submit">Sort</button>
+                            <select name="orderType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
+                                <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
+                                <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
+                                <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
+                            </select>
+                            <button class="btn btn-secondary" type="submit">Sort</button>
                         </div>
+                    </form>
+                </div>
+                <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
+                    <form action="event-list-filter" method="get" class="d-flex flex-row align-items-center">
+                        <div class="form-check">
+                            <%-- <c:if test="${isSpeaker}"> --%>
+                                <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
+                                                        id="showInWhichParticipated" ${showSpeakerEventParticipated ? 'checked' : ''}>
+                                <label class="form-check-label" for="showInWhichParticipated">
+                                    Show events in which you participated
+                                </label>
+                            <%-- </c:if> --%>
+                        </div>
+                        <button class="btn btn-warning ms-3" type="submit">Filter</button>
                     </form>
                 </div>
             </div>
@@ -88,5 +101,21 @@
         </div>
 
     </main>
+
+    <script>
+
+        // $(document).ready(() => {
+        //     $("filterSpeakerParticipated").submit((event) => {
+        //         event.preventDefault();
+        //         let elSpeakerPrticipated = $("#showInWhichParticipated");
+        //         $.post("filterBySpeakerParticipated", { showInWhichParticipated: elSpeakerPrticipated.checked });
+        //         $("#showInWhichParticipated").click(( event ) => {
+        //             $.post("filterBySpeakerParticipated", { showInWhichParticipated: event.target.checked });
+        //             $.get("home");
+        //         });
+        //     })
+        // });
+
+    </script>
     
     <jsp:include page="footer.jsp"/>

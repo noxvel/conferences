@@ -66,6 +66,8 @@ public interface EventDAO {
 
     boolean isUserRegisterEvent(Event event, User user);
 
+    ListWithCountResult listWithPaginationSpeakerParticipated(OrderType orderType, int page, int limit, User user);
+
 
     public enum OrderType{
         Date,

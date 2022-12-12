@@ -26,15 +26,19 @@ public class EventDAOJDBC implements EventDAO{
             "UPDATE event SET name = ?, place = ?, begin_date = ?, end_date = ?, participants_came = ?, description = ? WHERE id = ?";
     private static final String SQL_DELETE =
             "DELETE FROM event WHERE id = ?";
+
     private static final String SQL_LIST =
             "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came, report.r_count, participant.p_count " +
                     "FROM event AS e " +
                     "LEFT JOIN (SELECT COUNT(*) as r_count, event_id FROM report GROUP BY event_id) AS report ON e.id = report.event_id " +
                     "LEFT JOIN (SELECT COUNT(*) as p_count, event_id FROM event_has_participant GROUP BY event_id) AS participant ON e.id = participant.event_id ";
-    private static final String SQL_LIST_ORDER_BY_BEGIN_DATE = SQL_LIST + "ORDER BY e.begin_date ";
-    private static final String SQL_LIST_ORDER_BY_REPORTS = SQL_LIST + "ORDER BY r_count ";
-    private static final String SQL_LIST_ORDER_BY_PARTICIPANTS = SQL_LIST + "ORDER BY p_count ";
-    private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM event";
+    private static final String SQL_LIST_ORDER_BY_BEGIN_DATE = "ORDER BY e.begin_date ";
+    private static final String SQL_LIST_ORDER_BY_REPORTS = "ORDER BY r_count ";
+    private static final String SQL_LIST_ORDER_BY_PARTICIPANTS = "ORDER BY p_count ";
+    private static final String SQL_LIST_LIMIT = "LIMIT ?, ? ";
+    private static final String SQL_LIST_FILTER_SPEAKER_PARTICIPATED = "WHERE EXISTS (SELECT id FROM report WHERE report.event_id = e.id AND report.speaker_id = ?) ";
+
+    private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM event AS e ";
     private static final String SQL_REGISTER_USER_TO_EVENT = "INSERT INTO event_has_participant (event_id, user_id) VALUES (?, ?)" ;
     private static final String SQL_UNREGISTER_USER_TO_EVENT = "DELETE FROM event_has_participant WHERE event_id = ? AND user_id = ?";
     private static final String SQL_IS_USER_REGISTER = "SELECT * FROM event_has_participant WHERE event_id = ? AND user_id = ?";
@@ -92,13 +96,17 @@ public class EventDAOJDBC implements EventDAO{
     public List<Event> list(OrderType orderType) throws DAOException {
         List<Event> events = new ArrayList<>();
 
-        String currentSQL = SQL_LIST_ORDER_BY_BEGIN_DATE;
+        String currentSQL = SQL_LIST;
+
         switch (orderType) {
+            case Date:
+                currentSQL += SQL_LIST_ORDER_BY_BEGIN_DATE;
+                break;
             case ReportsCount:
-                currentSQL = SQL_LIST_ORDER_BY_REPORTS;
+                currentSQL += SQL_LIST_ORDER_BY_REPORTS;
                 break;
             case ParticipantsCount:
-                currentSQL = SQL_LIST_ORDER_BY_PARTICIPANTS;
+                currentSQL += SQL_LIST_ORDER_BY_PARTICIPANTS;
                 break;
         }
 
@@ -123,13 +131,17 @@ public class EventDAOJDBC implements EventDAO{
         List<Event> events = new ArrayList<>();
         result.setList(events);
 
-        String currentSQL = SQL_LIST_ORDER_BY_BEGIN_DATE;
+        String currentSQL = SQL_LIST;
+
         switch (orderType) {
+            case Date:
+                currentSQL += SQL_LIST_ORDER_BY_BEGIN_DATE;
+                break;
             case ReportsCount:
-                currentSQL = SQL_LIST_ORDER_BY_REPORTS;
+                currentSQL += SQL_LIST_ORDER_BY_REPORTS;
                 break;
             case ParticipantsCount:
-                currentSQL = SQL_LIST_ORDER_BY_PARTICIPANTS;
+                currentSQL += SQL_LIST_ORDER_BY_PARTICIPANTS;
                 break;
         }
 
@@ -140,7 +152,7 @@ public class EventDAOJDBC implements EventDAO{
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
-        currentSQL += "LIMIT ?, ? ";
+        currentSQL += SQL_LIST_LIMIT;
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -160,6 +172,61 @@ public class EventDAOJDBC implements EventDAO{
         }
 
         return result;
+    }
+
+
+    @Override
+    public ListWithCountResult listWithPaginationSpeakerParticipated(OrderType orderType, int page, int limit, User user) {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Event> events = new ArrayList<>();
+        result.setList(events);
+
+        String currentSQL = SQL_LIST;
+        String countAllSQL = SQL_LIST_COUNT_ALL + SQL_LIST_FILTER_SPEAKER_PARTICIPATED;
+
+        currentSQL += SQL_LIST_FILTER_SPEAKER_PARTICIPATED;
+
+        switch (orderType) {
+            case Date:
+                currentSQL += SQL_LIST_ORDER_BY_BEGIN_DATE;
+                break;
+            case ReportsCount:
+                currentSQL += SQL_LIST_ORDER_BY_REPORTS;
+                break;
+            case ParticipantsCount:
+                currentSQL += SQL_LIST_ORDER_BY_PARTICIPANTS;
+                break;
+        }
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(user.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+        currentSQL += SQL_LIST_LIMIT;
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, new ValueDAO(user.getId(),Types.INTEGER));
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    events.add(mapForList(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+
     }
 
     @Override

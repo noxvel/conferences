@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
 
 
     <jsp:include page="/header.jsp"/>
@@ -25,19 +26,21 @@
                                 <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
                             </a>
                         </c:if>
-                    </div>
-                    <%-- <div class="ms-2">
-                        <form action="home" method="get">
-                            <div class="input-group">
-                            <select name="orderType" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                                <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
-                                <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
-                                <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
-                            </select>
-                            <button class="btn btn-outline-secondary" type="submit">Sort</button>
-                            </div>
-                        </form>
-                    </div> --%>
+                    </div> 
+                    <%-- <c:if test="${isSpeaker}"> --%>
+                        <div class="ms-2">
+                            <form action="filter" method="get">
+                                <div class="input-group">
+                                    <select name="speakerFilter" class="form-select" id="speakerFilter" aria-label="Speaker filter">
+                                        <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
+                                        <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
+                                        <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
+                                    </select>
+                                    <button class="btn btn-primary" type="submit">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+                    <%-- </c:if> --%>
                 </div>
             </section>
 

@@ -14,6 +14,7 @@ public class DAOException extends RuntimeException{
     }
 
     public DAOException(Throwable cause) {
-        super(cause);
+//        super(cause);
+        System.out.println(cause.toString());
     }
 }
