@@ -1,8 +1,10 @@
 package com.nextvoyager.conferences.controller;
 
-import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.User;
+import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,16 +12,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
 
+    UserService userService = UserServiceImpl.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("login.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,resp);
     }
 
     @Override
@@ -53,16 +54,11 @@ public class LoginController extends HttpServlet {
 //        }
 
         // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance();
-
-        // Obtain UserDAO.
-        UserDAO userDAO = javabase.getUserDAO();
-
-        User user = userDAO.find(emailParam,passwordParam);
+        User user = userService.find(emailParam,passwordParam);
 
         if (user == null) {
             req.setAttribute("message", "Unknown username/password. Please retry");
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
         } else {
             req.getSession().setAttribute("user", user);
             resp.sendRedirect("home");

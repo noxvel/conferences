@@ -4,16 +4,55 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="560fc31e-011c-4e18-8610-bf29de6dbd6c" name="Changes" comment="user login and access control functionality">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/FilterEventList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/SortEventList.java" afterDir="false" />
+    <list default="true" id="560fc31e-011c-4e18-8610-bf29de6dbd6c" name="Changes" comment="fixed sort and filter for event list">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/FilterReportList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/service/EventService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/service/ReportService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/service/impl/EventServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/service/impl/ReportServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/service/impl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/FilterEventList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/FilterEventList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/HomePageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/HomePageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAOJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAOJDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/exeption/DAOException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/exeption/DAOException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/event-view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/event/event-view.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/home.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/LoginFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/filter/LoginFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/RegistrationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/RegistrationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/SignOutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/SignOutController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/SortEventList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/SortEventList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventCreateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventCreateController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventEditController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventEditController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventRegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventRegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/event/EventViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/ReportCreateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/ReportCreateController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/ReportEditController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/ReportEditController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/ReportViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/controller/report/ReportViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/DAOFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/DAOProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/DAOUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/DAOUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/event/EventDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/event/EventDAOJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/event/EventDAOJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/exeption/DAOConfigurationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/exeption/DAOConfigurationException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/exeption/DAOException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/exeption/DAOException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/report/ReportDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/report/ReportDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/report/ReportDAOJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/report/ReportDAOJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/user/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/user/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/dao/user/UserDAOJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/dao/user/UserDAOJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/entity/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/entity/Report.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nextvoyager/conferences/model/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/error.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/event-create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/event/event-create.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/event-edit.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/event/event-edit.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/event-view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/event/event-view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/report/report-create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/event/report/report-create.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/report/report-edit.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/event/report/report-edit.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/event/report/report-view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/event/report/report-view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/home.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/registration.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/registration.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +62,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="HTML File" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -68,11 +107,11 @@
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\WEB-INF\jsp" />
+      <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\WEB-INF\templates" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\event" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\report" />
       <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\WEB-INF\lib" />
-      <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp" />
-      <recent name="C:\Users\s.bogevskiy\IdeaProjects\conferences\src\main\webapp\WEB-INF" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.nextvoyager.conferences.controller.report" />
@@ -80,7 +119,7 @@
       <recent name="com.nextvoyager.conferences.model" />
     </key>
   </component>
-  <component name="RunManager" selected="Smart Tomcat.Tomcat10">
+  <component name="RunManager" selected="Maven.conferences [clean,package]">
     <configuration name="conferences [clean,package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />

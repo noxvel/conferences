@@ -1,8 +1,10 @@
 package com.nextvoyager.conferences.controller.report;
 
-import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.report.ReportDAO;
-import com.nextvoyager.conferences.model.Report;
+import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.report.ReportDAO;
+import com.nextvoyager.conferences.model.entity.Report;
+import com.nextvoyager.conferences.service.ReportService;
+import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,19 +15,16 @@ import java.io.IOException;
 
 @WebServlet("/event/report/view")
 public class ReportViewController extends HttpServlet {
+
+    ReportService reportService = ReportServiceImpl.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
 
-        // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance();
-
-        // Obtain UserDAO.
-        ReportDAO reportDAO = javabase.getReportDAO();
-
-        Report report = reportDAO.find(reportID);
+        Report report = reportService.find(reportID);
 
         req.setAttribute("report", report);
-        req.getRequestDispatcher("report-view.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/event/report/report-view.jsp").forward(req,resp);
     }
 }

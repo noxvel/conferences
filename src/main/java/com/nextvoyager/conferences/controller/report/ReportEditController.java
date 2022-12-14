@@ -1,12 +1,15 @@
 package com.nextvoyager.conferences.controller.report;
 
-import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.event.EventDAO;
-import com.nextvoyager.conferences.dao.report.ReportDAO;
-import com.nextvoyager.conferences.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.Event;
-import com.nextvoyager.conferences.model.Report;
-import com.nextvoyager.conferences.model.User;
+import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.report.ReportDAO;
+import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.model.entity.Report;
+import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.service.ReportService;
+import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
+import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,33 +17,26 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet("/event/report/edit")
 public class ReportEditController extends HttpServlet {
 
+    ReportService reportService = ReportServiceImpl.getInstance();
+    UserService userService = UserServiceImpl.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
 
-        // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance();
+        List<User> speakers = userService.listWithOneRole(User.Role.SPEAKER);
 
-        // Obtain ReportDAO.
-        UserDAO userDAO = javabase.getUserDAO();
-
-        List<User> speakers = userDAO.listWithOneRole(User.Role.SPEAKER);
-        // Obtain UserDAO.
-        ReportDAO reportDAO = javabase.getReportDAO();
-
-        Report report = reportDAO.find(reportID);
+        Report report = reportService.find(reportID);
 
         req.setAttribute("report", report);
         req.setAttribute("statuses", Report.Status.values());
         req.setAttribute("speakers", speakers);
-        req.getRequestDispatcher("report-edit.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/event/report/report-edit.jsp").forward(req,resp);
     }
 
     @Override
@@ -66,18 +62,7 @@ public class ReportEditController extends HttpServlet {
         report.setStatus(Report.Status.valueOf(statusParam));
         report.setDescription(descriptionParam);
 
-        // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance();
-
-        // Obtain ReportDAO.
-        ReportDAO reportDAO = javabase.getReportDAO();
-
-        reportDAO.update(report);
-
-//        StringJoiner sb = new StringJoiner(" - ");
-//        sb.add(topicParam).add(speakerParam).add(eventParam).add(statusParam).add(descriptionParam);
-//
-//        System.out.println(sb.toString());
+        reportService.update(report);
 
         resp.sendRedirect("view?reportID=" + report.getId());
     }

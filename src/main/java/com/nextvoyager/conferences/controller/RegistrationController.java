@@ -1,8 +1,10 @@
 package com.nextvoyager.conferences.controller;
 
-import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.User;
+import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,9 +16,11 @@ import java.io.IOException;
 @WebServlet("/registration")
 public class RegistrationController extends HttpServlet {
 
+    UserService userService = UserServiceImpl.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("registration.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req,resp);
     }
 
     @Override
@@ -35,20 +39,13 @@ public class RegistrationController extends HttpServlet {
         user.setPassword(passwordParam);
         user.setRole(User.Role.USER);
 
-        // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance();
-
-        // Obtain UserDAO.
-        UserDAO userDAO = javabase.getUserDAO();
-
-        // Check if email exists.
-        boolean exist = userDAO.existEmail(emailParam);
+        boolean exist = userService.existEmail(emailParam);
 
         if (exist) {
             req.setAttribute("message", "The email you entered already exists. Please enter a different email.");
-            req.getRequestDispatcher("registration.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
         } else {
-            userDAO.create(user);
+            userService.create(user);
 
             req.getSession().setAttribute("user", user);
             resp.sendRedirect("home");

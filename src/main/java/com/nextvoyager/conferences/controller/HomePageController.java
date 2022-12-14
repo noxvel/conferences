@@ -1,9 +1,8 @@
 package com.nextvoyager.conferences.controller;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import com.nextvoyager.conferences.dao.DAOFactory;
-import com.nextvoyager.conferences.dao.event.EventDAO;
-import com.nextvoyager.conferences.model.User;
+import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.event.EventDAO;
+import com.nextvoyager.conferences.model.entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -62,7 +61,7 @@ public class HomePageController extends HttpServlet {
         req.setAttribute("orderType", eventListOrderType);
         req.setAttribute("showSpeakerEventParticipated", showSpeakerEventParticipated);
         req.setAttribute("numOfPages", numOfPages);
-        req.getRequestDispatcher("home.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/home.jsp").forward(req,resp);
 
 //
 //        // Obtain DAOFactory.
