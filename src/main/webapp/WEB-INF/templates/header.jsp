@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,8 +34,9 @@
                                 <c:out value="${sessionScope.user.firstName} ${sessionScope.user.lastName}"/>
                             </a>
                             <ul class="dropdown-menu text-small" data-popper-placement="top-start">
-                                <li><a class="dropdown-item" href="#">New project...</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <c:if test="${isSpeaker}">
+                                    <li><a class="dropdown-item" href="${contextPath}/speaker-report-list">My reports</a></li>
+                                </c:if>
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="signout">Sign out</a></li>

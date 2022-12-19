@@ -16,6 +16,7 @@ INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'OFFERED_BY_SPEAKER');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'PROPOSE_TO_SPEAKER');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'SUGGESTED_SPEAKER');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'CONFIRMED');
+INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'CANCELED');
 -- -----------------------------------------------------
 INSERT INTO event (id, name, place, begin_date, end_date,participants_came)  VALUES (DEFAULT, 'Java conference', 'Odessa', '2022-02-18 13:00:00', '2022-02-21 12:00:00',500);
 INSERT INTO event (id, name, place, begin_date, end_date)  VALUES (DEFAULT, 'C++ conference', 'San Francisco', '2022-07-04 16:00:00', '2022-07-08 13:00:00');
