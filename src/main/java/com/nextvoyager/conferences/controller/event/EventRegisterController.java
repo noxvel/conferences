@@ -19,7 +19,7 @@ public class EventRegisterController extends HttpServlet {
     EventService eventService = EventServiceImpl.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer eventID = Integer.valueOf(req.getParameter("eventID"));
         User user = (User) req.getSession().getAttribute("user");
         boolean register = Boolean.parseBoolean(req.getParameter("register"));

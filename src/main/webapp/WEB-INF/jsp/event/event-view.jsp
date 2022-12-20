@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
+<c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
+<c:set var="isUser" value="${not empty sessionScope.user and sessionScope.user.role == 'USER'}" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
@@ -20,19 +22,25 @@
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
                     <div class="d-grid gap-2 d-md-block">
-                        <c:if test="${not empty sessionScope.user and (sessionScope.user.role == 'MODERATOR' or sessionScope.user.role == 'SPEAKER')}">
-                            <a role="button" href="report/create?eventID=${event.id}" class="btn btn-success">Create new report</a>
+                        <c:if test="${isModerator or isSpeaker}}">
+                            <a role="button" href="${contextPath}/report/create?eventID=${event.id}" class="btn btn-success">Create new report</a>
                         </c:if>
-                        <c:if test="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}">
+                        <c:if test="${isModerator}">
                             <a role="button" href="edit?eventID=${event.id}" class="btn btn-secondary">Edit</a>
                         </c:if>
-                        <c:if test="${isRegister != null}">
-                            <%-- <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="Disabled tooltip">
-                                <button class="btn btn-primary" type="button" disabled>Disabled button</button> --%>
-                                <a role="button" href="register?eventID=${event.id}&register=${!isRegister}" class="btn btn-primary">
-                                    <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
-                                </a>
-                            <%-- </span> --%>
+                        <c:if test="${empty sessionScope.user or isUser}">
+                            <form action="register" method="post">
+                                <input type="hidden" name="register" value="${!isRegister}"/>
+                                <input type="hidden" name="eventID" value="${event.id}"/>
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="You need to register before">
+                                    <button ${isRegister == null ? 'disabled' : ''} class="btn btn-primary" type="submit">
+                                        <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
+                                    </button>
+                                </span>
+                            </form>
+                            <%-- <a role="button" href="register?eventID=${event.id}&register=${!isRegister}" class="btn btn-primary">
+                                <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
+                            </a> --%>
                         </c:if>
                     </div> 
                     <%-- <c:if test="${isSpeaker}"> --%>
@@ -65,9 +73,9 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <a role="button" href="report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a role="button" href="${contextPath}/report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">View</a>
                                         <c:if test="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}">
-                                            <a role="button" href="report/edit?reportID=${report.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                            <a role="button" href="${contextPath}/report/edit?reportID=${report.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
                                         </c:if>
                                     </div>
                                 </div>
@@ -100,5 +108,12 @@
             </nav>
 
         </div>
+
+        <script>
+            $(document).ready(() => {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            });
+        </script>
 
     <jsp:include page="/WEB-INF/templates/footer.jsp"/>

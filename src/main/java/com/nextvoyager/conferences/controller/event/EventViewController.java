@@ -45,8 +45,10 @@ public class EventViewController extends HttpServlet {
 
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            boolean isRegister = eventService.isUserRegisterEvent(event, user);
-            req.setAttribute("isRegister", isRegister);
+            if (user.getRole() == User.Role.USER) {
+                boolean isRegister = eventService.isUserRegisterEvent(event, user);
+                req.setAttribute("isRegister", isRegister);
+            }
         }
 
         ReportDAO.ListWithCountResult countAndList;
