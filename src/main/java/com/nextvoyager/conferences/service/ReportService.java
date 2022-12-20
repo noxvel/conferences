@@ -12,8 +12,10 @@ public interface ReportService {
     void update(Report report);
 
     void create(Report report);
-    ReportDAO.ListWithCountResult listWithPagination(Integer eventID, int page, int limit);
-
-    ReportDAO.ListWithCountResult listWithPagination(Integer eventID, int page, int limit, Report.Status status);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker, Report.Status status);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, Report.Status status);
 
 }

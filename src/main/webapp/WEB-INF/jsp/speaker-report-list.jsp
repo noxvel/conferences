@@ -14,7 +14,6 @@
                     <%-- <c:if test="${isSpeaker}"> --%>
                         <div class="ms-2">
                             <form action="${contextPath}/report-list-filter" method="post">
-                                <input type="hidden" name="eventID" value="${event.id}" />
                                 <div class="input-group">
                                     <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
                                         <option ${empty reportStatusFilter ? 'selected' : ''} value="">All</option>
@@ -32,7 +31,7 @@
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-                <c:forEach var="report" items="${event.reports}">
+                <c:forEach var="report" items="${reports}">
                     <div class="col">
                         <div class="card shadow-sm">
                             <div class="card-body">

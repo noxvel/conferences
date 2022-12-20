@@ -40,12 +40,28 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(Integer eventID, int page, int limit) {
-        return reportDAO.listWithPagination(eventID, page, limit);
+    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit) {
+        return reportDAO.listWithPagination(page, limit);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(Integer eventID, int page, int limit, Report.Status status) {
-        return reportDAO.listWithPagination(eventID, page, limit, status);
+    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker) {
+        return reportDAO.listWithPagination(page, limit, speaker);
     }
+
+    @Override
+    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker, Report.Status status) {
+        return reportDAO.listWithPagination(page, limit, speaker, status);
+    }
+
+    @Override
+    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID) {
+        return reportDAO.listWithPagination(page, limit, eventID);
+    }
+
+    @Override
+    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, Report.Status status) {
+        return reportDAO.listWithPagination(page, limit, eventID, status);
+    }
+
 }

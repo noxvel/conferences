@@ -32,11 +32,15 @@
                             <form action="register" method="post">
                                 <input type="hidden" name="register" value="${!isRegister}"/>
                                 <input type="hidden" name="eventID" value="${event.id}"/>
-                                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="You need to register before">
+                                <c:if test="${isRegister == null}">
+                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="You need to register before">
+                                </c:if>
                                     <button ${isRegister == null ? 'disabled' : ''} class="btn btn-primary" type="submit">
                                         <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
                                     </button>
-                                </span>
+                                <c:if test="${isRegister == null}">
+                                    </span>
+                                </c:if>
                             </form>
                             <%-- <a role="button" href="register?eventID=${event.id}&register=${!isRegister}" class="btn btn-primary">
                                 <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event

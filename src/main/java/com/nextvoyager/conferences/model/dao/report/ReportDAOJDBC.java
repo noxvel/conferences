@@ -27,8 +27,10 @@ public class ReportDAOJDBC implements ReportDAO {
             "SELECT r.id, r.topic, r.speaker_id, r.event_id, r.report_status_id, r.description, " +
                             "s.name AS report_status_name, e.name AS event_name FROM report AS r " +
                     "LEFT JOIN report_status AS s ON r.report_status_id = s.id " +
-                    "LEFT JOIN event AS e ON r.event_id = e.id " +
-                    "WHERE r.event_id = ? ";
+                    "LEFT JOIN event AS e ON r.event_id = e.id ";
+    private static final String SQL_ADD_WHERE_EVENT = "r.event_id = ? ";
+    private static final String SQL_ADD_WHERE_SPEAKER = "r.speaker_id = ? ";
+    private static final String SQL_ADD_WHERE_STATUS = "r.report_status_id = ? ";
     private static final String SQL_INSERT =
             "INSERT INTO report (topic, speaker_id, event_id, report_status_id, description) VALUES (?, ?, ?, ?, ?) ";
     private static final String SQL_UPDATE =
@@ -36,8 +38,7 @@ public class ReportDAOJDBC implements ReportDAO {
     private static final String SQL_DELETE =
             "DELETE FROM report WHERE id = ? ";
     private static final String SQL_LIST_LIMIT = "LIMIT ?, ? ";
-    private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM report AS r WHERE r.event_id = ? ";
-    private static final String SQL_LIST_ADD_FILTER_STATUS = " AND r.report_status_id = ? ";
+    private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM report AS r ";
 
 
     // Vars ---------------------------------------------------------------------------------------
@@ -93,6 +94,8 @@ public class ReportDAOJDBC implements ReportDAO {
     public List<Report> list(Integer eventID) throws DAOException {
         List<Report> reports = new ArrayList<>();
 
+        String currentSQL = SQL_LIST;
+        currentSQL += "WHERE " + SQL_ADD_WHERE_EVENT;
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = prepareStatement(connection, SQL_LIST, false, new ValueDAO(eventID, Types.INTEGER));
@@ -109,7 +112,7 @@ public class ReportDAOJDBC implements ReportDAO {
     }
 
     @Override
-    public ListWithCountResult listWithPagination(Integer eventID, Integer page, Integer limit) throws DAOException {
+    public ListWithCountResult listWithPagination(Integer page, Integer limit) throws DAOException {
         ListWithCountResult result = new ListWithCountResult();
         List<Report> reports = new ArrayList<>();
         result.setList(reports);
@@ -121,14 +124,13 @@ public class ReportDAOJDBC implements ReportDAO {
         offset = (page - 1) * limit;
 
         ValueDAO[] valuesPagination = {
-                new ValueDAO(eventID, Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement stmtCount = prepareStatement(connection, SQL_LIST_COUNT_ALL, false, new ValueDAO(eventID,Types.INTEGER));
+                PreparedStatement stmtCount = prepareStatement(connection, SQL_LIST_COUNT_ALL, false);
                 ResultSet resultSetCountAll = stmtCount.executeQuery();
                 PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
                 ResultSet resultSetList = statementList.executeQuery()
@@ -147,20 +149,164 @@ public class ReportDAOJDBC implements ReportDAO {
     }
 
     @Override
-    public ListWithCountResult listWithPagination(Integer eventID, int page, int limit, Report.Status status) throws DAOException {
+    public ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker) throws DAOException {
         ListWithCountResult result = new ListWithCountResult();
         List<Report> reports = new ArrayList<>();
         result.setList(reports);
 
         String currentAllCount = SQL_LIST_COUNT_ALL;
-        currentAllCount += SQL_LIST_ADD_FILTER_STATUS;
+        currentAllCount += "WHERE " + SQL_ADD_WHERE_SPEAKER;
 
         String currentSQL = SQL_LIST;
-        currentSQL += SQL_LIST_ADD_FILTER_STATUS;
+        currentSQL += "WHERE " + SQL_ADD_WHERE_SPEAKER;
         currentSQL += SQL_LIST_LIMIT;
 
         int offset;
         offset = (page - 1) * limit;
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(speaker.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, currentAllCount, false, valuesAllCount);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    reports.add(map(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+    }
+
+    @Override
+    public ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker, Report.Status status) throws DAOException {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Report> reports = new ArrayList<>();
+        result.setList(reports);
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = SQL_LIST_COUNT_ALL;
+        currentAllCount += "WHERE " + SQL_ADD_WHERE_SPEAKER;
+        currentAllCount += "ADD " + SQL_ADD_WHERE_STATUS;
+
+        String currentSQL = SQL_LIST;
+        currentSQL += "WHERE " + SQL_ADD_WHERE_SPEAKER;
+        currentSQL += "ADD " + SQL_ADD_WHERE_STATUS;
+        currentSQL += SQL_LIST_LIMIT;
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, currentAllCount, false, valuesAllCount);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    reports.add(map(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+    }
+
+    @Override
+    public ListWithCountResult listWithPagination(Integer page, Integer limit, Integer eventID) throws DAOException {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Report> reports = new ArrayList<>();
+        result.setList(reports);
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = SQL_LIST_COUNT_ALL;
+        currentAllCount += "WHERE " + SQL_ADD_WHERE_EVENT;
+
+        String currentSQL = SQL_LIST;
+        currentSQL += "WHERE " + SQL_ADD_WHERE_EVENT;
+        currentSQL += SQL_LIST_LIMIT;
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(eventID, Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, currentAllCount, false, valuesAllCount);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    reports.add(map(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+    }
+
+    @Override
+    public ListWithCountResult listWithPagination(Integer page, Integer limit, Integer eventID, Report.Status status) throws DAOException {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Report> reports = new ArrayList<>();
+        result.setList(reports);
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = SQL_LIST_COUNT_ALL;
+        currentAllCount += "WHERE " + SQL_ADD_WHERE_EVENT;
+        currentAllCount += "ADD " + SQL_ADD_WHERE_STATUS;
+
+        String currentSQL = SQL_LIST;
+        currentSQL += "WHERE " + SQL_ADD_WHERE_EVENT;
+        currentSQL += "ADD " + SQL_ADD_WHERE_STATUS;
+        currentSQL += SQL_LIST_LIMIT;
 
         ValueDAO[] valuesAllCount = {
                 new ValueDAO(eventID, Types.INTEGER),

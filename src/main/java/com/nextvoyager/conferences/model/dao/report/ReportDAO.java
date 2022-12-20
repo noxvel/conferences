@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.model.dao.report;
 
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Report;
+import com.nextvoyager.conferences.model.entity.User;
 import lombok.Data;
 
 import java.util.List;
@@ -26,9 +27,14 @@ public interface ReportDAO {
      */
     public List<Report> list(Integer eventID) throws DAOException;
 
-    ListWithCountResult listWithPagination(Integer eventID, Integer page, Integer limit) throws DAOException;
+    ListWithCountResult listWithPagination(Integer page, Integer limit) throws DAOException;
 
-    ListWithCountResult listWithPagination(Integer eventID, int page, int limit, Report.Status status) throws DAOException;
+    ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker) throws DAOException;
+    ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker, Report.Status status) throws DAOException;
+
+    ListWithCountResult listWithPagination(Integer page, Integer limit, Integer eventID) throws DAOException;
+
+    ListWithCountResult listWithPagination(Integer page, Integer limit,Integer eventID, Report.Status status) throws DAOException;
     /**
      * Create the given report in the database. The report ID must be null, otherwise it will throw
      * IllegalArgumentException. After creating, the DAO will set the obtained ID in the given report.
