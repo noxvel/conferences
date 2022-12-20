@@ -19,6 +19,8 @@ public interface ReportDAO {
      */
     public Report find(Integer id) throws DAOException;
 
+    List<Report> list() throws DAOException;
+
     /**
      * Returns a list of all reports from the database ordered by report ID. The list is never null and
      * is empty when the database does not contain any report.
