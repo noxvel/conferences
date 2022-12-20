@@ -39,7 +39,7 @@
                                 </c:if>
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="signout">Sign out</a></li>
+                                <li><a class="dropdown-item" href="${contextPath}/signout">Sign out</a></li>
                             </ul>
                         </div>
                     </c:when>    

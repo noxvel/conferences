@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/event/report/edit")
+@WebServlet("/report/edit")
 public class ReportEditController extends HttpServlet {
 
     ReportService reportService = ReportServiceImpl.getInstance();
@@ -36,7 +36,7 @@ public class ReportEditController extends HttpServlet {
         req.setAttribute("report", report);
         req.setAttribute("statuses", Report.Status.values());
         req.setAttribute("speakers", speakers);
-        req.getRequestDispatcher("/WEB-INF/jsp/event/report/report-edit.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/report/report-edit.jsp").forward(req,resp);
     }
 
     @Override
