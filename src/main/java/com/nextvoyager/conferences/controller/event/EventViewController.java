@@ -56,9 +56,9 @@ public class EventViewController extends HttpServlet {
         HttpSession currentSession = req.getSession();
         Optional<Report.Status> reportStatusFilter = Optional.ofNullable((Report.Status) currentSession.getAttribute("reportStatusFilter"));
         if (reportStatusFilter.isEmpty()) {
-            countAndList = reportService.listWithPagination(eventID, page, limit);
+            countAndList = reportService.listWithPagination(page, limit, eventID);
         } else {
-            countAndList = reportService.listWithPagination(eventID, page, limit, reportStatusFilter.get());
+            countAndList = reportService.listWithPagination(page, limit, eventID, reportStatusFilter.get());
         }
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);

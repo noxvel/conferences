@@ -17,7 +17,7 @@ public interface EventDAO {
      * @return The event from the database matching the given ID, otherwise null.
      * @throws DAOException If something fails at database level.
      */
-    public Event find(Integer id) throws DAOException;
+    Event find(Integer id) throws DAOException;
 
     /**
      * Returns a list of all events from the database ordered by event ID. The list is never null and
@@ -25,7 +25,7 @@ public interface EventDAO {
      * @return A list of all events from the database ordered by event ID.
      * @throws DAOException If something fails at database level.
      */
-    public List<Event> list(OrderType orderType) throws DAOException;
+    List<Event> list(SortType sortType, SortDirection sortDirection) throws DAOException;
 
     /**
      * Returns a list of all events from the database ordered by event ID. The list is never null and
@@ -33,7 +33,11 @@ public interface EventDAO {
      * @return A list of all events from the database ordered by event ID.
      * @throws DAOException If something fails at database level.
      */
-    public ListWithCountResult listWithPagination(OrderType orderType, Integer page, Integer limit) throws DAOException;
+    ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType,
+                                           SortDirection sortDirection) throws DAOException;
+
+    ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, SortType sortType,
+                                                              SortDirection sortDirection, User speaker) throws DAOException;
 
     /**
      * Create the given event in the database. The event ID must be null, otherwise it will throw
@@ -42,7 +46,7 @@ public interface EventDAO {
      * @throws IllegalArgumentException If the event ID is not null.
      * @throws DAOException If something fails at database level.
      */
-    public void create(Event event) throws IllegalArgumentException, DAOException;
+    void create(Event event) throws IllegalArgumentException, DAOException;
 
     /**
      * Update the given event in the database. The event ID must not be null, otherwise it will throw
@@ -51,7 +55,7 @@ public interface EventDAO {
      * @throws IllegalArgumentException If the event ID is null.
      * @throws DAOException If something fails at database level.
      */
-    public void update(Event event) throws IllegalArgumentException, DAOException;
+    void update(Event event) throws IllegalArgumentException, DAOException;
 
     /**
      * Delete the given event from the database. After deleting, the DAO will set the ID of the given
@@ -59,21 +63,22 @@ public interface EventDAO {
      * @param event The event to be deleted from the database.
      * @throws DAOException If something fails at database level.
      */
-    public void delete(Event event) throws DAOException;
+    void delete(Event event) throws DAOException;
 
     void registerUser(Integer eventID, User user, boolean register);
 
     boolean isUserRegisterEvent(Event event, User user);
 
-    ListWithCountResult listWithPaginationSpeakerParticipated(OrderType orderType, int page, int limit, User user);
-
-
-    public enum OrderType{
+    enum SortType{
         Date,
         ReportsCount,
         ParticipantsCount
     }
 
+    enum SortDirection {
+        Descending,
+        Ascending
+    }
 
     @Data
     public static class ListWithCountResult{

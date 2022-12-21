@@ -18,4 +18,6 @@ public interface ReportService {
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, Report.Status status);
 
+    void changeStatusBySpeaker(String speakerAction, Integer reportID);
+
 }

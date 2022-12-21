@@ -19,13 +19,13 @@
                         <!-- Email input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="email">Email address</label>
-                            <input name="email" type="email" id="email" class="form-control" autoComplete="off" pattern="^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$" required/>
+                            <input name="email" type="email" id="email" class="form-control" autoComplete="off" pattern="^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$" required value="speaker@mail.com"/>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="password">Password</label>
-                            <input name="password" type="password" id="password" class="form-control" autoComplete="off" required/>
+                            <input name="password" type="password" id="password" class="form-control" autoComplete="off" required value="123"/>
                         </div>
 
                         <!-- 2 column grid layout for inline styling -->

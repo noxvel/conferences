@@ -13,38 +13,46 @@
     <main>
 
         <section class="py-3 text-center container">
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row align-items-center">
                 <div class="d-grid gap-2 d-md-block">
                     <c:if test="${isModerator}">
                         <a role="button" href="event/create" class="btn btn-success">Create new event</a>
                     </c:if>
                 </div>
                 <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">
-                    <form action="event-list-sort" method="post">
-                        <div class="input-group">
-                            <select name="orderType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
-                                <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
-                                <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
-                                <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
+                    <form class="row row-cols-lg-auto g-3 align-items-center" action="event-list-sort" method="post">
+                        <div class="col-12">
+                            <select name="sortType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
+                                <option ${sortType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
+                                <option ${sortType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
+                                <option ${sortType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
                             </select>
+                        </div>
+                        <div class="col-12">
+                            <select name="sortDirection" class="form-select" id="sortDirectionSelect" aria-label="sort direction select">
+                                <option ${sortDirection == 'Ascending' ? 'selected' : ''} value="Ascending">in ascending order</option>
+                                <option ${sortDirection == 'Descending' ? 'selected' : ''} value="Descending" >in descending order</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
                             <button class="btn btn-secondary" type="submit">Sort</button>
                         </div>
                     </form>
                 </div>
+                <c:if test="${isSpeaker}">
                 <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
                     <form action="event-list-filter" method="post" class="d-flex flex-row align-items-center">
                         <div class="form-check">
-                            <%-- <c:if test="${isSpeaker}"> --%>
                                 <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
                                                         id="showInWhichParticipated" ${showSpeakerEventParticipated ? 'checked' : ''}>
                                 <label class="form-check-label" for="showInWhichParticipated">
                                     Show events in which you participated
                                 </label>
-                            <%-- </c:if> --%>
                         </div>
                         <button class="btn btn-warning ms-3" type="submit">Filter</button>
                     </form>
                 </div>
+                </c:if>
             </div>
         </section>
 

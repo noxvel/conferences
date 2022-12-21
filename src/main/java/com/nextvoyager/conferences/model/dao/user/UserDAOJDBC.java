@@ -8,8 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nextvoyager.conferences.model.dao.DAOUtil.prepareStatement;
-import static com.nextvoyager.conferences.model.dao.DAOUtil.ValueDAO;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
 
 public class UserDAOJDBC implements UserDAO{
 

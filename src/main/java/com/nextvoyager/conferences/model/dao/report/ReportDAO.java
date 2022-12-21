@@ -63,6 +63,8 @@ public interface ReportDAO {
      */
     public void delete(Report report) throws DAOException;
 
+    void updateStatus(Report report);
+
     @Data
     public static class ListWithCountResult{
         private Integer count;

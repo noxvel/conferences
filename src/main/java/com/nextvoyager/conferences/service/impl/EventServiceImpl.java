@@ -6,6 +6,8 @@ import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 
+import java.util.List;
+
 public class EventServiceImpl implements EventService {
 
     DAOFactory javabase = DAOFactory.getInstance();
@@ -37,5 +39,22 @@ public class EventServiceImpl implements EventService {
     @Override
     public void registerUser(Integer eventID, User user, boolean register) {
         eventDAO.registerUser(eventID,user,register);
+    }
+
+    @Override
+    public List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection) {
+        return eventDAO.list(sortType, sortDirection);
+    }
+
+    @Override
+    public EventDAO.ListWithCountResult listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
+                                                           EventDAO.SortDirection sortDirection) {
+        return eventDAO.listWithPagination(page, limit, sortType, sortDirection);
+    }
+
+    @Override
+    public EventDAO.ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, EventDAO.SortType sortType,
+                                                                             EventDAO.SortDirection sortDirection, User speaker) {
+        return eventDAO.listWithPaginationSpeakerParticipated(page, limit, sortType, sortDirection, speaker);
     }
 }

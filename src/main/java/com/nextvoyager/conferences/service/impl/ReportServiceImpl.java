@@ -64,4 +64,34 @@ public class ReportServiceImpl implements ReportService {
         return reportDAO.listWithPagination(page, limit, eventID, status);
     }
 
+    @Override
+    public void changeStatusBySpeaker(String speakerAction, Integer reportID) {
+        Report report = find(reportID);
+
+        Report.Status status = getNewStatus(speakerAction);
+
+        if (status != null) {
+            report.setStatus(status);
+            reportDAO.update(report);
+        }
+    }
+
+    private Report.Status getNewStatus(String action) {
+        Report.Status status = null;
+
+        switch (action) {
+            case "accept-propose":
+                status = Report.Status.CONFIRMED;
+                break;
+            case "cancel-propose":
+            case "cancel-offer":
+                status = Report.Status.FREE;
+                break;
+            case "cancel-report":
+                status = Report.Status.CANCELED;
+                break;
+        }
+
+        return status;
+    }
 }

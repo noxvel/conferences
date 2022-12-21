@@ -11,43 +11,62 @@
 
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
-                    <%-- <c:if test="${isSpeaker}"> --%>
-                        <div class="ms-2">
-                            <form action="${contextPath}/report-list-filter" method="post">
-                                <div class="input-group">
-                                    <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
-                                        <option ${empty reportStatusFilter ? 'selected' : ''} value="">All</option>
-                                        <c:forEach var="status" items="${reportStatuses}">
-                                            <option ${reportStatusFilter == status ? 'selected' : ''} value="${status}">${status.name}</option>
-                                        </c:forEach>
-                                    </select>
-                                    <button class="btn btn-primary" type="submit">Filter</button>
-                                </div>
-                            </form>
-                        </div>
-                    <%-- </c:if> --%>
+                    <div class="ms-2">
+                        <form action="${contextPath}/report-list-filter" method="post">
+                            <input type="hidden" name="redirectPath" value="speaker-report-list"/>
+                            <div class="input-group">
+                                <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
+                                    <option ${empty reportStatusFilter ? 'selected' : ''} value="">All</option>
+                                    <c:forEach var="status" items="${reportStatuses}">
+                                        <option ${reportStatusFilter == status ? 'selected' : ''} value="${status}">${status.name}</option>
+                                    </c:forEach>
+                                </select>
+                                <button class="btn btn-primary" type="submit">Filter</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </section>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
                 <c:forEach var="report" items="${reports}">
+                    <c:choose>
+                        <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
+                            <c:set var="reportColor" value="border-info"/>
+                        </c:when>
+                        <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
+                            <c:set var="reportColor" value="border-primary"/>
+                        </c:when>
+                        <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
+                            <c:set var="reportColor" value="border-warning"/>
+                        </c:when>
+                        <c:when test="${report.status == 'CONFIRMED'}">
+                            <c:set var="reportColor" value="border-success"/>
+                        </c:when>
+                        <c:when test="${report.status == 'CANCELED'}">
+                            <c:set var="reportColor" value="border-danger"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="reportColor" value=""/>
+                        </c:otherwise>
+                    </c:choose>
                     <div class="col">
-                        <div class="card shadow-sm">
+                        <div class="card shadow-sm ${reportColor}">
                             <div class="card-body">
                                 <h5 class="card-title">${report.topic}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">${report.status}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">${report.status.name}</h6>
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a role="button" href="report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">View</a>
                                     <div class="btn-group">
                                         <c:choose>
                                             <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel" class="btn btn-sm btn-outline-primary">Cancel</a>
+                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel-report" class="btn btn-sm btn-outline-danger">Cancel</a>
                                             </c:when>
                                             <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=accept" class="btn btn-sm btn-success">Accept</a>
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel" class="btn btn-sm btn-danger">Reject</a>
+                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=accept-propose" class="btn btn-sm btn-success">Accept</a>
+                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel-propose" class="btn btn-sm btn-danger">Reject</a>
                                             </c:when>
                                             <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
                                                 <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel-offer" class="btn btn-sm btn-outline-danger">Cancel offer</a>

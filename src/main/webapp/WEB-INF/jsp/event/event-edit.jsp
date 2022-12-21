@@ -32,6 +32,13 @@
                     <span class="input-group-text">Description</span>
                     <textarea name="description" class="form-control" rows="6 aria-label="Description" >${event.description}</textarea>
                 </div>
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Physically came to the event</span>
+                        <input name="participantsCame" type="number" min="0" class="form-control" id="participantsCame" value="${event.participantsCame}">
+                    </div>
+                </div>
+                
                 <%-- <input type="hidden" id="timezone" name="timezone" value="-08:00" /> --%>
                 <input type="hidden" id="eventID" name="eventID" value="${event.id}" />
                 <div class="col-12">

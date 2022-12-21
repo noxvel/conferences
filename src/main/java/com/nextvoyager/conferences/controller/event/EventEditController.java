@@ -38,6 +38,7 @@ public class EventEditController extends HttpServlet {
         String beginDateParam = req.getParameter("beginDateISO");
         String endDateParam = req.getParameter("endDateISO");
         String descriptionParam = req.getParameter("description");
+        String participantsCameParam = req.getParameter("participantsCame");
 
         // TODO: 01.12.2022 create validation to input data
 
@@ -48,6 +49,7 @@ public class EventEditController extends HttpServlet {
         event.setBeginDate(Date.from(Instant.parse(beginDateParam)));
         event.setEndDate(Date.from(Instant.parse(endDateParam)));
         event.setDescription(descriptionParam);
+        event.setParticipantsCame(Integer.valueOf(participantsCameParam));
 
         eventService.update(event);
 

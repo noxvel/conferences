@@ -13,14 +13,20 @@ import java.io.IOException;
 public class SortEventList extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String orderTypeParam = req.getParameter("orderType");
+        String sortTypeParam = req.getParameter("sortType");
+        String sortDirectionParam = req.getParameter("sortDirection");
 
-        EventDAO.OrderType orderType = EventDAO.OrderType.Date;
-        if (orderTypeParam != null) {
-            orderType = EventDAO.OrderType.valueOf(orderTypeParam);
+        EventDAO.SortType sortType = EventDAO.SortType.Date;
+        if (sortTypeParam != null) {
+            sortType = EventDAO.SortType.valueOf(sortTypeParam);
+        }
+        EventDAO.SortDirection sortDirection = EventDAO.SortDirection.Ascending;
+        if (sortDirectionParam != null) {
+            sortDirection = EventDAO.SortDirection.valueOf(sortDirectionParam);
         }
 
-        req.getSession().setAttribute("eventListOrderType", orderType);
+        req.getSession().setAttribute("eventListSortType", sortType);
+        req.getSession().setAttribute("eventListSortDirection", sortDirection);
         resp.sendRedirect("home");
     }
 }

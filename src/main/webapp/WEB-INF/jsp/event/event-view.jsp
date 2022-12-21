@@ -33,7 +33,7 @@
                                 <input type="hidden" name="register" value="${!isRegister}"/>
                                 <input type="hidden" name="eventID" value="${event.id}"/>
                                 <c:if test="${isRegister == null}">
-                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="You need to register before">
+                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="You need to login, before registering for the event">
                                 </c:if>
                                     <button ${isRegister == null ? 'disabled' : ''} class="btn btn-primary" type="submit">
                                         <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
@@ -47,10 +47,10 @@
                             </a> --%>
                         </c:if>
                     </div> 
-                    <%-- <c:if test="${isSpeaker}"> --%>
+                    <c:if test="${isSpeaker or isModerator}">
                         <div class="ms-2">
                             <form action="${contextPath}/report-list-filter" method="post">
-                                <input type="hidden" name="eventID" value="${event.id}" />
+                                <input type="hidden" name="redirectPath" value="event/view?eventID=${event.id}"/>
                                 <div class="input-group">
                                     <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
                                         <option ${empty reportStatusFilter ? 'selected' : ''} value="">All</option>
@@ -62,7 +62,7 @@
                                 </div>
                             </form>
                         </div>
-                    <%-- </c:if> --%>
+                    </c:if>
                 </div>
             </section>
 

@@ -1,7 +1,7 @@
 package com.nextvoyager.conferences.model.dao.report;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
-import com.nextvoyager.conferences.model.dao.QueryBuilder;
+import com.nextvoyager.conferences.model.dao.utils.querybuilder.SelectQueryBuilder;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -11,8 +11,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nextvoyager.conferences.model.dao.DAOUtil.prepareStatement;
-import static com.nextvoyager.conferences.model.dao.DAOUtil.ValueDAO;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
 
 public class ReportDAOJDBC implements ReportDAO {
 
@@ -40,6 +40,8 @@ public class ReportDAOJDBC implements ReportDAO {
             "DELETE FROM report WHERE id = ? ";
     private static final String SQL_LIST_LIMIT = "LIMIT ?, ? ";
     private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM report AS r ";
+    private static final String SQL_STATUS_UPDATE =
+            "UPDATE report SET report_status_id = ? WHERE id = ? ";
 
 
     // Vars ---------------------------------------------------------------------------------------
@@ -114,7 +116,7 @@ public class ReportDAOJDBC implements ReportDAO {
     public List<Report> list(Integer eventID) throws DAOException {
         List<Report> reports = new ArrayList<>();
 
-        String currentSQL = new QueryBuilder(SQL_LIST)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_EVENT)
                 .build();
         try (
@@ -137,10 +139,10 @@ public class ReportDAOJDBC implements ReportDAO {
         int offset;
         offset = (page - 1) * limit;
 
-        String currentAllCount = new QueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .build();
 
-        String currentSQL = new QueryBuilder(SQL_LIST)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
@@ -159,11 +161,11 @@ public class ReportDAOJDBC implements ReportDAO {
         int offset;
         offset = (page - 1) * limit;
 
-        String currentAllCount = new QueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_SPEAKER)
                 .build();
 
-        String currentSQL = new QueryBuilder(SQL_LIST)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_SPEAKER)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
@@ -186,12 +188,12 @@ public class ReportDAOJDBC implements ReportDAO {
         int offset;
         offset = (page - 1) * limit;
 
-        String currentAllCount = new QueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_SPEAKER)
                 .setFilter(SQL_ADD_WHERE_STATUS)
                 .build();
 
-        String currentSQL = new QueryBuilder(SQL_LIST)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_SPEAKER)
                 .setFilter(SQL_ADD_WHERE_STATUS)
                 .setLimit(SQL_LIST_LIMIT)
@@ -217,11 +219,11 @@ public class ReportDAOJDBC implements ReportDAO {
         int offset;
         offset = (page - 1) * limit;
 
-        String currentAllCount = new QueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_EVENT)
                 .build();
 
-        String currentSQL = new QueryBuilder(SQL_LIST)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_EVENT)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
@@ -244,12 +246,12 @@ public class ReportDAOJDBC implements ReportDAO {
         int offset;
         offset = (page - 1) * limit;
 
-        String currentAllCount = new QueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_EVENT)
                 .setFilter(SQL_ADD_WHERE_STATUS)
                 .build();
 
-        String currentSQL = new QueryBuilder(SQL_LIST)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_EVENT)
                 .setFilter(SQL_ADD_WHERE_STATUS)
                 .setLimit(SQL_LIST_LIMIT)
@@ -380,6 +382,30 @@ public class ReportDAOJDBC implements ReportDAO {
                 throw new DAOException("Deleting report failed, no rows affected.");
             } else {
                 report.setId(null);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void updateStatus(Report report) {
+        if (report.getId() == null) {
+            throw new IllegalArgumentException("Report is not created yet, the report ID is null.");
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(report.getStatus().getId(),Types.INTEGER),
+                new ValueDAO(report.getId(),Types.INTEGER),
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_STATUS_UPDATE, false, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Updating report failed, no rows affected.");
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);

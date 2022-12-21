@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.model.dao.event;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
+import com.nextvoyager.conferences.model.dao.utils.querybuilder.SelectQueryBuilder;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 
@@ -9,9 +10,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nextvoyager.conferences.model.dao.DAOUtil.prepareStatement;
-import static com.nextvoyager.conferences.model.dao.DAOUtil.toSqlDate;
-import static com.nextvoyager.conferences.model.dao.DAOUtil.ValueDAO;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.toSqlDate;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
 
 public class EventDAOJDBC implements EventDAO{
 
@@ -35,8 +36,12 @@ public class EventDAOJDBC implements EventDAO{
     private static final String SQL_LIST_ORDER_BY_BEGIN_DATE = "ORDER BY e.begin_date ";
     private static final String SQL_LIST_ORDER_BY_REPORTS = "ORDER BY r_count ";
     private static final String SQL_LIST_ORDER_BY_PARTICIPANTS = "ORDER BY p_count ";
+
+    private static final String SQL_LIST_ORDER_DIRECTION_ASC = "ASC ";
+    private static final String SQL_LIST_ORDER_DIRECTION_DESC = "DESC ";
+
     private static final String SQL_LIST_LIMIT = "LIMIT ?, ? ";
-    private static final String SQL_LIST_FILTER_SPEAKER_PARTICIPATED = "WHERE EXISTS (SELECT id FROM report WHERE report.event_id = e.id AND report.speaker_id = ?) ";
+    private static final String SQL_LIST_WHERE_SPEAKER_PARTICIPATED = "EXISTS (SELECT id FROM report WHERE report.event_id = e.id AND report.speaker_id = ?) ";
 
     private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM event AS e ";
     private static final String SQL_REGISTER_USER_TO_EVENT = "INSERT INTO event_has_participant (event_id, user_id) VALUES (?, ?)" ;
@@ -93,22 +98,13 @@ public class EventDAOJDBC implements EventDAO{
     }
 
     @Override
-    public List<Event> list(OrderType orderType) throws DAOException {
+    public List<Event> list(SortType sortType, SortDirection sortDirection) throws DAOException {
         List<Event> events = new ArrayList<>();
 
-        String currentSQL = SQL_LIST;
-
-        switch (orderType) {
-            case Date:
-                currentSQL += SQL_LIST_ORDER_BY_BEGIN_DATE;
-                break;
-            case ReportsCount:
-                currentSQL += SQL_LIST_ORDER_BY_REPORTS;
-                break;
-            case ParticipantsCount:
-                currentSQL += SQL_LIST_ORDER_BY_PARTICIPANTS;
-                break;
-        }
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setSortType(getSortType(sortType))
+                .setSortDirection(getSortDirection(sortDirection))
+                .build();
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -125,34 +121,27 @@ public class EventDAOJDBC implements EventDAO{
         return events;
     }
 
+
+
     @Override
-    public ListWithCountResult listWithPagination(OrderType orderType, Integer page, Integer limit) throws DAOException {
+    public ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType, SortDirection sortDirection) throws DAOException {
         ListWithCountResult result = new ListWithCountResult();
         List<Event> events = new ArrayList<>();
         result.setList(events);
 
-        String currentSQL = SQL_LIST;
-
-        switch (orderType) {
-            case Date:
-                currentSQL += SQL_LIST_ORDER_BY_BEGIN_DATE;
-                break;
-            case ReportsCount:
-                currentSQL += SQL_LIST_ORDER_BY_REPORTS;
-                break;
-            case ParticipantsCount:
-                currentSQL += SQL_LIST_ORDER_BY_PARTICIPANTS;
-                break;
-        }
-
         int offset;
         offset = (page - 1) * limit;
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setSortType(getSortType(sortType))
+                .setSortDirection(getSortDirection(sortDirection))
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
 
         ValueDAO[] valuesPagination = {
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
-        currentSQL += SQL_LIST_LIMIT;
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -176,37 +165,31 @@ public class EventDAOJDBC implements EventDAO{
 
 
     @Override
-    public ListWithCountResult listWithPaginationSpeakerParticipated(OrderType orderType, int page, int limit, User user) {
+    public ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, SortType sortType,
+                                                                     SortDirection sortDirection, User user) {
         ListWithCountResult result = new ListWithCountResult();
         List<Event> events = new ArrayList<>();
         result.setList(events);
 
-        String currentSQL = SQL_LIST;
-        String countAllSQL = SQL_LIST_COUNT_ALL + SQL_LIST_FILTER_SPEAKER_PARTICIPATED;
-
-        currentSQL += SQL_LIST_FILTER_SPEAKER_PARTICIPATED;
-
-        switch (orderType) {
-            case Date:
-                currentSQL += SQL_LIST_ORDER_BY_BEGIN_DATE;
-                break;
-            case ReportsCount:
-                currentSQL += SQL_LIST_ORDER_BY_REPORTS;
-                break;
-            case ParticipantsCount:
-                currentSQL += SQL_LIST_ORDER_BY_PARTICIPANTS;
-                break;
-        }
-
         int offset;
         offset = (page - 1) * limit;
+
+        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(SQL_LIST_WHERE_SPEAKER_PARTICIPATED)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setFilter(SQL_LIST_WHERE_SPEAKER_PARTICIPATED)
+                .setSortType(getSortType(sortType))
+                .setSortDirection(getSortDirection(sortDirection))
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
 
         ValueDAO[] valuesPagination = {
                 new ValueDAO(user.getId(), Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
-        currentSQL += SQL_LIST_LIMIT;
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -399,7 +382,34 @@ public class EventDAOJDBC implements EventDAO{
         return event;
     }
 
+    private static String getSortDirection(SortDirection sortDirection) {
+        String result = "";
+        switch (sortDirection) {
+            case Ascending:
+                result = SQL_LIST_ORDER_DIRECTION_ASC;
+                break;
+            case Descending:
+                result = SQL_LIST_ORDER_DIRECTION_DESC;
+                break;
+        }
+        return result;
+    }
 
+    private static String getSortType(SortType sortType) {
+        String result = "";
+        switch (sortType) {
+            case Date:
+                result = SQL_LIST_ORDER_BY_BEGIN_DATE;
+                break;
+            case ReportsCount:
+                result = SQL_LIST_ORDER_BY_REPORTS;
+                break;
+            case ParticipantsCount:
+                result = SQL_LIST_ORDER_BY_PARTICIPANTS;
+                break;
+        }
+        return result;
+    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.model.dao;
+package com.nextvoyager.conferences.model.dao.utils;
 
 import lombok.Getter;
 import lombok.Setter;
