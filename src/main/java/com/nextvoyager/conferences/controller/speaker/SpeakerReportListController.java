@@ -34,15 +34,14 @@ public class SpeakerReportListController extends HttpServlet {
             page = Integer.parseInt(pageParam);
         }
 
-        HttpSession session = req.getSession(false);
+        HttpSession currentSession = req.getSession(false);
 
 //        if (session != null && session.getAttribute("user") != null) {
-            User speaker = (User) session.getAttribute("user");
+            User speaker = (User) currentSession.getAttribute("user");
 //        }
 
         ReportDAO.ListWithCountResult countAndList;
 
-        HttpSession currentSession = req.getSession();
         Optional<Report.Status> reportStatusFilter = Optional.ofNullable((Report.Status) currentSession.getAttribute("reportStatusFilter"));
         if (reportStatusFilter.isEmpty()) {
             countAndList = reportService.listWithPagination(page, limit, speaker);
@@ -58,6 +57,6 @@ public class SpeakerReportListController extends HttpServlet {
         req.setAttribute("page", page);
         req.setAttribute("numOfPages", numOfPages);
 
-        req.getRequestDispatcher("/WEB-INF/jsp/speaker-report-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/report-list.jsp").forward(req, resp);
     }
 }

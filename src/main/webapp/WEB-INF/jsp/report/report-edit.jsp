@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="currentUser" value="${sessionScope.user}" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
@@ -14,7 +15,7 @@
                 </div>
                 <div class="col-md-8">
                     <label for="speaker" class="form-label">Speaker</label>
-                    <select name="speaker" id="speaker" class="form-select">
+                    <select name="speaker" id="speaker" class="form-select" ${currentUser.role != 'MODERATOR' ? 'disabled' : ''}>
                         <option value="">Vacant</option>
                         <c:forEach var="speaker" items="${speakers}">
                             <option ${report.speaker.id == speaker.id ? 'selected' : ''} value="${speaker.id}">${speaker.email}</option>
@@ -23,7 +24,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-select">
+                    <select name="status" id="status" class="form-select" ${currentUser.role != 'MODERATOR' ? 'disabled' : ''}>
                         <c:forEach var="status" items="${statuses}">
                             <option ${report.status == status ? 'selected' : ''} value="${status}">${status.name}</option>
                         </c:forEach>

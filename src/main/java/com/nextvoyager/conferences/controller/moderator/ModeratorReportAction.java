@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.speaker;
+package com.nextvoyager.conferences.controller.moderator;
 
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
@@ -11,8 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/speaker-report-action")
-public class SpeakerReportAction extends HttpServlet {
+@WebServlet("/moderator-report-action")
+public class ModeratorReportAction extends HttpServlet {
 
     ReportService reportService = ReportServiceImpl.getInstance();
 
@@ -21,9 +21,7 @@ public class SpeakerReportAction extends HttpServlet {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
         String actionParam = req.getParameter("action");
 
-        User speaker = (User) req.getSession().getAttribute("user");
-
-        reportService.changeStatusBySpeaker(actionParam, reportID, speaker);
+        reportService.changeStatusByModerator(actionParam, reportID);
 
         resp.sendRedirect("report/view?reportID=" + reportID);
     }

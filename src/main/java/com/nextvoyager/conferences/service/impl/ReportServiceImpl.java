@@ -6,8 +6,8 @@ import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
-
-import java.util.List;
+import com.nextvoyager.conferences.service.changereport.ChangeReportAction;
+import com.nextvoyager.conferences.service.changereport.ChangeReportFactory;
 
 public class ReportServiceImpl implements ReportService {
 
@@ -45,6 +45,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Report.Status status) {
+        return reportDAO.listWithPagination(page, limit, status);
+    }
+
+    @Override
     public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker) {
         return reportDAO.listWithPagination(page, limit, speaker);
     }
@@ -65,33 +70,28 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void changeStatusBySpeaker(String speakerAction, Integer reportID) {
+    public void changeStatusBySpeaker(String action, Integer reportID, User speaker) {
         Report report = find(reportID);
 
-        Report.Status status = getNewStatus(speakerAction);
+        ChangeReportAction changeReportAction = ChangeReportFactory.getChangeReportAction(action);
 
-        if (status != null) {
-            report.setStatus(status);
+        if (changeReportAction != null) {
+            changeReportAction.change(report, speaker);
             reportDAO.update(report);
         }
     }
 
-    private Report.Status getNewStatus(String action) {
-        Report.Status status = null;
+    @Override
+    public void changeStatusByModerator(String action, Integer reportID) {
+        Report report = find(reportID);
 
-        switch (action) {
-            case "accept-propose":
-                status = Report.Status.CONFIRMED;
-                break;
-            case "cancel-propose":
-            case "cancel-offer":
-                status = Report.Status.FREE;
-                break;
-            case "cancel-report":
-                status = Report.Status.CANCELED;
-                break;
+        ChangeReportAction changeReportAction = ChangeReportFactory.getChangeReportAction(action);
+
+        if (changeReportAction != null) {
+            changeReportAction.change(report, report.getSpeaker());
+            reportDAO.update(report);
         }
 
-        return status;
     }
+
 }

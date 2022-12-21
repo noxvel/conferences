@@ -34,6 +34,36 @@
                             <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">Edit</a>
                         </c:if>
                     </div>
+                    <c:if test="${currentUser.role == 'SPEAKER'}">
+                        <div class="btn-group ms-3">
+                            <c:choose>
+                                <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-offer-speaker" class="btn btn btn-outline-danger">Cancel</a>
+                                </c:when>
+                                <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=accept-propose-speaker" class="btn btn btn-success">Accept</a>
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-propose-speaker" class="btn btn btn-danger">Reject</a>
+                                </c:when>
+                                <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-suggestion-speaker" class="btn btn btn-outline-danger">Cancel offer</a>
+                                </c:when>
+                            </c:choose>
+                        </div>
+                    </c:if>
+                    <c:if test="${currentUser.role == 'MODERATOR'}">
+                        <div class="btn-group ms-3">
+                            <c:choose>
+                                <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-offer-moderator" class="btn btn btn-success">Accept offer</a>
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-offer-moderator" class="btn btn btn-danger">Deny offer</a>
+                                </c:when>
+                                <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-suggestion-moderator" class="btn btn btn-success">Accept speaker suggestion</a>
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-suggestion-moderator" class="btn btn btn-danger">Cancel speaker suggestion</a>
+                                </c:when>
+                            </c:choose>
+                        </div>
+                    </c:if>
                     <%-- <div class="ms-2">
                         <form action="home" method="get">
                             <div class="input-group">

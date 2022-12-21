@@ -31,6 +31,7 @@ public interface ReportDAO {
 
     ListWithCountResult listWithPagination(Integer page, Integer limit) throws DAOException;
 
+    ListWithCountResult listWithPagination(int page, int limit, Report.Status status);
     ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker) throws DAOException;
     ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker, Report.Status status) throws DAOException;
 
@@ -63,7 +64,6 @@ public interface ReportDAO {
      */
     public void delete(Report report) throws DAOException;
 
-    void updateStatus(Report report);
 
     @Data
     public static class ListWithCountResult{

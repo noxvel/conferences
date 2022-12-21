@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
+<c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +38,10 @@
                                 <c:if test="${isSpeaker}">
                                     <li><a class="dropdown-item" href="${contextPath}/speaker-report-list">My reports</a></li>
                                 </c:if>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <c:if test="${isModerator}">
+                                    <li><a class="dropdown-item" href="${contextPath}/moderator-report-list">Reports list</a></li>
+                                </c:if>
+                                <li><a class="dropdown-item" href="${contextPath}/profile}">Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="${contextPath}/signout">Sign out</a></li>
                             </ul>

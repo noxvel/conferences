@@ -59,20 +59,6 @@
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a role="button" href="report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">View</a>
-                                    <div class="btn-group">
-                                        <c:choose>
-                                            <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel-report" class="btn btn-sm btn-outline-danger">Cancel</a>
-                                            </c:when>
-                                            <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=accept-propose" class="btn btn-sm btn-success">Accept</a>
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel-propose" class="btn btn-sm btn-danger">Reject</a>
-                                            </c:when>
-                                            <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
-                                                <a role="button" href="speaker-report-action?reportID=${report.id}&action=cancel-offer" class="btn btn-sm btn-outline-danger">Cancel offer</a>
-                                            </c:when>
-                                        </c:choose>
-                                    </div>
                                 </div>
                             </div>
                         </div>

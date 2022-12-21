@@ -157,6 +157,33 @@ public class ReportDAOJDBC implements ReportDAO {
     }
 
     @Override
+    public ListWithCountResult listWithPagination(int page, int limit, Report.Status status) {
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(SQL_ADD_WHERE_STATUS)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setFilter(SQL_ADD_WHERE_STATUS)
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(status.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(status.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
+    }
+
+    @Override
     public ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker) throws DAOException {
         int offset;
         offset = (page - 1) * limit;
@@ -298,6 +325,7 @@ public class ReportDAOJDBC implements ReportDAO {
         return result;
     }
 
+
     @Override
     public void create(Report report) throws IllegalArgumentException, DAOException {
         if (report.getId() != null) {
@@ -345,9 +373,15 @@ public class ReportDAOJDBC implements ReportDAO {
             throw new IllegalArgumentException("Report is not created yet, the report ID is null.");
         }
 
+        // if speaker field is null
+        ValueDAO speakerValue = new ValueDAO(null, Types.INTEGER);
+        if (report.getSpeaker() != null) {
+            speakerValue.setValue(report.getSpeaker().getId());
+        }
+
         ValueDAO[] values = {
                 new ValueDAO(report.getTopic(),Types.VARCHAR),
-                new ValueDAO(report.getSpeaker().getId(),Types.INTEGER),
+                speakerValue,
                 new ValueDAO(report.getEvent().getId(),Types.INTEGER),
                 new ValueDAO(report.getStatus().getId(),Types.INTEGER),
                 new ValueDAO(report.getDescription(),Types.VARCHAR),
@@ -382,30 +416,6 @@ public class ReportDAOJDBC implements ReportDAO {
                 throw new DAOException("Deleting report failed, no rows affected.");
             } else {
                 report.setId(null);
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void updateStatus(Report report) {
-        if (report.getId() == null) {
-            throw new IllegalArgumentException("Report is not created yet, the report ID is null.");
-        }
-
-        ValueDAO[] values = {
-                new ValueDAO(report.getStatus().getId(),Types.INTEGER),
-                new ValueDAO(report.getId(),Types.INTEGER),
-        };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_STATUS_UPDATE, false, values)
-        ) {
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Updating report failed, no rows affected.");
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
