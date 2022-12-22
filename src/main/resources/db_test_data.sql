@@ -4,7 +4,7 @@ USE `conferences` ;
 -- -----------------------------------------------------
 INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'MODERATOR');
 INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'SPEAKER');
-INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'USER');
+INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'ORDINARY_USER');
 -- -----------------------------------------------------
 INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'moderator@mail.com', md5('123'), 1, 'Іван', 'Гармата');
 INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'speaker@mail.com', md5('123'), 2, 'Богдан', 'Хмельницький');

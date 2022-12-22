@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
@@ -15,7 +16,9 @@
                 <div class="col-md-8">
                     <label for="speaker" class="form-label">Speaker</label>
                     <select name="speaker" id="speaker" class="form-select">
-                        <option value="">Vacant</option>
+                        <c:if test="${isModerator}">
+                            <option value="">Vacant</option>
+                        </c:if>
                         <c:forEach var="speaker" items="${speakers}">
                             <option value="${speaker.id}">${speaker.email}</option>
                         </c:forEach>

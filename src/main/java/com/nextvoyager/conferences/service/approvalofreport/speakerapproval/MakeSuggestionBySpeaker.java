@@ -1,10 +1,10 @@
-package com.nextvoyager.conferences.service.changereport.speaker;
+package com.nextvoyager.conferences.service.approvalofreport.speakerapproval;
 
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.service.changereport.ChangeReportAction;
+import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
 
-public class MakeSuggestionBySpeaker implements ChangeReportAction {
+public class MakeSuggestionBySpeaker implements ApprovalOfReportAction {
     @Override
     public void change(Report report, User speaker) {
         report.setStatus(Report.Status.SUGGESTED_SPEAKER);

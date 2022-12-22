@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.moderator;
+package com.nextvoyager.conferences.controller.user.moderator;
 
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -50,6 +50,6 @@ public class ModeratorReportListController extends HttpServlet {
         req.setAttribute("page", page);
         req.setAttribute("numOfPages", numOfPages);
 
-        req.getRequestDispatcher("/WEB-INF/jsp/report-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/report/report-list.jsp").forward(req, resp);
     }
 }

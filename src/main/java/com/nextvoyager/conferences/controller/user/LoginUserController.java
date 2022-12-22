@@ -1,7 +1,5 @@
-package com.nextvoyager.conferences.controller;
+package com.nextvoyager.conferences.controller.user;
 
-import com.nextvoyager.conferences.model.dao.DAOFactory;
-import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
@@ -14,13 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/login")
-public class LoginController extends HttpServlet {
+public class LoginUserController extends HttpServlet {
 
     UserService userService = UserServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/user/login.jsp").forward(req,resp);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class LoginController extends HttpServlet {
 
         if (user == null) {
             req.setAttribute("message", "Unknown username/password. Please retry");
-            req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/jsp/user/login.jsp").forward(req, resp);
         } else {
             req.getSession().setAttribute("user", user);
             resp.sendRedirect("home");

@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void update(User user) {
+        userDAO.update(user);
+    }
+
+    @Override
     public boolean existEmail(String emailParam) {
         return userDAO.existEmail(emailParam);
     }

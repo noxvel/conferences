@@ -45,7 +45,7 @@ public class EventViewController extends HttpServlet {
 
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            if (user.getRole() == User.Role.USER) {
+            if (user.getRole() == User.Role.ORDINARY_USER) {
                 boolean isRegister = eventService.isUserRegisterEvent(event, user);
                 req.setAttribute("isRegister", isRegister);
             }

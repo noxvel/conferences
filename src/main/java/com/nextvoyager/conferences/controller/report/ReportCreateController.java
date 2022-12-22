@@ -17,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,15 +32,21 @@ public class ReportCreateController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer eventID = Integer.valueOf(req.getParameter("eventID"));
 
-        // Obtain DAOFactory.
-        DAOFactory javabase = DAOFactory.getInstance();
+        Report.Status[] statuses;
+        List<User> speakers;
 
-        // Obtain ReportDAO.
-        UserDAO userDAO = javabase.getUserDAO();
+        HttpSession session = req.getSession(false);
+        User currentUser = (User) session.getAttribute("user");
 
-        List<User> speakers = userService.listWithOneRole(User.Role.SPEAKER);
+        if (currentUser.getRole() == User.Role.SPEAKER) {
+            speakers = List.of(currentUser);
+            statuses = new Report.Status[]{Report.Status.OFFERED_BY_SPEAKER};
+        } else {
+            speakers = userService.listWithOneRole(User.Role.SPEAKER);
+            statuses = Report.Status.values();
+        }
 
-        req.setAttribute("statuses", Report.Status.values());
+        req.setAttribute("statuses", statuses);
         req.setAttribute("speakers", speakers);
         req.setAttribute("eventID", eventID);
         req.getRequestDispatcher("/WEB-INF/jsp/report/report-create.jsp").forward(req,resp);

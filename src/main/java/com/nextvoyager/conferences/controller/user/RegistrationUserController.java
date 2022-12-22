@@ -1,7 +1,5 @@
-package com.nextvoyager.conferences.controller;
+package com.nextvoyager.conferences.controller.user;
 
-import com.nextvoyager.conferences.model.dao.DAOFactory;
-import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
@@ -14,13 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/registration")
-public class RegistrationController extends HttpServlet {
+public class RegistrationUserController extends HttpServlet {
 
     UserService userService = UserServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/user/registration.jsp").forward(req,resp);
     }
 
     @Override
@@ -37,13 +35,13 @@ public class RegistrationController extends HttpServlet {
         user.setLastName(lastNameParam);
         user.setEmail(emailParam);
         user.setPassword(passwordParam);
-        user.setRole(User.Role.USER);
+        user.setRole(User.Role.ORDINARY_USER);
 
         boolean exist = userService.existEmail(emailParam);
 
         if (exist) {
             req.setAttribute("message", "The email you entered already exists. Please enter a different email.");
-            req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/jsp/user/registration.jsp").forward(req, resp);
         } else {
             userService.create(user);
 

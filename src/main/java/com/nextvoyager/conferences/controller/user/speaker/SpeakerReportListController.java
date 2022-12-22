@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.speaker;
+package com.nextvoyager.conferences.controller.user.speaker;
 
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Event;
@@ -57,6 +57,6 @@ public class SpeakerReportListController extends HttpServlet {
         req.setAttribute("page", page);
         req.setAttribute("numOfPages", numOfPages);
 
-        req.getRequestDispatcher("/WEB-INF/jsp/report-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/report/report-list.jsp").forward(req, resp);
     }
 }

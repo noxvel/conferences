@@ -3,7 +3,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
 <c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
-<c:set var="isUser" value="${not empty sessionScope.user and sessionScope.user.role == 'USER'}" />
+<c:set var="isUser" value="${not empty sessionScope.user and sessionScope.user.role == 'ORDINARY_USER'}" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
@@ -22,7 +22,7 @@
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
                     <div class="d-grid gap-2 d-md-block">
-                        <c:if test="${isModerator or isSpeaker}}">
+                        <c:if test="${isModerator or isSpeaker}">
                             <a role="button" href="${contextPath}/report/create?eventID=${event.id}" class="btn btn-success">Create new report</a>
                         </c:if>
                         <c:if test="${isModerator}">

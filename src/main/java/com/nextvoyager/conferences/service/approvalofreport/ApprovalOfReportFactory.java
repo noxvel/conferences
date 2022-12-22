@@ -1,16 +1,16 @@
-package com.nextvoyager.conferences.service.changereport;
+package com.nextvoyager.conferences.service.approvalofreport;
 
-import com.nextvoyager.conferences.service.changereport.moderator.AcceptOfferByModerator;
-import com.nextvoyager.conferences.service.changereport.moderator.AcceptSuggestionByModerator;
-import com.nextvoyager.conferences.service.changereport.moderator.DenyOfferModerator;
-import com.nextvoyager.conferences.service.changereport.moderator.DenySuggestionByModerator;
-import com.nextvoyager.conferences.service.changereport.speaker.*;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.AcceptOfferByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.AcceptSuggestionByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.DenyOfferModerator;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.DenySuggestionByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.speakerapproval.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChangeReportFactory {
-    private static final Map<String,ChangeReportAction> changeReportActionMap = new HashMap<>();
+public class ApprovalOfReportFactory {
+    private static final Map<String, ApprovalOfReportAction> changeReportActionMap = new HashMap<>();
 
     static {
         changeReportActionMap.put("accept-propose-speaker", new AcceptProposeBySpeaker());
@@ -25,7 +25,7 @@ public class ChangeReportFactory {
         changeReportActionMap.put("deny-suggestion-moderator", new DenySuggestionByModerator());
     }
 
-    public static ChangeReportAction getChangeReportAction(String action) {
+    public static ApprovalOfReportAction getChangeReportAction(String action) {
         return changeReportActionMap.get(action);
     }
 }

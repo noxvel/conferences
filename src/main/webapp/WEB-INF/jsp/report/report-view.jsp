@@ -47,6 +47,9 @@
                                 <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-suggestion-speaker" class="btn btn btn-outline-danger">Cancel offer</a>
                                 </c:when>
+                                <c:when test="${report.status == 'FREE'}">
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=make-suggestion-speaker" class="btn btn btn-info">Make suggestion to be a speaker</a>
+                                </c:when>
                             </c:choose>
                         </div>
                     </c:if>

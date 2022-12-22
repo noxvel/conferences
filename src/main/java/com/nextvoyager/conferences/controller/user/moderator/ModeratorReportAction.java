@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.moderator;
+package com.nextvoyager.conferences.controller.user.moderator;
 
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;

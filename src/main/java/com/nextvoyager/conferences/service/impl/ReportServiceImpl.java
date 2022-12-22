@@ -6,8 +6,8 @@ import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
-import com.nextvoyager.conferences.service.changereport.ChangeReportAction;
-import com.nextvoyager.conferences.service.changereport.ChangeReportFactory;
+import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
+import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportFactory;
 
 public class ReportServiceImpl implements ReportService {
 
@@ -73,10 +73,10 @@ public class ReportServiceImpl implements ReportService {
     public void changeStatusBySpeaker(String action, Integer reportID, User speaker) {
         Report report = find(reportID);
 
-        ChangeReportAction changeReportAction = ChangeReportFactory.getChangeReportAction(action);
+        ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(action);
 
-        if (changeReportAction != null) {
-            changeReportAction.change(report, speaker);
+        if (approvalOfReportAction != null) {
+            approvalOfReportAction.change(report, speaker);
             reportDAO.update(report);
         }
     }
@@ -85,10 +85,10 @@ public class ReportServiceImpl implements ReportService {
     public void changeStatusByModerator(String action, Integer reportID) {
         Report report = find(reportID);
 
-        ChangeReportAction changeReportAction = ChangeReportFactory.getChangeReportAction(action);
+        ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(action);
 
-        if (changeReportAction != null) {
-            changeReportAction.change(report, report.getSpeaker());
+        if (approvalOfReportAction != null) {
+            approvalOfReportAction.change(report, report.getSpeaker());
             reportDAO.update(report);
         }
 

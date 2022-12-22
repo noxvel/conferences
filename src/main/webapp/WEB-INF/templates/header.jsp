@@ -41,7 +41,7 @@
                                 <c:if test="${isModerator}">
                                     <li><a class="dropdown-item" href="${contextPath}/moderator-report-list">Reports list</a></li>
                                 </c:if>
-                                <li><a class="dropdown-item" href="${contextPath}/profile}">Profile</a></li>
+                                <li><a class="dropdown-item" href="${contextPath}/profile">Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="${contextPath}/signout">Sign out</a></li>
                             </ul>

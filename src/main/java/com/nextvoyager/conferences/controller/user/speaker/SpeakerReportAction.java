@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.speaker;
+package com.nextvoyager.conferences.controller.user.speaker;
 
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
