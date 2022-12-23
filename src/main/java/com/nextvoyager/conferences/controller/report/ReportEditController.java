@@ -49,20 +49,20 @@ public class ReportEditController extends HttpServlet {
         String descriptionParam = req.getParameter("description");
 
         // TODO: 01.12.2022 create validation to input data
+        User currentUser = (User) req.getSession().getAttribute("user");
 
         Report report = reportService.find(reportID);
 
         report.setTopic(topicParam);
         report.setDescription(descriptionParam);
-        if (speakerParam != null) {
+        if (currentUser.getRole() == User.Role.MODERATOR) {
             if (!speakerParam.equals("")) {
                 report.setSpeaker(new User(Integer.valueOf(speakerParam)));
+                report.setStatus(Report.Status.valueOf(statusParam));
             } else {
                 report.setSpeaker(new User());
+                report.setStatus(Report.Status.FREE);
             }
-        }
-        if (statusParam != null) {
-            report.setStatus(Report.Status.valueOf(statusParam));
         }
 
         reportService.update(report);

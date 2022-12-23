@@ -64,16 +64,25 @@ public class ReportCreateController extends HttpServlet {
 
         // TODO: 01.12.2022 create validation to input data
 
+        User currentUser = (User) req.getSession().getAttribute("user");
+
         Report report = new Report();
         report.setTopic(topicParam);
-        if (!speakerParam.equals("")) {
-            report.setSpeaker(new User(Integer.valueOf(speakerParam)));
-        } else {
-            report.setSpeaker(new User());
-        }
         report.setEvent(new Event(Integer.valueOf(eventParam)));
-        report.setStatus(Report.Status.valueOf(statusParam));
         report.setDescription(descriptionParam);
+
+        if (currentUser.getRole() == User.Role.SPEAKER) {
+            report.setSpeaker(currentUser);
+            report.setStatus(Report.Status.OFFERED_BY_SPEAKER);
+        }else{
+            if (!speakerParam.equals("")) {
+                report.setSpeaker(new User(Integer.valueOf(speakerParam)));
+                report.setStatus(Report.Status.valueOf(statusParam));
+            } else {
+                report.setSpeaker(new User());
+                report.setStatus(Report.Status.FREE);
+            }
+        }
 
         reportService.create(report);
 

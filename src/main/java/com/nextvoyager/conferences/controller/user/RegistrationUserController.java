@@ -46,6 +46,7 @@ public class RegistrationUserController extends HttpServlet {
             userService.create(user);
 
             req.getSession().setAttribute("user", user);
+            req.getSession().setAttribute("userRole", user.getRole());
             resp.sendRedirect("home");
         }
     }

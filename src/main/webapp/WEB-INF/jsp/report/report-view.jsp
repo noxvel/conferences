@@ -41,7 +41,7 @@
                                 <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-offer-speaker" 
                                         class="btn btn btn-outline-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Offer your report">Cancel offer</a>
+                                        data-bs-toggle="tooltip" data-bs-title="Cancel your report offer">Cancel offer</a>
                                 </c:when>
                                 <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=accept-propose-speaker" 

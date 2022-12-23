@@ -4,9 +4,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
-<c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
-<c:set var="isUser" value="${not empty sessionScope.user and sessionScope.user.role == 'ORDINARY_USER'}" />
+<c:set var="isSpeaker" value="${sessionScope.userRole == 'SPEAKER'}" />
+<c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
+<c:set var="isUser" value="${sessionScope.userRole == 'ORDINARY_USER'}" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>

@@ -27,8 +27,8 @@ public class UserDAOTest {
 //
 //    }
 
-    @Test
-    void userCreateTest() {
+//    @Test
+//    void userCreateTest() {
 //
 //        // Create user.
 //        User user = new User();
@@ -92,5 +92,6 @@ public class UserDAOTest {
 //        System.out.println("Thus, amount of users in database is: " + users.size());
 //
 //        resp.getWriter().println("Hi new User!!!");
-    }
+//    }
+
 }
