@@ -17,7 +17,7 @@ public interface ReportDAO {
      * @return The report from the database matching the given ID, otherwise null.
      * @throws DAOException If something fails at database level.
      */
-    public Report find(Integer id) throws DAOException;
+    Report find(Integer id) throws DAOException;
 
     List<Report> list() throws DAOException;
 
@@ -27,7 +27,7 @@ public interface ReportDAO {
      * @return A list of all reports from the database ordered by report ID.
      * @throws DAOException If something fails at database level.
      */
-    public List<Report> list(Integer eventID) throws DAOException;
+    List<Report> list(Integer eventID) throws DAOException;
 
     ListWithCountResult listWithPagination(Integer page, Integer limit) throws DAOException;
 
@@ -45,7 +45,7 @@ public interface ReportDAO {
      * @throws IllegalArgumentException If the report ID is not null.
      * @throws DAOException If something fails at database level.
      */
-    public void create(Report report) throws IllegalArgumentException, DAOException;
+    void create(Report report) throws IllegalArgumentException, DAOException;
 
     /**
      * Update the given report in the database. The report ID must not be null, otherwise it will throw
@@ -54,7 +54,7 @@ public interface ReportDAO {
      * @throws IllegalArgumentException If the report ID is null.
      * @throws DAOException If something fails at database level.
      */
-    public void update(Report report) throws IllegalArgumentException, DAOException;
+    void update(Report report) throws IllegalArgumentException, DAOException;
 
     /**
      * Delete the given report from the database. After deleting, the DAO will set the ID of the given
@@ -62,11 +62,11 @@ public interface ReportDAO {
      * @param report The report to be deleted from the database.
      * @throws DAOException If something fails at database level.
      */
-    public void delete(Report report) throws DAOException;
+    void delete(Report report) throws DAOException;
 
 
     @Data
-    public static class ListWithCountResult{
+    class ListWithCountResult{
         private Integer count;
         private List<Report> list;
     }

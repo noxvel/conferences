@@ -12,7 +12,7 @@
                 <h2 class="text-center mb-3">Your profile</h2>
                 <h3> Your email: <c:out value="${currentUser.email}"/></h3>
                 <h3> Your role: <c:out value="${currentUser.role.name}"/></h3>
-                <form class="needs-validation" novalidate id="updateProfile" action="profile" method="post">
+                <form class="needs-validation mb-3" novalidate id="updateProfile" action="profile" method="post">
                     <c:if test="${requestScope.message != null}">
                         <div class="alert alert-danger" role="alert">
                             ${requestScope.message}
@@ -56,7 +56,7 @@
 
                 </form>
 
-                <br/>
+                <hr/>
                 
                 <a role="button" href="change-password" class="btn btn-info">Change passoword</a>
               </div>

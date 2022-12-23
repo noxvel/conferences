@@ -32,6 +32,7 @@
                 </div>
                 <%-- <input type="hidden" id="timezone" name="timezone" value="-08:00" /> --%>
                 <div class="col-12">
+                    <a role="button" href="${contextPath}/home" class="btn btn-secondary">Back</a>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>

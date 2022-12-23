@@ -36,12 +36,10 @@ public class UserDAOJDBC implements UserDAO{
             "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
     private static final String SQL_UPDATE =
             "UPDATE user SET email = ?, first_name = ?, last_name = ?, user_role_id = ? WHERE id = ?";
-    private static final String SQL_DELETE =
-            "DELETE FROM user WHERE id = ?";
-    private static final String SQL_EXIST_EMAIL =
-            "SELECT id FROM user WHERE email = ?";
-    private static final String SQL_CHANGE_PASSWORD =
-            "UPDATE user SET password = MD5(?) WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM user WHERE id = ?";
+    private static final String SQL_EXIST_EMAIL = "SELECT id FROM user WHERE email = ?";
+    private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = MD5(?) WHERE id = ?";
+    private static final String SQL_CHECK_PASSWORD = "SELECT id FROM user WHERE id = ? AND password = MD5(?)";
 
     // Vars ---------------------------------------------------------------------------------------
 
@@ -263,6 +261,32 @@ public class UserDAOJDBC implements UserDAO{
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public boolean checkPassword(User user) throws DAOException {
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User is not created yet, the user ID is null.");
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(user.getId(),Types.VARCHAR),
+                new ValueDAO(user.getPassword(),Types.VARCHAR)
+        };
+
+        boolean exist = false;
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_CHECK_PASSWORD, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            exist = resultSet.next();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return exist;
     }
 
     // Helpers ------------------------------------------------------------------------------------

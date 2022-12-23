@@ -30,7 +30,8 @@
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
                     <div class="d-grid gap-2 d-md-block">
-                        <c:if test="${not empty currentUser and (currentUser.role == 'MODERATOR' or (currentUser.role == 'SPEAKER' and currentUser.id == report.speaker.id))}">
+                        <c:if test="${not empty currentUser and (currentUser.role == 'MODERATOR' 
+                                    or (currentUser.role == 'SPEAKER' and currentUser.id == report.speaker.id and report.status == 'OFFERED_BY_SPEAKER'))}">
                             <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">Edit</a>
                         </c:if>
                     </div>
@@ -38,17 +39,27 @@
                         <div class="btn-group ms-3">
                             <c:choose>
                                 <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
-                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-offer-speaker" class="btn btn btn-outline-danger">Cancel</a>
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-offer-speaker" 
+                                        class="btn btn btn-outline-danger"
+                                        data-bs-toggle="tooltip" data-bs-title="Offer your report">Cancel offer</a>
                                 </c:when>
                                 <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
-                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=accept-propose-speaker" class="btn btn btn-success">Accept</a>
-                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-propose-speaker" class="btn btn btn-danger">Reject</a>
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=accept-propose-speaker" 
+                                        class="btn btn btn-success"
+                                        data-bs-toggle="tooltip" data-bs-title="Accept to be a speaker">Accept</a>
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-propose-speaker" 
+                                        class="btn btn btn-danger"
+                                        data-bs-toggle="tooltip" data-bs-title="Refuse to be a speaker">Reject</a>
                                 </c:when>
                                 <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
-                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-suggestion-speaker" class="btn btn btn-outline-danger">Cancel offer</a>
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-suggestion-speaker" 
+                                        class="btn btn btn-outline-danger"
+                                        data-bs-toggle="tooltip" data-bs-title="Cancel suggestion to be a speaker">Cancel suggestion</a>
                                 </c:when>
                                 <c:when test="${report.status == 'FREE'}">
-                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=make-suggestion-speaker" class="btn btn btn-info">Make suggestion to be a speaker</a>
+                                    <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=make-suggestion-speaker" 
+                                        class="btn btn btn-info"
+                                        data-bs-toggle="tooltip" data-bs-title="Make suggestion to be a speaker">Make suggestion</a>
                                 </c:when>
                             </c:choose>
                         </div>
@@ -57,34 +68,37 @@
                         <div class="btn-group ms-3">
                             <c:choose>
                                 <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
-                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-offer-moderator" class="btn btn btn-success">Accept offer</a>
-                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-offer-moderator" class="btn btn btn-danger">Deny offer</a>
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-offer-moderator" 
+                                        class="btn btn btn-success"
+                                        data-bs-toggle="tooltip" data-bs-title="Accept a proposed speaker's report">Accept offer</a>
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-offer-moderator" 
+                                        class="btn btn btn-danger"
+                                        data-bs-toggle="tooltip" data-bs-title="Reject a proposed speaker's report">Deny offer</a>
                                 </c:when>
                                 <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
-                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-suggestion-moderator" class="btn btn btn-success">Accept speaker suggestion</a>
-                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-suggestion-moderator" class="btn btn btn-danger">Cancel speaker suggestion</a>
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-suggestion-moderator" 
+                                        class="btn btn btn-success"
+                                        data-bs-toggle="tooltip" data-bs-title="Accept speaker suggestion">Accept suggestion</a>
+                                    <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-suggestion-moderator" 
+                                        class="btn btn btn-danger"
+                                        data-bs-toggle="tooltip" data-bs-title="Cancel speaker suggestion">Cancel suggestion</a>
                                 </c:when>
                             </c:choose>
                         </div>
                     </c:if>
-                    <%-- <div class="ms-2">
-                        <form action="home" method="get">
-                            <div class="input-group">
-                            <select name="orderType" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                                <option ${orderType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
-                                <option ${orderType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
-                                <option ${orderType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
-                            </select>
-                            <button class="btn btn-outline-secondary" type="submit">Sort</button>
-                            </div>
-                        </form>
-                    </div> --%>
                 </div>
             </section>
 
+            <h4>Description</h4>
             <p class="mt-5">${not empty report.description ? report.description : 'no description'}</p>
 
         </div>   
 
+        <script>
+            $(document).ready(() => {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            });
+        </script>
 
     <jsp:include page="/WEB-INF/templates/footer.jsp"/>

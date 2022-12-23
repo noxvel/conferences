@@ -29,7 +29,7 @@ public class EventDAOJDBC implements EventDAO{
             "DELETE FROM event WHERE id = ?";
 
     private static final String SQL_LIST =
-            "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came, report.r_count, participant.p_count " +
+            "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came, e.description, report.r_count, participant.p_count " +
                     "FROM event AS e " +
                     "LEFT JOIN (SELECT COUNT(*) as r_count, event_id FROM report GROUP BY event_id) AS report ON e.id = report.event_id " +
                     "LEFT JOIN (SELECT COUNT(*) as p_count, event_id FROM event_has_participant GROUP BY event_id) AS participant ON e.id = participant.event_id ";
@@ -376,6 +376,7 @@ public class EventDAOJDBC implements EventDAO{
         event.setPlace(resultSet.getString("place"));
         event.setBeginDate(resultSet.getDate("begin_date"));
         event.setEndDate(resultSet.getDate("end_date"));
+        event.setDescription(resultSet.getString("description"));
         event.setParticipantsCame(resultSet.getInt("participants_came"));
         event.setReportsCount(resultSet.getInt("r_count"));
         event.setParticipantsCount(resultSet.getInt("p_count"));

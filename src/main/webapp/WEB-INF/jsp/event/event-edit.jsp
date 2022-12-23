@@ -42,6 +42,7 @@
                 <%-- <input type="hidden" id="timezone" name="timezone" value="-08:00" /> --%>
                 <input type="hidden" id="eventID" name="eventID" value="${event.id}" />
                 <div class="col-12">
+                    <a role="button" href="${contextPath}/event/view?eventID=${event.id}" class="btn btn-secondary">Back</a>
                     <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>

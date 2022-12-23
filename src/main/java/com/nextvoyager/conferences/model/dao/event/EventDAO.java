@@ -81,7 +81,7 @@ public interface EventDAO {
     }
 
     @Data
-    public static class ListWithCountResult{
+    class ListWithCountResult{
         private Integer count;
         private List<Event> list;
     }

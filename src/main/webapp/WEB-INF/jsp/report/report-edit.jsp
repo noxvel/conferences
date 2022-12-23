@@ -37,6 +37,7 @@
                 <input type="hidden" id="event" name="event" value="${report.event.id}" />
                 <input type="hidden" id="reportID" name="reportID" value="${report.id}" />
                 <div class="col-12">
+                    <a role="button" href="${contextPath}/report/view?reportID=${report.id}" class="btn btn-secondary">Back</a>
                     <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>

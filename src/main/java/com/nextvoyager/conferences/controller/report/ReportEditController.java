@@ -41,7 +41,7 @@ public class ReportEditController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idParam = req.getParameter("reportID");
+        Integer reportID = Integer.valueOf(req.getParameter("reportID"));
         String topicParam = req.getParameter("topic");
         String speakerParam = req.getParameter("speaker");
         String eventParam = req.getParameter("event");
@@ -50,17 +50,20 @@ public class ReportEditController extends HttpServlet {
 
         // TODO: 01.12.2022 create validation to input data
 
-        Report report = new Report();
-        report.setId(Integer.valueOf(idParam));
+        Report report = reportService.find(reportID);
+
         report.setTopic(topicParam);
-        if (!speakerParam.equals("")) {
-            report.setSpeaker(new User(Integer.valueOf(speakerParam)));
-        } else {
-            report.setSpeaker(new User());
-        }
-        report.setEvent(new Event(Integer.valueOf(eventParam)));
-        report.setStatus(Report.Status.valueOf(statusParam));
         report.setDescription(descriptionParam);
+        if (speakerParam != null) {
+            if (!speakerParam.equals("")) {
+                report.setSpeaker(new User(Integer.valueOf(speakerParam)));
+            } else {
+                report.setSpeaker(new User());
+            }
+        }
+        if (statusParam != null) {
+            report.setStatus(Report.Status.valueOf(statusParam));
+        }
 
         reportService.update(report);
 

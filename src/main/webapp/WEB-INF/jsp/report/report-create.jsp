@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
+<c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
@@ -38,6 +38,7 @@
                 </div>
                 <input type="hidden" id="event" name="event" value="${eventID}" />
                 <div class="col-12">
+                    <a role="button" href="${contextPath}/event/view?eventID=${eventID}" class="btn btn-secondary">Back to event</a>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>

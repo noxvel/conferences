@@ -31,10 +31,16 @@ public class ChangeUserPasswordController extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("user");
-        user.setPassword(newPasswordParam);
+        user.setPassword(currentPasswordParam);
 
-        userService.update(user);
-        resp.sendRedirect("profile");
+        if (!userService.checkPassword(user)) {
+            req.setAttribute("message", "Please type your current password.");
+            req.getRequestDispatcher("/WEB-INF/jsp/user/change-password.jsp").forward(req, resp);
+        } else {
+            user.setPassword(newPasswordParam);
+            userService.changePassword(user);
+            resp.sendRedirect("profile");
+        }
     }
 
 

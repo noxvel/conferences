@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%-- <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %> --%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
@@ -66,8 +67,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">${event.name}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">${event.place}</h6>
-                                    <h6 class="card-subtitle mb-2 text-muted">${event.beginDate} - ${event.endDate}</h6>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        <fmt:formatDate type="date" value="${event.beginDate}" /> - <fmt:formatDate type="date" value="${event.endDate}" />
+                                    </h6>
+                                    <p class="card-text">${fn:substring(event.description, 0, 140)}...</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
                                             <a role="button" href="event/view?eventID=${event.id}" class="btn btn-sm btn-outline-primary">View</a>
