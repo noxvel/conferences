@@ -10,7 +10,7 @@
                 <div class="d-flex flex-column">
 
                     <h2 class="fw-normal mb-3 pb-3 text-center">Change password</h2>      
-                    <form id="changePassword" action="change-password" method="post">
+                    <form class="needs-validation" novalidate id="changePassword" action="change-password" method="post">
                         <c:if test="${requestScope.message != null}">
                             <div class="alert alert-danger" role="alert">
                                 ${requestScope.message}
@@ -38,9 +38,9 @@
                         <!-- Confirm new password input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="password">Confirm new password</label>
-                            <input type="password" id="confirmNewPassword" class="form-control" autoComplete="off" pattern=".{3,60}" required />
+                            <input name="confirmPassword" type="password" id="confirmPassword" class="form-control" autoComplete="off" required />
                             <div class="invalid-feedback">
-                                Bad password!
+                                Passwords do not match!
                             </div>
                         </div>
 
@@ -56,12 +56,30 @@
         <script>
 
             $(document).ready(function() {
-                $("#registerUser").submit(function( event ) {
-                  if (!event.target.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                  }
-                  event.target.classList.add('was-validated')
+
+                // $('#password, #confirm_password').on('keyup', function () {
+                //     if ($('#password').val() == $('#confirm_password').val()) {
+                //         $('#message').html('Matching').css('color', 'green');
+                //     } else 
+                //         $('#message').html('Not Matching').css('color', 'red');
+                // });
+
+                $("#changePassword").submit(function( event ) {
+
+                    const password = document.querySelector('#newPassword');
+                    const confirm = document.querySelector('#confirmPassword');
+                    if (confirm.value === password.value) {
+                        confirm.setCustomValidity('');
+                    } else {
+                        confirm.setCustomValidity('Passwords do not match');
+                        // confirm.reportValidity();
+                    }
+
+                    if (!event.target.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    event.target.classList.add('was-validated')
                 });
             });
 

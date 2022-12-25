@@ -3,6 +3,7 @@ package com.nextvoyager.conferences.service.impl;
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 
@@ -53,8 +54,25 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDAO.ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, EventDAO.SortType sortType,
-                                                                             EventDAO.SortDirection sortDirection, User speaker) {
-        return eventDAO.listWithPaginationSpeakerParticipated(page, limit, sortType, sortDirection, speaker);
+    public EventDAO.ListWithCountResult listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
+                                                                             EventDAO.SortDirection sortDirection,
+                                                                  User speaker, Boolean participated) {
+        return eventDAO.listWithPaginationSpeaker(page, limit, sortType, sortDirection, speaker, participated);
+    }
+
+    @Override
+    public EventDAO.ListWithCountResult listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType sortType,
+                                                                       EventDAO.SortDirection sortDirection,
+                                                                       User ordinaryUser, Boolean participated) {
+        return eventDAO.listWithPaginationOrdinaryUser(page, limit, sortType, sortDirection, ordinaryUser, participated);
+    }
+
+    @Override
+    public EventDAO.ListWithCountResult listWithPaginationReportStatusFilter(int page,
+                                                                             int limit, EventDAO.SortType sortType,
+                                                                             EventDAO.SortDirection sortDirection,
+                                                                             Report.Status reportStatus) {
+        return eventDAO.listWithPaginationReportStatusFilter(page, limit, sortType, sortDirection,
+                reportStatus);
     }
 }

@@ -32,6 +32,7 @@ public class ReportDAOJDBC implements ReportDAO {
     private static final String SQL_ADD_WHERE_EVENT = "r.event_id = ? ";
     private static final String SQL_ADD_WHERE_SPEAKER = "r.speaker_id = ? ";
     private static final String SQL_ADD_WHERE_STATUS = "r.report_status_id = ? ";
+    private static final String SQL_ADD_WHERE_SPEAKER_EVENT_VIEW = "(r.speaker_id = ? OR r.report_status_id IN (?,?)) ";
     private static final String SQL_INSERT =
             "INSERT INTO report (topic, speaker_id, event_id, report_status_id, description) VALUES (?, ?, ?, ?, ?) ";
     private static final String SQL_UPDATE =
@@ -149,6 +150,76 @@ public class ReportDAOJDBC implements ReportDAO {
         ValueDAO[] valuesAllCount = {};
 
         ValueDAO[] valuesPagination = {
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
+    }
+
+    @Override
+    public ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker) {
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
+    }
+
+    @Override
+    public ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status) {
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER)
+                .setFilter(SQL_ADD_WHERE_STATUS)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER)
+                .setFilter(SQL_ADD_WHERE_STATUS)
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };

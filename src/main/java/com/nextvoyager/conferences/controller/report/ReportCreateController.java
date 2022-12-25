@@ -9,6 +9,12 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.ConsolidateReportByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.NoApprovalAction;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.ProposeToSpeakerByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.SetFreeReportByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.speakerapproval.OfferReportBySpeaker;
 import com.nextvoyager.conferences.service.impl.EventServiceImpl;
 import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
@@ -71,18 +77,32 @@ public class ReportCreateController extends HttpServlet {
         report.setEvent(new Event(Integer.valueOf(eventParam)));
         report.setDescription(descriptionParam);
 
+        // Choose approval action for the new report
+        ApprovalOfReportAction approvalAction = null;
+        User approvalSpeaker = null;
         if (currentUser.getRole() == User.Role.SPEAKER) {
-            report.setSpeaker(currentUser);
-            report.setStatus(Report.Status.OFFERED_BY_SPEAKER);
+            approvalAction = new OfferReportBySpeaker();
+            approvalSpeaker =  currentUser;
         }else{
             if (!speakerParam.equals("")) {
-                report.setSpeaker(new User(Integer.valueOf(speakerParam)));
-                report.setStatus(Report.Status.valueOf(statusParam));
+                approvalSpeaker = new User(Integer.valueOf(speakerParam));
+                Report.Status status = Report.Status.valueOf(statusParam);
+                switch (status) {
+                    case CONFIRMED:
+                        approvalAction = new ConsolidateReportByModerator();
+                        break;
+                    case PROPOSE_TO_SPEAKER:
+                        approvalAction = new ProposeToSpeakerByModerator();
+                        break;
+                    default:
+                        approvalAction = new NoApprovalAction();
+                        break;
+                }
             } else {
-                report.setSpeaker(new User());
-                report.setStatus(Report.Status.FREE);
+                approvalAction = new SetFreeReportByModerator();
             }
         }
+        approvalAction.change(report,approvalSpeaker);
 
         reportService.create(report);
 

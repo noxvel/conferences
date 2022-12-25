@@ -13,9 +13,9 @@ public class FilterEventList extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String showSpeakerEventParticipatedParam = req.getParameter("showInWhichParticipated");
+        String showEventParticipatedParam = req.getParameter("showInWhichParticipated");
 
-        req.getSession().setAttribute("filterBySpeakerParticipated", showSpeakerEventParticipatedParam != null);
+        req.getSession().setAttribute("filterByEventParticipated", showEventParticipatedParam != null);
         resp.sendRedirect("home");
     }
 

@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.service;
 
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 
 import java.util.List;
@@ -23,7 +24,14 @@ public interface EventService {
     EventDAO.ListWithCountResult listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
                                                     EventDAO.SortDirection sortDirection);
 
-    EventDAO.ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, EventDAO.SortType sortType,
-                                                                       EventDAO.SortDirection sortDirection, User speaker);
+    EventDAO.ListWithCountResult listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
+                                                                       EventDAO.SortDirection sortDirection,
+                                                           User speaker, Boolean participated);
 
+    EventDAO.ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit,
+                                                                      EventDAO.SortType eventListSortType,
+                                                                      EventDAO.SortDirection eventListSortDirection,
+                                                                      Report.Status reportStatus);
+
+    EventDAO.ListWithCountResult listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType eventListSortType, EventDAO.SortDirection eventListSortDirection, User currentUser, Boolean showEventParticipated);
 }

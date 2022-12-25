@@ -64,6 +64,10 @@ public interface ReportDAO {
      */
     void delete(Report report) throws DAOException;
 
+    ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker);
+
+    ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
+
 
     @Data
     class ListWithCountResult{

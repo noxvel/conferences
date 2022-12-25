@@ -4,6 +4,7 @@ import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.dao.utils.querybuilder.SelectQueryBuilder;
 import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 
 import java.sql.*;
@@ -28,11 +29,20 @@ public class EventDAOJDBC implements EventDAO{
     private static final String SQL_DELETE =
             "DELETE FROM event WHERE id = ?";
 
-    private static final String SQL_LIST =
+    private static final String SQL_LIST_BASE =
             "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came, e.description, report.r_count, participant.p_count " +
                     "FROM event AS e " +
-                    "LEFT JOIN (SELECT COUNT(*) as r_count, event_id FROM report GROUP BY event_id) AS report ON e.id = report.event_id " +
                     "LEFT JOIN (SELECT COUNT(*) as p_count, event_id FROM event_has_participant GROUP BY event_id) AS participant ON e.id = participant.event_id ";
+    private static final String SQL_LIST = SQL_LIST_BASE +
+            "LEFT JOIN (SELECT COUNT(*) as r_count, event_id FROM report " +
+            "GROUP BY event_id) AS report ON e.id = report.event_id ";
+    private static final String SQL_LIST_REPORT_COUNT_REPORT_STATUS = SQL_LIST_BASE +
+            "LEFT JOIN (SELECT COUNT(*) as r_count, event_id FROM report WHERE report_status_id = ? " +
+            "GROUP BY event_id) AS report ON e.id = report.event_id ";
+    private static final String SQL_LIST_REPORT_COUNT_FOR_SPEAKER = SQL_LIST_BASE +
+            "LEFT JOIN (SELECT COUNT(*) as r_count, event_id FROM report AS r WHERE (r.speaker_id = ? OR r.report_status_id IN (?,?)) " +
+            "GROUP BY event_id) AS report ON e.id = report.event_id ";
+
     private static final String SQL_LIST_ORDER_BY_BEGIN_DATE = "ORDER BY e.begin_date ";
     private static final String SQL_LIST_ORDER_BY_REPORTS = "ORDER BY r_count ";
     private static final String SQL_LIST_ORDER_BY_PARTICIPANTS = "ORDER BY p_count ";
@@ -42,6 +52,8 @@ public class EventDAOJDBC implements EventDAO{
 
     private static final String SQL_LIST_LIMIT = "LIMIT ?, ? ";
     private static final String SQL_LIST_WHERE_SPEAKER_PARTICIPATED = "EXISTS (SELECT id FROM report WHERE report.event_id = e.id AND report.speaker_id = ?) ";
+    private static final String SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED = "EXISTS (SELECT ehp.event_id FROM event_has_participant AS ehp " +
+                                                            "WHERE ehp.event_id = e.id AND ehp.user_id = ?) ";
 
     private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM event AS e ";
     private static final String SQL_REGISTER_USER_TO_EVENT = "INSERT INTO event_has_participant (event_id, user_id) VALUES (?, ?)" ;
@@ -124,7 +136,8 @@ public class EventDAOJDBC implements EventDAO{
 
 
     @Override
-    public ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType, SortDirection sortDirection) throws DAOException {
+    public ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType,
+                                                  SortDirection sortDirection) throws DAOException {
         ListWithCountResult result = new ListWithCountResult();
         List<Event> events = new ArrayList<>();
         result.setList(events);
@@ -163,10 +176,9 @@ public class EventDAOJDBC implements EventDAO{
         return result;
     }
 
-
     @Override
-    public ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, SortType sortType,
-                                                                     SortDirection sortDirection, User user) {
+    public ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit, SortType sortType,
+                                                                    SortDirection sortDirection, Report.Status status) throws DAOException {
         ListWithCountResult result = new ListWithCountResult();
         List<Event> events = new ArrayList<>();
         result.setList(events);
@@ -175,25 +187,135 @@ public class EventDAOJDBC implements EventDAO{
         offset = (page - 1) * limit;
 
         String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
-                .setFilter(SQL_LIST_WHERE_SPEAKER_PARTICIPATED)
                 .build();
 
-        String currentSQL = new SelectQueryBuilder(SQL_LIST)
-                .setFilter(SQL_LIST_WHERE_SPEAKER_PARTICIPATED)
+        String currentSQL = new SelectQueryBuilder(SQL_LIST_REPORT_COUNT_REPORT_STATUS)
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
+        ValueDAO[] countAllValues = {};
+
         ValueDAO[] valuesPagination = {
-                new ValueDAO(user.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, new ValueDAO(user.getId(),Types.INTEGER));
+                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    events.add(mapForList(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public ListWithCountResult listWithPaginationSpeaker(int page, int limit, SortType sortType,
+                                                         SortDirection sortDirection, User speaker,
+                                                         Boolean participated) {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Event> events = new ArrayList<>();
+        result.setList(events);
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(participated ? SQL_LIST_WHERE_SPEAKER_PARTICIPATED : null)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST_REPORT_COUNT_FOR_SPEAKER)
+                .setFilter(participated ? SQL_LIST_WHERE_SPEAKER_PARTICIPATED : null)
+                .setSortType(getSortType(sortType))
+                .setSortDirection(getSortDirection(sortDirection))
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
+
+        ValueDAO[] countAllValues = {
+                participated ? new ValueDAO(speaker.getId(), Types.INTEGER) : null,
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER),
+                participated ? new ValueDAO(speaker.getId(), Types.INTEGER) : null,
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            if (resultSetCountAll.next()) {
+                result.setCount(resultSetCountAll.getInt("count_all"));
+                while (resultSetList.next()) {
+                    events.add(mapForList(resultSetList));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+
+    }
+
+    @Override
+    public ListWithCountResult listWithPaginationOrdinaryUser(int page, int limit, SortType sortType,
+                                                         SortDirection sortDirection, User ordinaryUser,
+                                                         Boolean participated) {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Event> events = new ArrayList<>();
+        result.setList(events);
+
+        int offset;
+        offset = (page - 1) * limit;
+
+        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(participated ? SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED : null)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST_REPORT_COUNT_REPORT_STATUS)
+                .setFilter(participated ? SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED : null)
+                .setSortType(getSortType(sortType))
+                .setSortDirection(getSortDirection(sortDirection))
+                .setLimit(SQL_LIST_LIMIT)
+                .build();
+
+        ValueDAO[] countAllValues = {
+                participated ? new ValueDAO(ordinaryUser.getId(), Types.INTEGER) : null,
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER),
+                participated ? new ValueDAO(ordinaryUser.getId(), Types.INTEGER) : null,
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
                 ResultSet resultSetCountAll = stmtCount.executeQuery();
                 PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
                 ResultSet resultSetList = statementList.executeQuery()

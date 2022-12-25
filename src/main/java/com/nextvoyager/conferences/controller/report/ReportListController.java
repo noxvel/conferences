@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.user.moderator;
+package com.nextvoyager.conferences.controller.report;
 
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -15,8 +15,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/moderator-report-list")
-public class ModeratorReportListController extends HttpServlet {
+@WebServlet("/report-list")
+public class ReportListController extends HttpServlet {
     ReportService reportService = ReportServiceImpl.getInstance();
 
     @Override
@@ -35,11 +35,22 @@ public class ModeratorReportListController extends HttpServlet {
         ReportDAO.ListWithCountResult countAndList;
 
         HttpSession currentSession = req.getSession();
+        User.Role userRole = (User.Role) currentSession.getAttribute("userRole");
+        User currentUser = (User) currentSession.getAttribute("user");
+
         Optional<Report.Status> reportStatusFilter = Optional.ofNullable((Report.Status) currentSession.getAttribute("reportStatusFilter"));
-        if (reportStatusFilter.isEmpty()) {
-            countAndList = reportService.listWithPagination(page, limit);
+        if (userRole == User.Role.SPEAKER) {
+            if (reportStatusFilter.isEmpty()) {
+                countAndList = reportService.listWithPagination(page, limit, currentUser);
+            } else {
+                countAndList = reportService.listWithPagination(page, limit, currentUser, reportStatusFilter.get());
+            }
         } else {
-            countAndList = reportService.listWithPagination(page, limit, reportStatusFilter.get());
+            if (reportStatusFilter.isEmpty()) {
+                countAndList = reportService.listWithPagination(page, limit);
+            } else {
+                countAndList = reportService.listWithPagination(page, limit, reportStatusFilter.get());
+            }
         }
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);

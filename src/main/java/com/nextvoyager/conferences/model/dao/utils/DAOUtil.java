@@ -43,9 +43,11 @@ public class DAOUtil {
     public static void setValues(PreparedStatement statement, ValueDAO... values)
             throws SQLException
     {
-        for (int i = 0; i < values.length; i++) {
-            statement.setObject(i + 1, values[i].getValue(), values[i].getType());
-
+        int sConuter = 0;
+        for (ValueDAO value : values) {
+            if (value != null) {
+                statement.setObject(++sConuter, value.getValue(), value.getType());
+            }
         }
     }
 

@@ -6,14 +6,15 @@
 <%-- <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %> --%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<c:set var="isModerator" value="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}" />
-<c:set var="isSpeaker" value="${not empty sessionScope.user and sessionScope.user.role == 'SPEAKER'}" />
+<c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
+<c:set var="isSpeaker" value="${sessionScope.userRole == 'SPEAKER'}" />
+<c:set var="isOrdinaryUser" value="${sessionScope.userRole == 'ORDINARY_USER'}" />
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
 
     <main>
 
-        <section class="py-3 text-center container">
+        <section class="py-2 text-center container">
             <div class="d-flex flex-row align-items-center">
                 <div class="d-grid gap-2 d-md-block">
                     <c:if test="${isModerator}">
@@ -40,12 +41,12 @@
                         </div>
                     </form>
                 </div>
-                <c:if test="${isSpeaker}">
+                <c:if test="${isSpeaker or isOrdinaryUser}">
                 <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
                     <form action="event-list-filter" method="post" class="d-flex flex-row align-items-center">
                         <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
-                                                        id="showInWhichParticipated" ${showSpeakerEventParticipated ? 'checked' : ''}>
+                                                        id="showInWhichParticipated" ${showEventParticipated ? 'checked' : ''}>
                                 <label class="form-check-label" for="showInWhichParticipated">
                                     Show events in which you participated
                                 </label>
@@ -57,7 +58,7 @@
             </div>
         </section>
 
-        <div class="album py-5 bg-light">
+        <div class="album py-3 bg-light">
             <div class="container">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 

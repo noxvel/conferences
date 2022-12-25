@@ -35,7 +35,7 @@
                                 <c:if test="${isRegister == null}">
                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-title="You need to login, before registering for the event">
                                 </c:if>
-                                    <button ${isRegister == null ? 'disabled' : ''} class="btn btn-primary" type="submit">
+                                    <button ${isRegister == null ? 'disabled' : ''} class="btn btn-${isRegister == true ? 'danger' : 'primary'}" type="submit">
                                         <c:out value="${isRegister ? 'Unregister' : 'Register'}"/> to event
                                     </button>
                                 <c:if test="${isRegister == null}">
@@ -54,7 +54,9 @@
                 <div class="nav nav-tabs" id="nav-tab-event-view" role="tablist">
                     <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-reports" type="button" role="tab" aria-controls="nav-reports" aria-selected="false">Reports</button>
                     <button class="nav-link" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Description</button>
-                    <button class="nav-link" id="nav-participants-tab" data-bs-toggle="tab" data-bs-target="#nav-participants" type="button" role="tab" aria-controls="nav-participants" aria-selected="true">Participants</button>
+                    <c:if test="${isModerator}">
+                        <button class="nav-link" id="nav-participants-tab" data-bs-toggle="tab" data-bs-target="#nav-participants" type="button" role="tab" aria-controls="nav-participants" aria-selected="true">Participants</button>
+                    </c:if>
                 </div>
             </nav>
             <div class="tab-content pt-3" id="nav-tabContent">
@@ -84,16 +86,41 @@
 
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                         <c:forEach var="report" items="${event.reports}">
+                            <c:set var="reportColor" value=""/>
+                            <c:if test="${isModerator or isSpeaker}">
+                                <c:choose>
+                                    <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
+                                        <c:set var="reportColor" value="info"/>
+                                    </c:when>
+                                    <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
+                                        <c:set var="reportColor" value="secondary"/>
+                                    </c:when>
+                                    <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
+                                        <c:set var="reportColor" value="warning"/>
+                                    </c:when>
+                                    <c:when test="${report.status == 'CONFIRMED'}">
+                                        <c:set var="reportColor" value="success"/>
+                                    </c:when>
+                                    <c:when test="${report.status == 'CANCELED'}">
+                                        <c:set var="reportColor" value="danger"/>
+                                    </c:when>
+                                    <c:when test="${report.status == 'FREE'}">
+                                        <c:set var="reportColor" value="primary"/>
+                                    </c:when>
+                                </c:choose>
+                            </c:if>
                             <div class="col">
-                                <div class="card shadow-sm">
+                                <div class="card shadow-md ${empty reportColor ? '' : 'border-' += reportColor}">
                                     <div class="card-body">
                                         <h5 class="card-title">${report.topic}</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">${report.status.name}</h6>
+                                        <c:if test="${isModerator or isSpeaker}">
+                                            <h6 class="card-subtitle mb-2 text-${reportColor}">${report.status.name}</h6>
+                                        </c:if>
                                         <p class="card-text">${fn:substring(report.description, 0, 140)}...</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
                                                 <a role="button" href="${contextPath}/report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">View</a>
-                                                <c:if test="${not empty sessionScope.user and sessionScope.user.role == 'MODERATOR'}">
+                                                <c:if test="${isModerator}">
                                                     <a role="button" href="${contextPath}/report/edit?reportID=${report.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
                                                 </c:if>
                                             </div>

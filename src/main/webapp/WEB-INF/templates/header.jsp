@@ -24,35 +24,40 @@
 
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="${contextPath}/home" class="nav-link px-2 link-dark">Home</a></li>
-                    <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+                    <li><a href="${contextPath}/about.jsp" class="nav-link px-2 link-dark">About</a></li>
                 </ul>
 
-                <c:choose>
-                    <c:when test="${sessionScope.user != null}">
-                        <div class="dropdown text-end">
-                            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
-                                <c:out value="${sessionScope.user.firstName} ${sessionScope.user.lastName}"/>
-                            </a>
-                            <ul class="dropdown-menu text-small" data-popper-placement="top-start">
-                                <c:if test="${isSpeaker}">
-                                    <li><a class="dropdown-item" href="${contextPath}/speaker-report-list">My reports</a></li>
-                                </c:if>
-                                <c:if test="${isModerator}">
-                                    <li><a class="dropdown-item" href="${contextPath}/moderator-report-list">Reports list</a></li>
-                                </c:if>
-                                <li><a class="dropdown-item" href="${contextPath}/profile">Profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${contextPath}/signout">Sign out</a></li>
-                            </ul>
-                        </div>
-                    </c:when>    
-                    <c:otherwise>
-                        <div class="col-md-3 text-end">
-                            <a role="button" href="${contextPath}/login" class="btn btn-outline-primary me-2">Login</a>
-                            <a role="button" href="${contextPath}/registration" class="btn btn-primary">Sign-up</a>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div class="d-flex flex-row align-items-center">
+                    <form class="me-5" id="chooseLanguage" action="chooseLanguage" method="post">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected value="EN">EN</option>
+                            <option value="UA">UA</option>
+                        </select>
+                    </form>
+                    <c:choose>
+                        <c:when test="${sessionScope.user != null}">
+                            <div class="dropdown text-end">
+                                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+                                    <c:out value="${sessionScope.user.firstName} ${sessionScope.user.lastName}"/>
+                                </a>
+                                <ul class="dropdown-menu text-small" data-popper-placement="top-start">
+                                    <c:if test="${isSpeaker or isModerator}">
+                                        <li><a class="dropdown-item" href="${contextPath}/report-list">List of reports</a></li>
+                                    </c:if>
+                                    <li><a class="dropdown-item" href="${contextPath}/profile">Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="${contextPath}/signout">Sign out</a></li>
+                                </ul>
+                            </div>
+                        </c:when>    
+                        <c:otherwise>
+                            <div class="d-flex flex-row">
+                                <a role="button" href="${contextPath}/login" class="btn btn-outline-primary me-2">Login</a>
+                                <a role="button" href="${contextPath}/registration" class="btn btn-primary">Sign-up</a>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
 
             </header>
         </div>

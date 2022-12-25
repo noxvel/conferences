@@ -11,12 +11,13 @@ public interface ReportService {
 
     void create(Report report);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit);
-
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Report.Status status);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker, Report.Status status);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, Report.Status status);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker);
+    ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
 
     void changeStatusBySpeaker(String speakerAction, Integer reportID, User speaker);
 

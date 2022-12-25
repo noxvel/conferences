@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.model.dao.event;
 
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import lombok.Data;
 
@@ -36,9 +37,14 @@ public interface EventDAO {
     ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType,
                                            SortDirection sortDirection) throws DAOException;
 
-    ListWithCountResult listWithPaginationSpeakerParticipated(int page, int limit, SortType sortType,
-                                                              SortDirection sortDirection, User speaker) throws DAOException;
+    ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit, SortType sortType,
+                                                             SortDirection sortDirection, Report.Status status) throws DAOException;
 
+    ListWithCountResult listWithPaginationSpeaker(int page, int limit, SortType sortType,
+                                                  SortDirection sortDirection, User speaker, Boolean participated);
+
+    ListWithCountResult listWithPaginationOrdinaryUser(int page, int limit, SortType sortType,
+                                                       SortDirection sortDirection, User ordinaryUser, Boolean participated);
     /**
      * Create the given event in the database. The event ID must be null, otherwise it will throw
      * IllegalArgumentException. After creating, the DAO will set the obtained ID in the given event.
@@ -68,6 +74,7 @@ public interface EventDAO {
     void registerUser(Integer eventID, User user, boolean register);
 
     boolean isUserRegisterEvent(Event event, User user);
+
 
     enum SortType{
         Date,

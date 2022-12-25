@@ -41,25 +41,47 @@ public class EventViewController extends HttpServlet {
 
         Event event = eventService.find(eventID);
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
+        User currentUser = null;
+        User.Role userRole = null;
 
-        if (session != null && session.getAttribute("user") != null) {
-            User user = (User) session.getAttribute("user");
-            if (user.getRole() == User.Role.ORDINARY_USER) {
-                boolean isRegister = eventService.isUserRegisterEvent(event, user);
+        if (session.getAttribute("user") != null) {
+            currentUser = (User) session.getAttribute("user");
+            userRole = currentUser.getRole();
+            if (userRole == User.Role.ORDINARY_USER) {
+                boolean isRegister = eventService.isUserRegisterEvent(event, currentUser);
                 req.setAttribute("isRegister", isRegister);
             }
         }
 
         ReportDAO.ListWithCountResult countAndList;
+        Optional<Report.Status> reportStatusFilter = Optional.empty();
 
-        HttpSession currentSession = req.getSession();
-        Optional<Report.Status> reportStatusFilter = Optional.ofNullable((Report.Status) currentSession.getAttribute("reportStatusFilter"));
-        if (reportStatusFilter.isEmpty()) {
-            countAndList = reportService.listWithPagination(page, limit, eventID);
-        } else {
-            countAndList = reportService.listWithPagination(page, limit, eventID, reportStatusFilter.get());
+        // Get list of all confirmed reports for not registered or the ordinary user
+        if (userRole == null || userRole == User.Role.ORDINARY_USER) {
+            countAndList = reportService.listWithPagination(page, limit, eventID, Report.Status.CONFIRMED);
+        }  else {
+            reportStatusFilter = Optional.ofNullable((Report.Status) session.getAttribute("reportStatusFilter"));
+            if (userRole == User.Role.SPEAKER) {
+                if (reportStatusFilter.isEmpty()) {
+                    countAndList = reportService.listWithPagination(page, limit, eventID, currentUser);
+                } else {
+                    Report.Status filterStatus= reportStatusFilter.get();
+                    if (filterStatus == Report.Status.FREE || filterStatus == Report.Status.CONFIRMED) {
+                        countAndList = reportService.listWithPagination(page, limit, eventID, filterStatus);
+                    } else {
+                        countAndList = reportService.listWithPagination(page, limit, eventID, currentUser, reportStatusFilter.get());
+                    }
+                }
+            } else {
+                if (reportStatusFilter.isEmpty()) {
+                    countAndList = reportService.listWithPagination(page, limit, eventID);
+                } else {
+                    countAndList = reportService.listWithPagination(page, limit, eventID, reportStatusFilter.get());
+                }
+            }
         }
+
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
         event.setReports(countAndList.getList());
