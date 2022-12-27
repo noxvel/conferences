@@ -14,9 +14,9 @@
             <section class="w-100 p-4 d-flex justify-content-center pb-4">
               <div class="d-flex flex-column">
 
-                <h2 class="text-center mb-3">Your profile</h2>
-                <h3> Your email: <c:out value="${currentUser.email}"/></h3>
-                <h3> Your role: <c:out value="${currentUser.role.name}"/></h3>
+                <h2 class="text-center mb-3"><fmt:message key="profile.header.text"/></h2>
+                <h3><fmt:message key="profile.email.label"/>: <c:out value="${currentUser.email}"/></h3>
+                <h3><fmt:message key="profile.role.label"/>: <c:out value="${currentUser.role.name}"/></h3>
                 <form class="needs-validation mb-3" novalidate id="updateProfile" action="profile" method="post">
                     <c:if test="${requestScope.message != null}">
                         <div class="alert alert-danger" role="alert">
@@ -27,19 +27,19 @@
                     <div class="row">
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
-                          <label class="form-label" for="firstName">First name</label>
+                          <label class="form-label" for="firstName"><fmt:message key="profile.firstname.label"/></label>
                           <input name="firstName" value="${currentUser.firstName}" type="text" id="firstName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
                           <div class="valid-feedback">
-                            Looks good!
+                            <fmt:message key="profile.firstname.goodfeedback"/>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6 mb-4">
                         <div class="form-outline">
-                          <label class="form-label" for="lastName">Last name</label>
+                          <label class="form-label" for="lastName"><fmt:message key="profile.lastname.label"/></label>
                           <input name="lastName" value="${currentUser.lastName}" type="text" id="lastName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
                           <div class="valid-feedback">
-                            Looks good!
+                            <fmt:message key="profile.lastname.goodfeedback"/>
                           </div>
                         </div>
                       </div>
@@ -56,14 +56,16 @@
 
                     <!-- Submit button -->
                     <div class="d-grid gap-2">
-                      <button type="submit" class="btn btn-primary btn-block mb-4">Update profile</button>
+                      <button type="submit" class="btn btn-primary btn-block mb-5"><fmt:message key="profile.button.update-profile"/></button>
                     </div>
 
                 </form>
 
                 <hr/>
                 
-                <a role="button" href="change-password" class="btn btn-info">Change passoword</a>
+                <a role="button" href="change-password" class="btn btn-info">
+                  <fmt:message key="profile.button.change-password"/>
+                </a>
               </div>
             </section>
 

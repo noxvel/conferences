@@ -13,7 +13,7 @@
             <section class="w-100 p-4 d-flex justify-content-center pb-4">
                 <div class="d-flex flex-column">
 
-                    <h2 class="fw-normal mb-3 pb-3 text-center">Change password</h2>      
+                    <h2 class="fw-normal mb-3 pb-3 text-center"><fmt:message key="change-password.header.text"/></h2>      
                     <form class="needs-validation" novalidate id="changePassword" action="change-password" method="post">
                         <c:if test="${requestScope.message != null}">
                             <div class="alert alert-danger" role="alert">
@@ -23,34 +23,36 @@
 
                         <!-- Current password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="password">Current password</label>
+                            <label class="form-label" for="password"><fmt:message key="change-password.current-password.label"/></label>
                             <input name="currentPassword" type="password" id="currentPassword" class="form-control" autoComplete="off" pattern=".{3,60}" required />
                             <div class="invalid-feedback">
-                                Bad password!
+                                <fmt:message key="change-password.current-password.badfeedback"/>
                             </div>
                         </div>
 
                         <!-- New password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="password">New password</label>
+                            <label class="form-label" for="password"><fmt:message key="change-password.new-password.label"/></label>
                             <input name="newPassword" type="password" id="newPassword" class="form-control" autoComplete="off" pattern=".{3,60}" required />
                             <div class="invalid-feedback">
-                                Bad password!
+                                <fmt:message key="change-password.new-password.badfeedback"/>
                             </div>
                         </div>
 
                         <!-- Confirm new password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="password">Confirm new password</label>
+                            <label class="form-label" for="password"><fmt:message key="change-password.conf-new-pass.label"/></label>
                             <input name="confirmPassword" type="password" id="confirmPassword" class="form-control" autoComplete="off" required />
                             <div class="invalid-feedback">
-                                Passwords do not match!
+                                <fmt:message key="change-password.conf-new-pass.badfeedback"/>
                             </div>
                         </div>
 
                         <!-- Submit button -->
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-block mb-4">Update password</button>
+                            <button type="submit" class="btn btn-primary btn-block mb-4">
+                                <fmt:message key="change-password.button.update-password"/>
+                            </button>
                         </div>
 
                     </form>
@@ -61,13 +63,6 @@
 
             $(document).ready(function() {
 
-                // $('#password, #confirm_password').on('keyup', function () {
-                //     if ($('#password').val() == $('#confirm_password').val()) {
-                //         $('#message').html('Matching').css('color', 'green');
-                //     } else 
-                //         $('#message').html('Not Matching').css('color', 'red');
-                // });
-
                 $("#changePassword").submit(function( event ) {
 
                     const password = document.querySelector('#newPassword');
@@ -76,7 +71,6 @@
                         confirm.setCustomValidity('');
                     } else {
                         confirm.setCustomValidity('Passwords do not match');
-                        // confirm.reportValidity();
                     }
 
                     if (!event.target.checkValidity()) {

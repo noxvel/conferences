@@ -13,7 +13,7 @@
             <section class="w-100 p-4 d-flex justify-content-center pb-4">
                 <div class="d-flex flex-column">
 
-                    <h2 class="fw-normal mb-3 pb-3 text-center">Sign into your account</h2>      
+                    <h2 class="fw-normal mb-3 pb-3 text-center"><fmt:message key="login.header.text"/></h2>      
                     <form id="loginUser" action="login" method="post">
                         <c:if test="${requestScope.message != null}">
                             <div class="alert alert-danger" role="alert">
@@ -22,40 +22,37 @@
                         </c:if>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="email">Email address</label>
+                            <label class="form-label" for="email"><fmt:message key="login.email.label"/></label>
                             <input name="email" type="email" id="email" class="form-control" autoComplete="off" pattern="^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$" required value="moderator@mail.com"/>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="password">Password</label>
+                            <label class="form-label" for="password"><fmt:message key="login.password.label"/></label>
                             <input name="password" type="password" id="password" class="form-control" autoComplete="off" required value="123"/>
                         </div>
 
                         <!-- 2 column grid layout for inline styling -->
                         <div class="row mb-4">
                             <div class="col d-flex justify-content-center">
-                                <!-- Checkbox -->
-                                <div class="form-check">
-                                    <input name="rememberMe" class="form-check-input" type="checkbox" value="" id="rememberMe" checked />
-                                    <label class="form-check-label" for="rememberMe"> Remember me </label>
-                                </div>
                             </div>
 
                             <div class="col">
                             <!-- Simple link -->
-                            <a href="#!">Forgot password?</a>
+                            <a href="#!"><fmt:message key="login.text.forgot-password"/></a>
                             </div>
                         </div>
 
                         <!-- Submit button -->
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                            <button type="submit" class="btn btn-primary btn-block mb-4"><fmt:message key="login.button.signin"/></button>
                         </div>
 
                         <!-- Register buttons -->
                         <div class="text-center">
-                            <p>Not a member? <a href="/conferences/registration">Register</a></p>
+                            <p><fmt:message key="login.text.not-member"/>
+                                <a href="/conferences/registration"><fmt:message key="login.button.register"/></a>
+                            </p>
                         </div>
                     </form>
                 </div>

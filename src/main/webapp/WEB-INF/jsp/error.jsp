@@ -7,7 +7,7 @@
 <fmt:setBundle basename="text" />
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}">
     <head>
         <meta charset="UTF-8">
         <title>Conferences</title>
@@ -19,16 +19,16 @@
     <body class="d-flex flex-column h-100">
 
         <div class="container">
-            <h1>Error code: ${status}</h1>
+            <h1><fmt:message key="error.text.error-code"/>: ${status}</h1>
             <c:choose>
             <c:when test="${status == 500}">
-                <h3>Error: ${pageContext.exception.getMessage()}</h3>
+                <h3><fmt:message key="error.text.error-message"/>: ${pageContext.exception.getMessage()}</h3>
             </c:when >
             <c:when test="${status == 404}">
-                <h3>Page not found</h3>
+                <h3><fmt:message key="error.text.page-not-found"/></h3>
             </c:when>
             <c:otherwise>
-                <h3>Error is occured!</h3>
+                <h2><fmt:message key="error.text.error-occurred"/>!</h2>
             </c:otherwise>
             </c:choose>
         </div>
