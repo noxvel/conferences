@@ -5,6 +5,9 @@
 <fmt:formatDate value="${event.beginDate}" var="beginDate" pattern="yyyy-MM-dd'T'HH:mm"/>
 <fmt:formatDate value="${event.endDate}" var="endDate" pattern="yyyy-MM-dd'T'HH:mm"/>
 
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="text" />
+
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
 
         <div class="container d-flex flex-column">

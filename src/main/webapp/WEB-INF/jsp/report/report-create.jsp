@@ -1,7 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
+
+
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="text" />
 
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>

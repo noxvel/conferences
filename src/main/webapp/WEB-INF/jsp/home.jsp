@@ -1,14 +1,15 @@
-
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%-- <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %> --%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
 <c:set var="isSpeaker" value="${sessionScope.userRole == 'SPEAKER'}" />
 <c:set var="isOrdinaryUser" value="${sessionScope.userRole == 'ORDINARY_USER'}" />
+
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="text" />
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
 
@@ -18,26 +19,40 @@
             <div class="d-flex flex-row align-items-center">
                 <div class="d-grid gap-2 d-md-block">
                     <c:if test="${isModerator}">
-                        <a role="button" href="event/create" class="btn btn-success">Create new event</a>
+                        <a role="button" href="event/create" class="btn btn-success">
+                            <fmt:message key="home.button.create-event"/>
+                        </a>
                     </c:if>
                 </div>
                 <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">
                     <form class="row row-cols-lg-auto g-3 align-items-center" action="event-list-sort" method="post">
                         <div class="col-12">
                             <select name="sortType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
-                                <option ${sortType == 'Date' ? 'selected' : ''} value="Date" >by date</option>
-                                <option ${sortType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">by number of reports</option>
-                                <option ${sortType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">by number of participants</option>
+                                <option ${sortType == 'Date' ? 'selected' : ''} value="Date" >
+                                    <fmt:message key="home.sort.date"/>
+                                </option>
+                                <option ${sortType == 'ReportsCount' ? 'selected' : ''} value="ReportsCount">
+                                    <fmt:message key="home.sort.number-of-reports"/>
+                                </option>
+                                <option ${sortType == 'ParticipantsCount' ? 'selected' : ''} value="ParticipantsCount">
+                                    <fmt:message key="home.sort.number-of-participants"/>
+                                </option>
                             </select>
                         </div>
                         <div class="col-12">
                             <select name="sortDirection" class="form-select" id="sortDirectionSelect" aria-label="sort direction select">
-                                <option ${sortDirection == 'Ascending' ? 'selected' : ''} value="Ascending">in ascending order</option>
-                                <option ${sortDirection == 'Descending' ? 'selected' : ''} value="Descending" >in descending order</option>
+                                <option ${sortDirection == 'Ascending' ? 'selected' : ''} value="Ascending">
+                                    <fmt:message key="home.sort.ascending-order"/>
+                                </option>
+                                <option ${sortDirection == 'Descending' ? 'selected' : ''} value="Descending" >
+                                    <fmt:message key="home.sort.descending-order"/>
+                                </option>
                             </select>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-secondary" type="submit">Sort</button>
+                            <button class="btn btn-secondary" type="submit">
+                                <fmt:message key="home.sort.button"/>Sort
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -48,10 +63,12 @@
                                 <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
                                                         id="showInWhichParticipated" ${showEventParticipated ? 'checked' : ''}>
                                 <label class="form-check-label" for="showInWhichParticipated">
-                                    Show events in which you participated
+                                    <fmt:message key="home.filter.in-which-participated"/>
                                 </label>
                         </div>
-                        <button class="btn btn-warning ms-3" type="submit">Filter</button>
+                        <button class="btn btn-warning ms-3" type="submit">
+                            <fmt:message key="home.filter.button"/>
+                        </button>
                     </form>
                 </div>
                 </c:if>
@@ -74,13 +91,17 @@
                                     <p class="card-text">${fn:substring(event.description, 0, 140)}...</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <a role="button" href="event/view?eventID=${event.id}" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a role="button" href="event/view?eventID=${event.id}" class="btn btn-sm btn-outline-primary">
+                                                <fmt:message key="home.card.button.view"/>
+                                            </a>
                                             <c:if test="${isModerator}">
-                                                <a role="button" href="event/edit?eventID=${event.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                                <a role="button" href="event/edit?eventID=${event.id}" class="btn btn-sm btn-outline-secondary">
+                                                    <fmt:message key="home.card.button.edit"/>
+                                                </a>
                                             </c:if>
                                         </div>
-                                        <small class="text-muted">${event.reportsCount} reports</small>
-                                        <small class="text-muted">${event.participantsCount} participants</small>
+                                        <small class="text-muted">${event.reportsCount} <fmt:message key="home.card.reports"/></small>
+                                        <small class="text-muted">${event.participantsCount} <fmt:message key="home.card.participants"/></small>
                                     </div>
                                 </div>
                             </div>

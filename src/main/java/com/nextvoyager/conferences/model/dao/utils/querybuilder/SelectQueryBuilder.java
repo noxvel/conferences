@@ -14,9 +14,13 @@ public class SelectQueryBuilder {
     }
 
     public SelectQueryBuilder setFilter(String filter) {
+        return setFilter(filter, false);
+    }
+
+    public SelectQueryBuilder setFilter(String filter, boolean isAdditional) {
         if (filter == null) return this;
 
-        setFilterKeyWord();
+        setFilterKeyWord(isAdditional);
 
         this.stringBuilder.append(filter);
         return this;
@@ -30,7 +34,11 @@ public class SelectQueryBuilder {
     }
 
     public SelectQueryBuilder setInFilter(String filter, int filterCount) {
-        setFilterKeyWord();
+        return setInFilter(filter, filterCount, false);
+    }
+
+    public SelectQueryBuilder setInFilter(String filter, int filterCount, boolean isAdditional) {
+        setFilterKeyWord(isAdditional);
 
         this.stringBuilder.append(filter);
         StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
@@ -41,11 +49,11 @@ public class SelectQueryBuilder {
         return this;
     }
 
-    private void setFilterKeyWord() {
-        if (this.stringBuilder.indexOf("WHERE") == -1) {
-            this.stringBuilder.append("WHERE ");
-        } else {
+    private void setFilterKeyWord(boolean isAdditional) {
+        if (isAdditional) {
             this.stringBuilder.append("AND ");
+        } else {
+            this.stringBuilder.append("WHERE ");
         }
     }
 

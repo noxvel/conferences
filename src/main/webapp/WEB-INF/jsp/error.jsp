@@ -1,6 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" isErrorPage="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="status" value="${pageContext.response.status}" />
+
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="text" />
 
 <!DOCTYPE html>
 <html lang="en">

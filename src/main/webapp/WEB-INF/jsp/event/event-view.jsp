@@ -2,12 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="mytag" tagdir="/WEB-INF/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isSpeaker" value="${sessionScope.userRole == 'SPEAKER'}" />
 <c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
 <c:set var="isUser" value="${sessionScope.userRole == 'ORDINARY_USER'}" />
 
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="text" />
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
 
@@ -86,35 +89,15 @@
 
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                         <c:forEach var="report" items="${event.reports}">
-                            <c:set var="reportColor" value=""/>
                             <c:if test="${isModerator or isSpeaker}">
-                                <c:choose>
-                                    <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
-                                        <c:set var="reportColor" value="info"/>
-                                    </c:when>
-                                    <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
-                                        <c:set var="reportColor" value="secondary"/>
-                                    </c:when>
-                                    <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
-                                        <c:set var="reportColor" value="warning"/>
-                                    </c:when>
-                                    <c:when test="${report.status == 'CONFIRMED'}">
-                                        <c:set var="reportColor" value="success"/>
-                                    </c:when>
-                                    <c:when test="${report.status == 'CANCELED'}">
-                                        <c:set var="reportColor" value="danger"/>
-                                    </c:when>
-                                    <c:when test="${report.status == 'FREE'}">
-                                        <c:set var="reportColor" value="primary"/>
-                                    </c:when>
-                                </c:choose>
+                                <mytag:statuscolor reportStatus="${report.status}"/>
                             </c:if>
                             <div class="col">
                                 <div class="card shadow-md ${empty reportColor ? '' : 'border-' += reportColor}">
                                     <div class="card-body">
                                         <h5 class="card-title">${report.topic}</h5>
                                         <c:if test="${isModerator or isSpeaker}">
-                                            <h6 class="card-subtitle mb-2 text-${reportColor}">${report.status.name}</h6>
+                                            <h6 class="card-subtitle mb-2 ${empty reportColor ? '' : 'text-' += reportColor}">${report.status.name}</h6>
                                         </c:if>
                                         <p class="card-text">${fn:substring(report.description, 0, 140)}...</p>
                                         <div class="d-flex justify-content-between align-items-center">

@@ -1,0 +1,11 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Custom taglib</short-name>
+
+    <tag>
+        <name>company-label</name>
+        <tag-class>com.nextvoyager.conferences.customtag.CompanyLabelTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+</taglib>
