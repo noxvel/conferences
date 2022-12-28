@@ -15,14 +15,14 @@
 
             <form id="createReport" class="row g-3" action="create" method="post">
                 <div class="col-12">
-                    <label for="topic" class="form-label">Topic</label>
+                    <label for="topic" class="form-label"><fmt:message key="report-create.topic.label"/></label>
                     <input name="topic" type="text" class="form-control" id="topic" placeholder="Reports topic" value="Basic topic">
                 </div>
                 <c:if test="${isModerator}">
                     <div class="col-md-8">
-                        <label for="speaker" class="form-label">Speaker</label>
+                        <label for="speaker" class="form-label"><fmt:message key="report-create.speaker.label"/></label>
                         <select name="speaker" id="speakerSelect" class="form-select">
-                            <option value="">Vacant</option>
+                            <option value=""><fmt:message key="report-create.speaker.select.vacant"/></option>
                             <c:forEach var="speaker" items="${speakers}">
                                 <option value="${speaker.id}">${speaker.firstName} ${speaker.lastName}(${speaker.email})</option>
                             </c:forEach>
@@ -30,17 +30,17 @@
                     </div>
                     <div class="col-md-4">
                         <div id="actionForSpeakerBlock" class="d-none">
-                            <div>Action</div>
+                            <div><fmt:message key="report-create.action.label"/></div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="status" value="CONFIRMED" id="radioReportStatus1" checked>
                                 <label class="form-check-label" for="radioReportStatus1">
-                                    Consolidate 
+                                    <fmt:message key="report-create.action.radio.consolidate"/>
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="status" value="PROPOSE_TO_SPEAKER" id="radioReportStatus2" >
                                 <label class="form-check-label" for="radioReportStatus2">
-                                    Propose
+                                    <fmt:message key="report-create.action.radio.propose"/>
                                 </label>
                             </div>
                             <%-- <label for="status" class="form-label">Status</label>
@@ -53,13 +53,16 @@
                     </div>
                 </c:if>
                 <div class="input-group">
-                    <span class="input-group-text">Description</span>
-                    <textarea name="description" class="form-control" rows="6 aria-label="Description" >Interesting description of the new report</textarea>
+                    <span class="input-group-text"><fmt:message key="report-create.description.label"/></span>
+                    <fmt:message key="report-create.description.placeholder" var="descriptionPlaceholder"/>
+                    <textarea name="description" class="form-control" rows="6" aria-label="Description" placeholder="${descriptionPlaceholder}" ></textarea>
                 </div>
                 <input type="hidden" id="event" name="event" value="${eventID}" />
                 <div class="col-12">
-                    <a role="button" href="${contextPath}/event/view?eventID=${eventID}" class="btn btn-secondary">Back to event</a>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a role="button" href="${contextPath}/event/view?eventID=${eventID}" class="btn btn-secondary">
+                        <fmt:message key="report-create.button.back"/>
+                    </a>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="report-create.button.create"/></button>
                 </div>
             </form>
 

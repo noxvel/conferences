@@ -30,7 +30,7 @@
                           <label class="form-label" for="firstName"><fmt:message key="profile.firstname.label"/></label>
                           <input name="firstName" value="${currentUser.firstName}" type="text" id="firstName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
                           <div class="valid-feedback">
-                            <fmt:message key="profile.firstname.goodfeedback"/>
+                            <fmt:message key="profile.firstname.good-feedback"/>
                           </div>
                         </div>
                       </div>
@@ -39,7 +39,7 @@
                           <label class="form-label" for="lastName"><fmt:message key="profile.lastname.label"/></label>
                           <input name="lastName" value="${currentUser.lastName}" type="text" id="lastName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
                           <div class="valid-feedback">
-                            <fmt:message key="profile.lastname.goodfeedback"/>
+                            <fmt:message key="profile.lastname.good-feedback"/>
                           </div>
                         </div>
                       </div>

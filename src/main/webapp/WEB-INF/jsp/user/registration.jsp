@@ -31,7 +31,7 @@
                           </label>
                           <input name="firstName" type="text" id="firstName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
                           <div class="valid-feedback">
-                            <fmt:message key="registration.firstname.goodfeedback"/>
+                            <fmt:message key="registration.firstname.good-feedback"/>
                           </div>
                         </div>
                       </div>
@@ -42,7 +42,7 @@
                           </label>
                           <input name="lastName" type="text" id="lastName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
                           <div class="valid-feedback">
-                            <fmt:message key="registration.lastname.goodfeedback"/>
+                            <fmt:message key="registration.lastname.good-feedback"/>
                           </div>
                         </div>
                       </div>
@@ -55,7 +55,7 @@
                       </label>
                       <input name="email" type="email" id="email" class="form-control" autoComplete="off" pattern="^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$" required />
                       <div class="invalid-feedback">
-                        <fmt:message key="registration.email.badfeedback"/>
+                        <fmt:message key="registration.email.bad-feedback"/>
                       </div>
                     </div>
 
@@ -66,7 +66,7 @@
                       </label>
                       <input name="password" type="password" id="password" class="form-control" autoComplete="off" pattern=".{3,60}" required />
                       <div class="invalid-feedback">
-                        <fmt:message key="registration.password.badfeedback"/>
+                        <fmt:message key="registration.password.bad-feedback"/>
                       </div>
                     </div>
 

@@ -26,7 +26,7 @@
                             <label class="form-label" for="password"><fmt:message key="change-password.current-password.label"/></label>
                             <input name="currentPassword" type="password" id="currentPassword" class="form-control" autoComplete="off" pattern=".{3,60}" required />
                             <div class="invalid-feedback">
-                                <fmt:message key="change-password.current-password.badfeedback"/>
+                                <fmt:message key="change-password.current-password.bad-feedback"/>
                             </div>
                         </div>
 
@@ -35,7 +35,7 @@
                             <label class="form-label" for="password"><fmt:message key="change-password.new-password.label"/></label>
                             <input name="newPassword" type="password" id="newPassword" class="form-control" autoComplete="off" pattern=".{3,60}" required />
                             <div class="invalid-feedback">
-                                <fmt:message key="change-password.new-password.badfeedback"/>
+                                <fmt:message key="change-password.new-password.bad-feedback"/>
                             </div>
                         </div>
 
@@ -44,7 +44,7 @@
                             <label class="form-label" for="password"><fmt:message key="change-password.conf-new-pass.label"/></label>
                             <input name="confirmPassword" type="password" id="confirmPassword" class="form-control" autoComplete="off" required />
                             <div class="invalid-feedback">
-                                <fmt:message key="change-password.conf-new-pass.badfeedback"/>
+                                <fmt:message key="change-password.conf-new-pass.bad-feedback"/>
                             </div>
                         </div>
 

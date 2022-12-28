@@ -33,7 +33,7 @@
                 </ul>
 
                 <div class="d-flex flex-row align-items-center">
-                    <form class="me-5" id="changeLanguage" action="change-language" method="post">
+                    <form class="me-5" id="changeLanguage" action="${contextPath}/change-language" method="post">
                         <select name="lang" class="form-select" onchange="submit()" aria-label="Default select example">
                             <option value="en" ${lang == 'en' ? 'selected' : ''}>EN</option>
                             <option value="uk" ${lang == 'uk' ? 'selected' : ''}>UA</option>
@@ -51,7 +51,7 @@
                                     </c:if>
                                     <li><a class="dropdown-item" href="${contextPath}/profile"><fmt:message key="header.button.profile"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="${contextPath}/signout"><fmt:message key="header.button.signout"/></a></li>
+                                    <li><a class="dropdown-item" href="${contextPath}/signout"><fmt:message key="header.button.sign-out"/></a></li>
                                 </ul>
                             </div>
                         </c:when>    

@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-12">
                             <button class="btn btn-secondary" type="submit">
-                                <fmt:message key="home.sort.button"/>Sort
+                                <fmt:message key="home.sort.button"/>
                             </button>
                         </div>
                     </form>

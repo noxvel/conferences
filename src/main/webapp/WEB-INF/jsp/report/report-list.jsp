@@ -14,20 +14,23 @@
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
 
         <div class="container d-flex flex-column">
-            <h2 class="mb-3">Your list of reports</h2>
+            <h2 class="mb-3"><fmt:message key="report-list.header.text"/></h2>
 
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
                     <div class="ms-2">
                         <form action="${contextPath}/report-list-filter" method="post">
+                            <input type="hidden" name="redirectPath" value="report-list"/>
                             <div class="input-group">
                                 <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
-                                    <option ${empty reportStatusFilter ? 'selected' : ''} value="">All</option>
+                                    <option ${empty reportStatusFilter ? 'selected' : ''} value=""><fmt:message key="report-list.filter.status.all"/></option>
                                     <c:forEach var="status" items="${reportStatuses}">
-                                        <option ${reportStatusFilter == status ? 'selected' : ''} value="${status}">${status.name}</option>
+                                        <option ${reportStatusFilter == status ? 'selected' : ''} value="${status}">
+                                            <mytag:report-status-i18n reportStatus="${status}"/>
+                                        </option>
                                     </c:forEach>
                                 </select>
-                                <button class="btn btn-primary" type="submit">Filter</button>
+                                <button class="btn btn-primary" type="submit"><fmt:message key="report-list.filter.button"/></button>
                             </div>
                         </form>
                     </div>
@@ -37,16 +40,20 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
                 <c:forEach var="report" items="${reports}">
-                    <mytag:statuscolor reportStatus="${report.status}"/>
+                    <mytag:report-status-color reportStatus="${report.status}"/>
                     
                     <div class="col">
                         <div class="card shadow-md ${empty reportColor ? '' : 'border-' += reportColor}">
                             <div class="card-body">
                                 <h5 class="card-title">${report.topic}</h5>
-                                <h6 class="card-subtitle mb-2 ${empty reportColor ? '' : 'text-' += reportColor}">${report.status.name}</h6>
+                                <h6 class="card-subtitle mb-2 ${empty reportColor ? '' : 'text-' += reportColor}">
+                                    <mytag:report-status-i18n reportStatus="${report.status}"/>
+                                </h6>
                                 <p class="card-text">${fn:substring(report.description, 0, 140)}...</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <a role="button" href="report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">View</a>
+                                    <a role="button" href="report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">
+                                        <fmt:message key="report-list.report.button.view"/>
+                                    </a>
                                 </div>
                             </div>
                         </div>

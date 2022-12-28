@@ -15,6 +15,7 @@ public class FilterReportList extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String statusFilterParam = req.getParameter("reportStatusFilter");
+        String redirectPath = req.getParameter("redirectPath");
 
         if (!statusFilterParam.equals("")) {
             req.getSession().setAttribute("reportStatusFilter", Report.Status.valueOf(statusFilterParam));
@@ -22,6 +23,6 @@ public class FilterReportList extends HttpServlet {
             req.getSession().removeAttribute("reportStatusFilter");
         }
 
-        resp.sendRedirect("report-list");
+        resp.sendRedirect(redirectPath);
     }
 }

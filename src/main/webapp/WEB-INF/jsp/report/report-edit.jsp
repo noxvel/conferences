@@ -14,14 +14,14 @@
 
             <form id="createReport" class="row g-3" action="edit" method="post">
                 <div class="col-12">
-                    <label for="topic" class="form-label">Topic</label>
+                    <label for="topic" class="form-label"><fmt:message key="report-edit.topic.label"/></label>
                     <input name="topic" type="text" class="form-control" id="topic" placeholder="Reports topic" value="${report.topic}">
                 </div>
                 <c:if test="${isModerator}">
                     <div class="col-md-8">
-                        <label for="speaker" class="form-label">Speaker</label>
+                        <label for="speaker" class="form-label"><fmt:message key="report-edit.speaker.label"/></label>
                         <select name="speaker" id="speakerSelect" class="form-select" >
-                            <option value="">Vacant</option>
+                            <option value=""><fmt:message key="report-edit.speaker.select.vacant"/></option>
                             <c:forEach var="speaker" items="${speakers}">
                                 <option ${report.speaker.id == speaker.id ? 'selected' : ''} value="${speaker.id}">
                                     ${speaker.firstName} ${speaker.lastName}(${speaker.email})
@@ -31,17 +31,17 @@
                     </div>
                     <div class="col-md-4">
                         <div id="actionForSpeakerBlock" class="${report.status == 'FREE' ? 'd-none' : 'd-block'}">
-                            <div>Action</div>
+                            <div><fmt:message key="report-edit.action.label"/></div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="status" value="CONFIRMED" id="radioReportStatus1" checked>
                                 <label class="form-check-label" for="radioReportStatus1">
-                                    Consolidate 
+                                    <fmt:message key="report-edit.action.radio.consolidate"/>
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="status" value="PROPOSE_TO_SPEAKER" id="radioReportStatus2" >
                                 <label class="form-check-label" for="radioReportStatus2">
-                                    Propose
+                                    <fmt:message key="report-edit.action.radio.propose"/>
                                 </label>
                             </div>
                             <%-- <label for="status" class="form-label">Status</label>
@@ -54,14 +54,18 @@
                     </div>
                 </c:if>
                 <div class="input-group">
-                    <span class="input-group-text">Description</span>
+                    <span class="input-group-text"><fmt:message key="report-edit.description.label"/></span>
                     <textarea name="description" class="form-control" rows="6 aria-label="Description" >${report.description}</textarea>
                 </div>
                 <input type="hidden" id="event" name="event" value="${report.event.id}" />
                 <input type="hidden" id="reportID" name="reportID" value="${report.id}" />
                 <div class="col-12">
-                    <a role="button" href="${contextPath}/report/view?reportID=${report.id}" class="btn btn-secondary">Back</a>
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <a role="button" href="${contextPath}/report/view?reportID=${report.id}" class="btn btn-secondary">
+                        <fmt:message key="report-edit.button.back"/>
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <fmt:message key="report-edit.button.edit"/>
+                    </button>
                 </div>
             </form>
 

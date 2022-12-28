@@ -12,20 +12,22 @@
         <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="${contextPath}/home">Home</a></li>
+                    <li class="breadcrumb-item"><a href="${contextPath}/home"><fmt:message key="report-view.breadcrumb-home-text"/></a></li>
                     <li class="breadcrumb-item"><a href="${contextPath}/event/view?eventID=${report.event.id}">${report.event.name}</a></li>
                     <li class="breadcrumb-item active" aria-current="page">${report.topic}</li>
                 </ol>
             </nav>
             <h3>${report.topic}</h3>
-            <h4>Status: ${report.status.name}</h4>
-            <h5>Speaker: 
+            <c:if test="${userRole == 'MODERATOR' or userRole == 'SPEAKER'}">
+                <h4><mytag:report-status-i18n reportStatus="${report.status}"/></h4>
+            </c:if>
+            <h5><fmt:message key="report-view.text-speaker"/> 
              <c:choose>
                 <c:when test="${report.speaker.id != 0}">
                     ${report.speaker.firstName} ${report.speaker.lastName}
                 </c:when>
                 <c:otherwise>
-                    No speaker
+                    <fmt:message key="report-view.text.no-speaker"/>
                 </c:otherwise>
             </c:choose>
             </h5>
@@ -35,34 +37,51 @@
                     <div class="d-grid gap-2 d-md-block">
                         <c:if test="${not empty currentUser and (currentUser.role == 'MODERATOR' 
                                     or (currentUser.role == 'SPEAKER' and currentUser.id == report.speaker.id and report.status == 'OFFERED_BY_SPEAKER'))}">
-                            <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">Edit</a>
+                            <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">
+                                <fmt:message key="report-view.button.edit"/>
+                            </a>
                         </c:if>
                     </div>
                     <c:if test="${currentUser.role == 'SPEAKER'}">
                         <div class="btn-group ms-3">
                             <c:choose>
                                 <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
+                                    <fmt:message key="report-view.speaker.tooltip.cancel-offer" var="tooltipSpeakerCancelOffer"/>
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-offer-speaker" 
                                         class="btn btn btn-outline-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Cancel your report offer">Cancel offer</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipSpeakerCancelOffer}">
+                                        <fmt:message key="report-view.speaker.button.cancel-offer"/>
+                                    </a>
                                 </c:when>
                                 <c:when test="${report.status == 'PROPOSE_TO_SPEAKER'}">
+                                    <fmt:message key="report-view.speaker.tooltip.accept" var="tooltipSpeakerAccept"/>
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=accept-propose-speaker" 
                                         class="btn btn btn-success"
-                                        data-bs-toggle="tooltip" data-bs-title="Accept to be a speaker">Accept</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipSpeakerAccept}">
+                                        <fmt:message key="report-view.speaker.button.accept"/>
+                                    </a>
+                                    <fmt:message key="report-view.speaker.tooltip.reject" var="tooltipSpeakerReject"/>
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-propose-speaker" 
                                         class="btn btn btn-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Refuse to be a speaker">Reject</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipSpeakerReject}">
+                                        <fmt:message key="report-view.speaker.button.reject"/>
+                                    </a>
                                 </c:when>
                                 <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
+                                    <fmt:message key="report-view.speaker.tooltip.cancel-suggestion" var="tooltipSpeakerCancelSuggestion"/>
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=cancel-suggestion-speaker" 
                                         class="btn btn btn-outline-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Cancel suggestion to be a speaker">Cancel suggestion</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipSpeakerCancelSuggestion}">
+                                        <fmt:message key="report-view.speaker.button.cancel-suggestion"/>
+                                    </a>
                                 </c:when>
                                 <c:when test="${report.status == 'FREE'}">
+                                    <fmt:message key="report-view.speaker.tooltip.make-suggestion" var="tooltipSpeakerMakeSuggestion"/>
                                     <a role="button" href="${contextPath}/speaker-report-action?reportID=${report.id}&action=make-suggestion-speaker" 
                                         class="btn btn btn-info"
-                                        data-bs-toggle="tooltip" data-bs-title="Make suggestion to be a speaker">Make suggestion</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipSpeakerMakeSuggestion}">
+                                        <fmt:message key="report-view.speaker.button.make-suggestion"/>
+                                    </a>
                                 </c:when>
                             </c:choose>
                         </div>
@@ -71,20 +90,32 @@
                         <div class="btn-group ms-3">
                             <c:choose>
                                 <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
+                                    <fmt:message key="report-view.moderator.tooltip.accept-offer" var="tooltipModeratorAcceptOffer"/>
                                     <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-offer-moderator" 
                                         class="btn btn btn-success"
-                                        data-bs-toggle="tooltip" data-bs-title="Accept a proposed speaker's report">Accept offer</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorAcceptOffer}">
+                                        <fmt:message key="report-view.moderator.button.accept-offer"/>
+                                    </a>
+                                    <fmt:message key="report-view.moderator.tooltip.deny-offer" var="tooltipModeratorDenyOffer"/>
                                     <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-offer-moderator" 
                                         class="btn btn btn-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Reject a proposed speaker's report">Deny offer</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorDenyOffer}">
+                                        <fmt:message key="report-view.moderator.button.deny-offer"/>
+                                    </a>
                                 </c:when>
                                 <c:when test="${report.status == 'SUGGESTED_SPEAKER'}">
+                                    <fmt:message key="report-view.moderator.tooltip.accept-suggestion" var="tooltipModeratorAcceptSuggestion"/>
                                     <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=accept-suggestion-moderator" 
                                         class="btn btn btn-success"
-                                        data-bs-toggle="tooltip" data-bs-title="Accept speaker suggestion">Accept suggestion</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorAcceptSuggestion}">
+                                        <fmt:message key="report-view.moderator.button.accept-suggestion"/>
+                                    </a>
+                                    <fmt:message key="report-view.moderator.tooltip.cancel-suggestion" var="tooltipModeratorCancelSuggestion"/>
                                     <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=deny-suggestion-moderator" 
                                         class="btn btn btn-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Cancel speaker suggestion">Cancel suggestion</a>
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorCancelSuggestion}">
+                                        <fmt:message key="report-view.moderator.button.cancel-suggestion"/>
+                                    </a>
                                 </c:when>
                             </c:choose>
                         </div>
@@ -92,8 +123,9 @@
                 </div>
             </section>
 
-            <h4>Description</h4>
-            <p class="mt-5">${not empty report.description ? report.description : 'no description'}</p>
+            <h4><fmt:message key="report-view.text.description"/></h4>
+            <fmt:message key="report-view.text.no-description" var="textNoDescription"/>
+            <p class="mt-5">${not empty report.description ? report.description : textNoDescription}</p>
 
         </div>   
 
