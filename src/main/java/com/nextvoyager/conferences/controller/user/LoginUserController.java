@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.controller.user;
 
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
@@ -8,13 +9,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginUserController extends HttpServlet {
 
-    UserService userService = UserServiceImpl.getInstance();
+    private final UserService userService = AppContext.getInstance().getUserService();
+    private static final Logger logger = LogManager.getLogger(LoginUserController.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -57,9 +61,12 @@ public class LoginUserController extends HttpServlet {
         if (user == null) {
             req.setAttribute("message", "Unknown username/password. Please retry");
             req.getRequestDispatcher("/WEB-INF/jsp/user/login.jsp").forward(req, resp);
+
+            logger.warn("Bad login for user with email: " + emailParam);
         } else {
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("userRole", user.getRole());
+            logger.info("user is login - " + user.getEmail());
             resp.sendRedirect("home");
         }
     }

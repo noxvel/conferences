@@ -1,21 +1,12 @@
 package com.nextvoyager.conferences.controller.report;
 
-import com.nextvoyager.conferences.model.dao.DAOFactory;
-import com.nextvoyager.conferences.model.dao.report.ReportDAO;
-import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
-import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.ConsolidateReportByModerator;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.NoApprovalAction;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.ProposeToSpeakerByModerator;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.SetFreeReportByModerator;
-import com.nextvoyager.conferences.service.approvalofreport.speakerapproval.OfferReportBySpeaker;
-import com.nextvoyager.conferences.service.impl.EventServiceImpl;
 import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
@@ -31,8 +22,8 @@ import java.util.List;
 @WebServlet("/report/create")
 public class ReportCreateController extends HttpServlet {
 
-    ReportService reportService = ReportServiceImpl.getInstance();
-    UserService userService = UserServiceImpl.getInstance();
+    private final ReportService reportService = AppContext.getInstance().getReportService();
+    private final UserService userService = AppContext.getInstance().getUserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -78,10 +69,10 @@ public class ReportCreateController extends HttpServlet {
         report.setDescription(descriptionParam);
 
         // Choose approval action for the new report
-        ApprovalOfReportAction approvalAction = null;
+        String approvalAction = null;
         User approvalSpeaker = null;
         if (currentUser.getRole() == User.Role.SPEAKER) {
-            approvalAction = new OfferReportBySpeaker();
+            approvalAction = "offer-report-speaker";
             approvalSpeaker =  currentUser;
         }else{
             if (!speakerParam.equals("")) {
@@ -89,22 +80,21 @@ public class ReportCreateController extends HttpServlet {
                 Report.Status status = Report.Status.valueOf(statusParam);
                 switch (status) {
                     case CONFIRMED:
-                        approvalAction = new ConsolidateReportByModerator();
+                        approvalAction = "consolidate-report-moderator";
                         break;
                     case PROPOSE_TO_SPEAKER:
-                        approvalAction = new ProposeToSpeakerByModerator();
+                        approvalAction = "propose-to-speaker-moderator";
                         break;
                     default:
-                        approvalAction = new NoApprovalAction();
+                        approvalAction = "no-approval-action";
                         break;
                 }
             } else {
-                approvalAction = new SetFreeReportByModerator();
+                approvalAction = "set-free-report-moderator";
             }
         }
-        approvalAction.change(report,approvalSpeaker);
 
-        reportService.create(report);
+        reportService.create(approvalAction, report, approvalSpeaker);
 
         resp.sendRedirect("view?reportID=" + report.getId());
     }

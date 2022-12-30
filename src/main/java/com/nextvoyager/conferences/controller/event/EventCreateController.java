@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.controller.event;
 
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
@@ -18,7 +19,7 @@ import java.util.Date;
 @WebServlet("/event/create")
 public class EventCreateController extends HttpServlet {
 
-    EventService eventService = EventServiceImpl.getInstance();
+    private final EventService eventService = AppContext.getInstance().getEventService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

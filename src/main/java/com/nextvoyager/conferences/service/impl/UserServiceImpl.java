@@ -9,11 +9,14 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    DAOFactory javabase = DAOFactory.getInstance();
-    UserDAO userDAO = javabase.getUserDAO();
+    UserDAO userDAO;
 
-    public static UserServiceImpl getInstance() {
-        return new UserServiceImpl();
+    public static UserServiceImpl getInstance(UserDAO userDAO) {
+        return new UserServiceImpl(userDAO);
+    }
+
+    private UserServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -49,6 +52,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listWithOneRole(User.Role role) {
         return userDAO.listWithOneRole(role);
+    }
+
+    @Override
+    public List<User> list() {
+        return userDAO.list();
     }
 
 }

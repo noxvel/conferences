@@ -1,8 +1,10 @@
 package com.nextvoyager.conferences.controller.report;
 
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Report;
+import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
 import jakarta.servlet.ServletException;
@@ -16,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/report/view")
 public class ReportViewController extends HttpServlet {
 
-    ReportService reportService = ReportServiceImpl.getInstance();
+    private final ReportService reportService = AppContext.getInstance().getReportService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

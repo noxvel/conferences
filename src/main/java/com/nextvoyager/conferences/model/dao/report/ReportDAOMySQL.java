@@ -14,7 +14,7 @@ import java.util.List;
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
 
-public class ReportDAOJDBC implements ReportDAO {
+public class ReportDAOMySQL implements ReportDAO {
 
     // Constants ----------------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ public class ReportDAOJDBC implements ReportDAO {
      *
      * @param daoFactory The DAOFactory to construct this Report DAO for.
      */
-    public ReportDAOJDBC(DAOFactory daoFactory) {
+    public ReportDAOMySQL(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
@@ -506,7 +506,8 @@ public class ReportDAOJDBC implements ReportDAO {
         Report report = new Report();
         report.setId(resultSet.getInt("id"));
         report.setTopic(resultSet.getString("topic"));
-        report.setSpeaker(new User(resultSet.getInt("speaker_id")));
+        int speakerID = resultSet.getInt("speaker_id");
+        report.setSpeaker(speakerID != 0 ? new User(speakerID) : null);
         report.setEvent(new Event(resultSet.getInt("event_id"),resultSet.getString("event_name")));
         report.setStatus(Report.Status.valueOf(resultSet.getString("report_status_name")));
         report.setDescription(resultSet.getString("description"));

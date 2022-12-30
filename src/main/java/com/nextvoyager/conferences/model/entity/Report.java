@@ -14,6 +14,17 @@ public class Report {
     private Event event;
     private String description;
 
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id=" + id +
+                ", topic='" + topic + '\'' +
+                ", speaker=" + speaker +
+                ", status=" + status +
+                ", event=" + event +
+                '}';
+    }
+
     @Getter
     @ToString
     public enum Status{

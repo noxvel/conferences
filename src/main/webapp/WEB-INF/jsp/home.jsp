@@ -56,22 +56,33 @@
                         </div>
                     </form>
                 </div>
-                <c:if test="${isSpeaker or isOrdinaryUser}">
                 <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
                     <form action="event-list-filter" method="post" class="d-flex flex-row align-items-center">
-                        <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
-                                                        id="showInWhichParticipated" ${showEventParticipated ? 'checked' : ''}>
-                                <label class="form-check-label" for="showInWhichParticipated">
-                                    <fmt:message key="home.filter.in-which-participated"/>
-                                </label>
-                        </div>
+                        <select name="timeFilter" class="form-select" id="timefilterSelect" aria-label="time filter select">
+                            <option ${eventTimeFilter == 'AllTime' ? 'selected' : ''} value="AllTime">
+                                <fmt:message key="home.filter.time-filter.all-time"/>
+                            </option>
+                            <option ${eventTimeFilter == 'Future' ? 'selected' : ''} value="Future" >
+                                <fmt:message key="home.filter.time-filter.future"/>
+                            </option>
+                            <option ${eventTimeFilter == 'Past' ? 'selected' : ''} value="Past">
+                                <fmt:message key="home.filter.time-filter.past"/>
+                            </option>
+                        </select>
+                        <c:if test="${isSpeaker or isOrdinaryUser}">
+                            <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
+                                                            id="showInWhichParticipated" ${showEventParticipated ? 'checked' : ''}>
+                                    <label class="form-check-label" for="showInWhichParticipated">
+                                        <fmt:message key="home.filter.in-which-participated"/>
+                                    </label>
+                            </div>
+                        </c:if>
                         <button class="btn btn-warning ms-3" type="submit">
                             <fmt:message key="home.filter.button"/>
                         </button>
                     </form>
                 </div>
-                </c:if>
             </div>
         </section>
 

@@ -1,5 +1,7 @@
 package com.nextvoyager.conferences.controller.user.speaker;
 
+import com.nextvoyager.conferences.AppContext;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
@@ -14,7 +16,7 @@ import java.io.IOException;
 @WebServlet("/speaker-report-action")
 public class SpeakerReportAction extends HttpServlet {
 
-    ReportService reportService = ReportServiceImpl.getInstance();
+    private final ReportService reportService = AppContext.getInstance().getReportService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -23,7 +25,8 @@ public class SpeakerReportAction extends HttpServlet {
 
         User speaker = (User) req.getSession().getAttribute("user");
 
-        reportService.changeStatusBySpeaker(actionParam, reportID, speaker);
+        Report report = reportService.find(reportID);
+        reportService.update(actionParam, report, speaker);
 
         resp.sendRedirect("report/view?reportID=" + reportID);
     }

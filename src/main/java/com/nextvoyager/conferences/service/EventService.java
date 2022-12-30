@@ -19,19 +19,23 @@ public interface EventService {
 
     void registerUser(Integer eventID, User user, boolean register);
 
-    List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection);
+    List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
 
     EventDAO.ListWithCountResult listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
-                                                    EventDAO.SortDirection sortDirection);
+                                                    EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
 
     EventDAO.ListWithCountResult listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
                                                                        EventDAO.SortDirection sortDirection,
-                                                           User speaker, Boolean participated);
+                                                           EventDAO.TimeFilter timeFilter, User speaker, Boolean participated);
 
     EventDAO.ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit,
                                                                       EventDAO.SortType eventListSortType,
                                                                       EventDAO.SortDirection eventListSortDirection,
+                                                                      EventDAO.TimeFilter timeFilter,
                                                                       Report.Status reportStatus);
 
-    EventDAO.ListWithCountResult listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType eventListSortType, EventDAO.SortDirection eventListSortDirection, User currentUser, Boolean showEventParticipated);
+    EventDAO.ListWithCountResult listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType eventListSortType,
+                                                                EventDAO.SortDirection eventListSortDirection,
+                                                                EventDAO.TimeFilter timeFilter, User currentUser,
+                                                                Boolean showEventParticipated);
 }

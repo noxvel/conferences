@@ -26,7 +26,7 @@ public interface EventDAO {
      * @return A list of all events from the database ordered by event ID.
      * @throws DAOException If something fails at database level.
      */
-    List<Event> list(SortType sortType, SortDirection sortDirection) throws DAOException;
+    List<Event> list(SortType sortType, SortDirection sortDirection, TimeFilter timeFilter) throws DAOException;
 
     /**
      * Returns a list of all events from the database ordered by event ID. The list is never null and
@@ -35,16 +35,19 @@ public interface EventDAO {
      * @throws DAOException If something fails at database level.
      */
     ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType,
-                                           SortDirection sortDirection) throws DAOException;
+                                           SortDirection sortDirection, TimeFilter timeFilter) throws DAOException;
 
     ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit, SortType sortType,
-                                                             SortDirection sortDirection, Report.Status status) throws DAOException;
+                                                             SortDirection sortDirection, TimeFilter timeFilter,
+                                                             Report.Status status) throws DAOException;
 
     ListWithCountResult listWithPaginationSpeaker(int page, int limit, SortType sortType,
-                                                  SortDirection sortDirection, User speaker, Boolean participated);
+                                                  SortDirection sortDirection, TimeFilter timeFilter,
+                                                  User speaker, Boolean participated);
 
     ListWithCountResult listWithPaginationOrdinaryUser(int page, int limit, SortType sortType,
-                                                       SortDirection sortDirection, User ordinaryUser, Boolean participated);
+                                                       SortDirection sortDirection, TimeFilter timeFilter,
+                                                       User ordinaryUser, Boolean participated);
     /**
      * Create the given event in the database. The event ID must be null, otherwise it will throw
      * IllegalArgumentException. After creating, the DAO will set the obtained ID in the given event.
@@ -85,6 +88,12 @@ public interface EventDAO {
     enum SortDirection {
         Descending,
         Ascending
+    }
+
+    enum TimeFilter{
+        AllTime,
+        Future,
+        Past
     }
 
     @Data

@@ -1,13 +1,11 @@
 package com.nextvoyager.conferences.service.approvalofreport;
 
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.AcceptOfferByModerator;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.AcceptSuggestionByModerator;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.DenyOfferModerator;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.DenySuggestionByModerator;
+import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.*;
 import com.nextvoyager.conferences.service.approvalofreport.speakerapproval.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ApprovalOfReportFactory {
     private static final Map<String, ApprovalOfReportAction> changeReportActionMap = new HashMap<>();
@@ -18,14 +16,22 @@ public class ApprovalOfReportFactory {
         changeReportActionMap.put("cancel-offer-speaker", new CancelOfferBySpeaker());
         changeReportActionMap.put("make-suggestion-speaker", new MakeSuggestionBySpeaker());
         changeReportActionMap.put("cancel-suggestion-speaker", new CancelSuggestionBySpeaker());
+        changeReportActionMap.put("offer-report-speaker", new OfferReportBySpeaker());
 
+        changeReportActionMap.put("consolidate-report-moderator", new ConsolidateReportByModerator());
+        changeReportActionMap.put("propose-to-speaker-moderator", new ProposeToSpeakerByModerator());
+        changeReportActionMap.put("set-free-report-moderator", new SetFreeReportByModerator());
         changeReportActionMap.put("accept-offer-moderator", new AcceptOfferByModerator());
         changeReportActionMap.put("deny-offer-moderator", new DenyOfferModerator());
         changeReportActionMap.put("accept-suggestion-moderator", new AcceptSuggestionByModerator());
         changeReportActionMap.put("deny-suggestion-moderator", new DenySuggestionByModerator());
+        changeReportActionMap.put("cancel-report-moderator", new CancelReportByModerator());
+
+        changeReportActionMap.put("no-approval-action", new NoApprovalAction());
     }
 
-    public static ApprovalOfReportAction getChangeReportAction(String action) {
-        return changeReportActionMap.get(action);
+    public static ApprovalOfReportAction getChangeReportAction(String actionParam) {
+        ApprovalOfReportAction action = changeReportActionMap.get(actionParam);
+        return Objects.requireNonNullElseGet(action, NoApprovalAction::new);
     }
 }

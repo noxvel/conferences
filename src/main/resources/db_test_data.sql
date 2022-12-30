@@ -19,15 +19,16 @@ INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'SUGGESTED_SPEAKER');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'CONFIRMED');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'CANCELED');
 -- -----------------------------------------------------
-INSERT INTO event (id, name, place, begin_date, end_date, description, participants_came)  VALUES (DEFAULT, 'Java conference', 'Odessa', '2022-02-18 13:00:00', '2022-02-21 12:00:00', @lorem_ipsum, 500);
+INSERT INTO event (id, name, place, begin_date, end_date, description, participants_came)  VALUES (DEFAULT, 'Java conference', 'Odessa', '2023-02-18 13:00:00', '2023-02-21 12:00:00', @lorem_ipsum, 500);
 INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (DEFAULT, 'C++ conference', 'San Francisco', '2022-07-04 16:00:00', '2022-07-08 13:00:00', @lorem_ipsum);
-INSERT INTO event (id, name, place, begin_date, end_date, description, participants_came)  VALUES (DEFAULT, 'Python conference', 'London', '2022-06-13 11:00:00', '2022-06-15 16:00:00', @lorem_ipsum, 200);
+INSERT INTO event (id, name, place, begin_date, end_date, description, participants_came)  VALUES (DEFAULT, 'Python conference', 'London', '2023-03-13 11:00:00', '2023-03-15 16:00:00', @lorem_ipsum, 200);
 INSERT INTO event (id, name, place, begin_date, end_date, description, participants_came)  VALUES (DEFAULT, 'Ruby conference', 'Paris', '2022-08-22 16:00:00', '2022-08-24 17:30:00', @lorem_ipsum, 300);
 INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (DEFAULT, 'Kotlin conference', 'New York', '2022-04-12 08:00:00', '2022-04-14 16:00:00', @lorem_ipsum);
 INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (DEFAULT, 'Scala conference', 'Rio de Janeiro', '2022-01-14 08:00:00', '2022-01-15 16:00:00', @lorem_ipsum);
 INSERT INTO event (id, name, place, begin_date, end_date, description, participants_came)  VALUES (DEFAULT, 'Android conference', 'Los Angeles', '2022-11-06 08:00:00', '2022-11-09 16:00:00', @lorem_ipsum, 150);
 -- INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (DEFAULT, 'Rust conference', 'Tokyo', '2022-07-17 08:00:00', '2022-07-19 16:00:00', @lorem_ipsum);
 INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (DEFAULT, 'JavaScript conference', 'Helsinki', '2022-12-12 08:00:00', '2022-12-16 16:00:00', @lorem_ipsum);
+INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (DEFAULT, 'Swift conference', 'Praga', '2023-04-12 08:00:00', '2023-04-16 16:00:00', @lorem_ipsum);
 
 -- -----------------------------------------------------
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Java', NULL, 1, 1, @lorem_ipsum);
