@@ -24,6 +24,14 @@ public class Event {
     private List<Report> reports;
     private Set<User> participants;
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public Event() {
     }
 

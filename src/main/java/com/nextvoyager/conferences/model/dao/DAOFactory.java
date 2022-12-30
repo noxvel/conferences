@@ -1,12 +1,12 @@
 package com.nextvoyager.conferences.model.dao;
 
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
-import com.nextvoyager.conferences.model.dao.event.EventDAOJDBC;
+import com.nextvoyager.conferences.model.dao.event.EventDAOMySQL;
 import com.nextvoyager.conferences.model.dao.exeption.*;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
-import com.nextvoyager.conferences.model.dao.report.ReportDAOJDBC;
+import com.nextvoyager.conferences.model.dao.report.ReportDAOMySQL;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.dao.user.UserDAOJDBC;
+import com.nextvoyager.conferences.model.dao.user.UserDAOMySQL;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -142,15 +142,15 @@ public abstract class DAOFactory {
      * @return The User DAO associated with the current DAOFactory.
      */
     public UserDAO getUserDAO() {
-        return new UserDAOJDBC(this);
+        return new UserDAOMySQL(this);
     }
 
     public EventDAO getEventDAO() {
-        return new EventDAOJDBC(this);
+        return new EventDAOMySQL(this);
     }
 
     public ReportDAO getReportDAO() {
-        return new ReportDAOJDBC(this);
+        return new ReportDAOMySQL(this);
     }
 
 }

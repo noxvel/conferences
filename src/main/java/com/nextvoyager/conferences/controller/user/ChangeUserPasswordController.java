@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.controller.user;
 
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
@@ -15,7 +16,7 @@ import java.io.IOException;
 @WebServlet("/change-password")
 public class ChangeUserPasswordController extends HttpServlet {
 
-    UserService userService = UserServiceImpl.getInstance();
+    private final UserService userService = AppContext.getInstance().getUserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

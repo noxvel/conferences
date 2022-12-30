@@ -1,5 +1,7 @@
 package com.nextvoyager.conferences.controller.user.moderator;
 
+import com.nextvoyager.conferences.AppContext;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
@@ -14,14 +16,15 @@ import java.io.IOException;
 @WebServlet("/moderator-report-action")
 public class ModeratorReportAction extends HttpServlet {
 
-    ReportService reportService = ReportServiceImpl.getInstance();
+    private final ReportService reportService = AppContext.getInstance().getReportService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
         String actionParam = req.getParameter("action");
 
-        reportService.changeStatusByModerator(actionParam, reportID);
+        Report report = reportService.find(reportID);
+        reportService.update(actionParam, report, report.getSpeaker());
 
         resp.sendRedirect("report/view?reportID=" + reportID);
     }

@@ -1,13 +1,12 @@
 package com.nextvoyager.conferences.controller.report;
 
-import com.nextvoyager.conferences.model.dao.DAOFactory;
-import com.nextvoyager.conferences.model.dao.report.ReportDAO;
-import com.nextvoyager.conferences.model.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
 import com.nextvoyager.conferences.service.impl.ReportServiceImpl;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
@@ -22,8 +21,8 @@ import java.util.List;
 @WebServlet("/report/edit")
 public class ReportEditController extends HttpServlet {
 
-    ReportService reportService = ReportServiceImpl.getInstance();
-    UserService userService = UserServiceImpl.getInstance();
+    private final ReportService reportService = AppContext.getInstance().getReportService();
+    private final UserService userService = AppContext.getInstance().getUserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,17 +54,31 @@ public class ReportEditController extends HttpServlet {
 
         report.setTopic(topicParam);
         report.setDescription(descriptionParam);
+
+        // Choose approval action for the current report
+        String approvalAction = null;
+        User approvalSpeaker = null;
         if (currentUser.getRole() == User.Role.MODERATOR) {
             if (!speakerParam.equals("")) {
-                report.setSpeaker(new User(Integer.valueOf(speakerParam)));
-                report.setStatus(Report.Status.valueOf(statusParam));
+                approvalSpeaker = new User(Integer.valueOf(speakerParam));
+                Report.Status status = Report.Status.valueOf(statusParam);
+                switch (status) {
+                    case CONFIRMED:
+                        approvalAction = "consolidate-report-moderator";
+                        break;
+                    case PROPOSE_TO_SPEAKER:
+                        approvalAction = "propose-to-speaker-moderator";
+                        break;
+                    default:
+                        approvalAction = "no-approval-action";
+                        break;
+                }
             } else {
-                report.setSpeaker(new User());
-                report.setStatus(Report.Status.FREE);
+                approvalAction = "set-free-report-moderator";
             }
         }
 
-        reportService.update(report);
+        reportService.update(approvalAction, report, approvalSpeaker);
 
         resp.sendRedirect("view?reportID=" + report.getId());
     }

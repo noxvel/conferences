@@ -2,7 +2,20 @@ package com.nextvoyager.conferences.service.approvalofreport;
 
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public interface ApprovalOfReportAction {
-    void change(Report report, User speaker);
+public abstract class ApprovalOfReportAction {
+
+    private static final Logger LOGGER = LogManager.getLogger(ApprovalOfReportAction.class);
+
+    public abstract void execute(Report report, User speaker);
+
+    public void commit(Report report) {
+        LOGGER.info("Approval of report action - {"
+                + this.getClass().getName()
+                + "} for report - "
+                + report.toString());
+
+    }
 }

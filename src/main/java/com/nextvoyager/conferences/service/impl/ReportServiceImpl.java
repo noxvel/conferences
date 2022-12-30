@@ -9,20 +9,26 @@ import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
 import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportFactory;
 
+import java.util.List;
+
 public class ReportServiceImpl implements ReportService {
 
-    DAOFactory javabase = DAOFactory.getInstance();
-    ReportDAO reportDAO = javabase.getReportDAO();
-    UserDAO userDAO = javabase.getUserDAO();
+    ReportDAO reportDAO;
+    UserDAO userDAO;
 
-    public static ReportServiceImpl getInstance() {
-        return new ReportServiceImpl();
+    public static ReportServiceImpl getInstance(ReportDAO reportDAO,UserDAO userDAO) {
+        return new ReportServiceImpl(reportDAO, userDAO);
+    }
+
+    private ReportServiceImpl(ReportDAO reportDAO, UserDAO userDAO) {
+        this.reportDAO = reportDAO;
+        this.userDAO = userDAO;
     }
 
     @Override
     public Report find(Integer reportID) {
         Report report = reportDAO.find(reportID);
-        if (report != null && report.getSpeaker().getId() != 0) {
+        if (report != null && report.getSpeaker() != null) {
             User speaker = userDAO.find(report.getSpeaker().getId());
             report.setSpeaker(speaker);
         }
@@ -37,6 +43,11 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void create(Report report) {
         reportDAO.create(report);
+    }
+
+    @Override
+    public List<Report> list(Integer eventID) {
+        return reportDAO.list(eventID);
     }
 
     @Override
@@ -80,28 +91,30 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void changeStatusBySpeaker(String action, Integer reportID, User speaker) {
-        Report report = find(reportID);
+    public void create(String approvalAction, Report report, User speaker) {
 
-        ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(action);
+        ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(approvalAction);
 
-        if (approvalOfReportAction != null) {
-            approvalOfReportAction.change(report, speaker);
-            reportDAO.update(report);
-        }
+        approvalOfReportAction.execute(report, speaker);
+
+        reportDAO.create(report);
+
+        approvalOfReportAction.commit(report);
+
     }
 
     @Override
-    public void changeStatusByModerator(String action, Integer reportID) {
-        Report report = find(reportID);
+    public void update(String approvalAction, Report report, User speaker) {
 
-        ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(action);
+        ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(approvalAction);
 
-        if (approvalOfReportAction != null) {
-            approvalOfReportAction.change(report, report.getSpeaker());
-            reportDAO.update(report);
-        }
+        approvalOfReportAction.execute(report, speaker);
+
+        reportDAO.update(report);
+
+        approvalOfReportAction.commit(report);
 
     }
+
 
 }

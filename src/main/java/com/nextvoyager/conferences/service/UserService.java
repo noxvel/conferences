@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserService {
     List<User> listWithOneRole(User.Role speaker);
 
+    List<User> list();
+
     void create(User user);
 
     User find(String emailParam, String passwordParam);

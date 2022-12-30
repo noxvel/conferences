@@ -3,6 +3,9 @@ package com.nextvoyager.conferences.service;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
+
+import java.util.List;
 
 public interface ReportService {
     Report find(Integer reportID);
@@ -10,6 +13,8 @@ public interface ReportService {
     void update(Report report);
 
     void create(Report report);
+
+    List<Report> list(Integer eventID);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Report.Status status);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker);
@@ -19,8 +24,7 @@ public interface ReportService {
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
 
-    void changeStatusBySpeaker(String speakerAction, Integer reportID, User speaker);
+    void update(String speakerAction, Report report, User speaker);
 
-    void changeStatusByModerator(String actionParam, Integer reportID);
-
+    void create(String approvalAction, Report report, User speaker);
 }

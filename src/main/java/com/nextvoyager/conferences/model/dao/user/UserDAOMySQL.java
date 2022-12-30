@@ -11,7 +11,7 @@ import java.util.List;
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
 
-public class UserDAOJDBC implements UserDAO{
+public class UserDAOMySQL implements UserDAO{
 
     // Constants ----------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ public class UserDAOJDBC implements UserDAO{
      * inside the DAO package only.
      * @param daoFactory The DAOFactory to construct this User DAO for.
      */
-    public UserDAOJDBC(DAOFactory daoFactory) {
+    public UserDAOMySQL(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 

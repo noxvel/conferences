@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.controller.event;
 
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
@@ -23,8 +24,8 @@ import java.util.Optional;
 @WebServlet("/event/view")
 public class EventViewController extends HttpServlet {
 
-    EventService eventService = EventServiceImpl.getInstance();
-    ReportService reportService = ReportServiceImpl.getInstance();
+    private final ReportService reportService = AppContext.getInstance().getReportService();
+    private final EventService eventService = AppContext.getInstance().getEventService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

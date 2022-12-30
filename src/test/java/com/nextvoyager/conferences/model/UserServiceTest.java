@@ -1,31 +1,73 @@
 package com.nextvoyager.conferences.model;
 
-import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.User;
-import org.junit.jupiter.api.BeforeAll;
+import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserDAOTest {
+public class UserServiceTest {
 
-//    DAOFactory factory;
-//    UserDAO userDAO;
-//
-//    @BeforeEach
-//    void createFactoryAndUserDAO() {
-//
-//        // Obtain DAOFactory.
-//        factory = DAOFactory.getInstance("javabase.jdbc");
-//        System.out.println("DAOFactory successfully obtained: " + factory);
-//
-//        // Obtain UserDAO.
-//        UserDAO userDAO = factory.getUserDAO();
-//        System.out.println("UserDAO successfully obtained: " + userDAO);
-//
-//    }
+    @Mock
+    UserDAO dao;
+
+    private User testUser = new User();
+    List<User> testList = new ArrayList<>();
+
+    @InjectMocks
+    UserServiceImpl userService;
+
+    @BeforeEach
+    public void setUp() {
+        testUser.setId(1);
+        testUser.setEmail("user@mail.com");
+        testUser.setFirstName("Ivan");
+        testUser.setLastName("Garmata");
+        testUser.setPassword("123");
+        testUser.setRole(User.Role.ORDINARY_USER);
+        testList.add(testUser);
+
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void findAll() {
+        Mockito.when(dao.list()).thenReturn(testList);
+        assertEquals(testList, userService.list());
+    }
+
+    @Test
+    public void find() {
+        Mockito.when(dao.find("user@mail.com","123")).thenReturn(testUser);
+        assertEquals(testUser, userService.find("user@mail.com","123"));
+    }
+
+    @Test
+    public void save() {
+        userService.create(testUser);
+        Mockito.verify(dao, Mockito.times(1)).create(testUser);
+    }
+
+    @Test
+    public void update() {
+        userService.update(testUser);
+        Mockito.verify(dao, Mockito.times(1)).update(testUser);
+    }
+
+    @Test
+    public void remove() {
+        dao.delete(testUser);
+        Mockito.verify(dao, Mockito.times(1)).delete(testUser);
+    }
 
 //    @Test
 //    void userCreateTest() {
