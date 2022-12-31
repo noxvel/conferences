@@ -49,6 +49,9 @@
                                     <c:if test="${isSpeaker or isModerator}">
                                         <li><a class="dropdown-item" href="${contextPath}/report-list"><fmt:message key="header.button.list-of-reports"/></a></li>
                                     </c:if>
+                                    <c:if test="${isModerator}">
+                                        <li><a class="dropdown-item" href="${contextPath}/event/statistics"><fmt:message key="header.button.event-statistics"/></a></li>
+                                    </c:if>
                                     <li><a class="dropdown-item" href="${contextPath}/profile"><fmt:message key="header.button.profile"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${contextPath}/signout"><fmt:message key="header.button.sign-out"/></a></li>
