@@ -91,6 +91,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public void delete(Report report) {
+        reportDAO.delete(report);
+    }
+
+    @Override
     public void create(String approvalAction, Report report, User speaker) {
 
         ApprovalOfReportAction approvalOfReportAction = ApprovalOfReportFactory.getChangeReportAction(approvalAction);

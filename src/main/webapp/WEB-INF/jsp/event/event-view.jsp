@@ -21,7 +21,9 @@
                     <li class="breadcrumb-item active" aria-current="page">${event.name}</li>
                 </ol>
             </nav>
-            <h3>${event.name}</h3>
+            <div class="h4 pb-2 mb-3 border-bottom border-dark">
+                <h3>${event.name}</h3>
+            </div>
             <h4><fmt:message key="event-view.text.location"/>: ${event.place}</h4>
             <h5><fmt:message key="event-view.text.event-date"/>: 
                 <fmt:formatDate type="date" value="${event.beginDate}" /> - <fmt:formatDate type="date" value="${event.endDate}" /> 
@@ -33,6 +35,9 @@
                         <c:if test="${isModerator}">
                             <a role="button" href="edit?eventID=${event.id}" class="btn btn-secondary">
                                 <fmt:message key="event-view.button.edit"/>
+                            </a>
+                            <a role="button" href="delete?eventID=${event.id}" class="btn btn-danger">
+                                <fmt:message key="event-view.button.delete"/>
                             </a>
                         </c:if>
                         <c:if test="${empty sessionScope.user or isUser}">

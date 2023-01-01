@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface ReportService {
     Report find(Integer reportID);
-
-    void update(Report report);
-
     void create(Report report);
-
+    void update(Report report);
+    void update(String speakerAction, Report report, User speaker);
+    void create(String approvalAction, Report report, User speaker);
+    void delete(Report report);
     List<Report> list(Integer eventID);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Report.Status status);
@@ -23,8 +23,4 @@ public interface ReportService {
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, Report.Status status);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker);
     ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
-
-    void update(String speakerAction, Report report, User speaker);
-
-    void create(String approvalAction, Report report, User speaker);
 }

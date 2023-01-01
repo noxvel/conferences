@@ -370,7 +370,7 @@ public class ReportDAOMySQL implements ReportDAO {
         return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
     }
 
-    public ListWithCountResult listWithPagination(String sqlAllCount, String sql, ValueDAO[] valuesAllCount,
+    private ListWithCountResult listWithPagination(String sqlAllCount, String sql, ValueDAO[] valuesAllCount,
                                                   ValueDAO[] values) throws DAOException {
         ListWithCountResult result = new ListWithCountResult();
         List<Report> reports = new ArrayList<>();

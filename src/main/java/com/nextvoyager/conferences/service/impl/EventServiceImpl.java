@@ -36,6 +36,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public void delete(Event event) {
+        eventDAO.delete(event);
+    }
+
+    @Override
     public boolean isUserRegisterEvent(Event event, User user) {
         return eventDAO.isUserRegisterEvent(event, user);
     }

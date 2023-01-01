@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.model.dao.event;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
+import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.dao.utils.querybuilder.SelectQueryBuilder;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -140,14 +141,10 @@ public class EventDAOMySQL implements EventDAO{
     @Override
     public ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType,
                                                   SortDirection sortDirection, TimeFilter timeFilter) throws DAOException {
-        ListWithCountResult result = new ListWithCountResult();
-        List<Event> events = new ArrayList<>();
-        result.setList(events);
-
         int offset;
         offset = (page - 1) * limit;
 
-        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(getTimeFilter(timeFilter))
                 .build();
 
@@ -158,45 +155,24 @@ public class EventDAOMySQL implements EventDAO{
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
-        ValueDAO[] countAllValues = {};
+        ValueDAO[] valuesAllCount = {};
 
         ValueDAO[] valuesPagination = {
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
 
-        try (
-            Connection connection = daoFactory.getConnection();
-            PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
-            ResultSet resultSetCountAll = stmtCount.executeQuery();
-            PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
-            ResultSet resultSetList = statementList.executeQuery()
-        ) {
-            if (resultSetCountAll.next()) {
-                result.setCount(resultSetCountAll.getInt("count_all"));
-                while (resultSetList.next()) {
-                    events.add(mapForList(resultSetList));
-                }
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return result;
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
     }
 
     @Override
     public ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit, SortType sortType,
                                                                     SortDirection sortDirection, TimeFilter timeFilter,
                                                                     Report.Status status) throws DAOException {
-        ListWithCountResult result = new ListWithCountResult();
-        List<Event> events = new ArrayList<>();
-        result.setList(events);
-
         int offset;
         offset = (page - 1) * limit;
 
-        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(getTimeFilter(timeFilter))
                 .build();
 
@@ -207,7 +183,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
-        ValueDAO[] countAllValues = {};
+        ValueDAO[] valuesAllCount = {};
 
         ValueDAO[] valuesPagination = {
                 new ValueDAO(status.getId(), Types.INTEGER),
@@ -215,24 +191,7 @@ public class EventDAOMySQL implements EventDAO{
                 new ValueDAO(limit, Types.INTEGER)
         };
 
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
-                ResultSet resultSetCountAll = stmtCount.executeQuery();
-                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
-                ResultSet resultSetList = statementList.executeQuery()
-        ) {
-            if (resultSetCountAll.next()) {
-                result.setCount(resultSetCountAll.getInt("count_all"));
-                while (resultSetList.next()) {
-                    events.add(mapForList(resultSetList));
-                }
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return result;
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
     }
 
 
@@ -240,14 +199,10 @@ public class EventDAOMySQL implements EventDAO{
     public ListWithCountResult listWithPaginationSpeaker(int page, int limit, SortType sortType,
                                                          SortDirection sortDirection, TimeFilter timeFilter,
                                                          User speaker, Boolean participated) {
-        ListWithCountResult result = new ListWithCountResult();
-        List<Event> events = new ArrayList<>();
-        result.setList(events);
-
         int offset;
         offset = (page - 1) * limit;
 
-        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(participated ? SQL_LIST_WHERE_SPEAKER_PARTICIPATED : null)
                 .setFilter(getTimeFilter(timeFilter),true)
                 .build();
@@ -260,7 +215,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
-        ValueDAO[] countAllValues = {
+        ValueDAO[] valuesAllCount = {
                 participated ? new ValueDAO(speaker.getId(), Types.INTEGER) : null,
         };
 
@@ -273,24 +228,7 @@ public class EventDAOMySQL implements EventDAO{
                 new ValueDAO(limit, Types.INTEGER)
         };
 
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
-                ResultSet resultSetCountAll = stmtCount.executeQuery();
-                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
-                ResultSet resultSetList = statementList.executeQuery()
-        ) {
-            if (resultSetCountAll.next()) {
-                result.setCount(resultSetCountAll.getInt("count_all"));
-                while (resultSetList.next()) {
-                    events.add(mapForList(resultSetList));
-                }
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return result;
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
 
     }
 
@@ -298,14 +236,10 @@ public class EventDAOMySQL implements EventDAO{
     public ListWithCountResult listWithPaginationOrdinaryUser(int page, int limit, SortType sortType,
                                                          SortDirection sortDirection, TimeFilter timeFilter,
                                                          User ordinaryUser, Boolean participated) {
-        ListWithCountResult result = new ListWithCountResult();
-        List<Event> events = new ArrayList<>();
-        result.setList(events);
-
         int offset;
         offset = (page - 1) * limit;
 
-        String countAllSQL = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(participated ? SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED : null)
                 .setFilter(getTimeFilter(timeFilter),true)
                 .build();
@@ -318,7 +252,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
-        ValueDAO[] countAllValues = {
+        ValueDAO[] valuesAllCount = {
                 participated ? new ValueDAO(ordinaryUser.getId(), Types.INTEGER) : null,
         };
 
@@ -329,11 +263,20 @@ public class EventDAOMySQL implements EventDAO{
                 new ValueDAO(limit, Types.INTEGER)
         };
 
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
+    }
+
+    private ListWithCountResult listWithPagination(String sqlAllCount, String sql, ValueDAO[] valuesAllCount,
+                                                             ValueDAO[] values) throws DAOException {
+        ListWithCountResult result = new ListWithCountResult();
+        List<Event> events = new ArrayList<>();
+        result.setList(events);
+
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement stmtCount = prepareStatement(connection, countAllSQL, false, countAllValues);
+                PreparedStatement stmtCount = prepareStatement(connection, sqlAllCount, false, valuesAllCount);
                 ResultSet resultSetCountAll = stmtCount.executeQuery();
-                PreparedStatement statementList = prepareStatement(connection, currentSQL, false, valuesPagination);
+                PreparedStatement statementList = prepareStatement(connection, sql, false, values);
                 ResultSet resultSetList = statementList.executeQuery()
         ) {
             if (resultSetCountAll.next()) {
@@ -347,7 +290,6 @@ public class EventDAOMySQL implements EventDAO{
         }
 
         return result;
-
     }
 
     @Override

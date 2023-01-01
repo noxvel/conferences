@@ -19,7 +19,7 @@
                     <li class="breadcrumb-item active" aria-current="page">${report.topic}</li>
                 </ol>
             </nav>
-            <div class="h4 pb-2 mb-4 border-bottom border-dark">
+            <div class="h4 pb-2 mb-3 border-bottom border-dark">
                 <h3>${report.topic}</h3>
             </div>
             <c:if test="${userRole == 'MODERATOR' or userRole == 'SPEAKER'}">
@@ -134,9 +134,16 @@
                             <div>
                                 <fmt:message key="report-view.moderator.tooltip.cancel-report" var="tooltipModeratorCancelReport"/>
                                 <a role="button" href="${contextPath}/moderator-report-action?reportID=${report.id}&action=cancel-report-moderator" 
-                                    class="btn btn btn-danger ms-2"
+                                    class="btn btn btn-outline-danger ms-2"
                                     data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorCancelReport}">
                                     <fmt:message key="report-view.moderator.button.cancel-report"/>
+                                </a>
+                            </div>
+                        </c:if>
+                        <c:if test="${report.status == 'CANCELED'}">
+                            <div>
+                                <a role="button" href="delete?reportID=${report.id}" class="btn btn-danger">
+                                    <fmt:message key="report-view.button.delete"/>
                                 </a>
                             </div>
                         </c:if>

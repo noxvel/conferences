@@ -17,6 +17,8 @@ public interface EventService {
 
     void create(Event event);
 
+    void delete(Event event);
+
     void registerUser(Integer eventID, User user, boolean register);
 
     List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
@@ -38,4 +40,5 @@ public interface EventService {
                                                                 EventDAO.SortDirection eventListSortDirection,
                                                                 EventDAO.TimeFilter timeFilter, User currentUser,
                                                                 Boolean showEventParticipated);
+
 }
