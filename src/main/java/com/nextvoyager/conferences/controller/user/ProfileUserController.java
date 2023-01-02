@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/profile")
+@WebServlet("/user/profile")
 public class ProfileUserController extends HttpServlet {
 
     private final UserService userService = AppContext.getInstance().getUserService();

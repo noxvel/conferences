@@ -34,6 +34,8 @@
 
                 <div class="d-flex flex-row align-items-center">
                     <form class="me-5" id="changeLanguage" action="${contextPath}/change-language" method="post">
+                        <input type="hidden" name="redirectPath" 
+                            value="${sessionScope.originRequestURL}${sessionScope.originRequestQuery == null ? '' : '?' += sessionScope.originRequestQuery}" />
                         <select name="lang" class="form-select" onchange="submit()" aria-label="Default select example">
                             <option value="en" ${lang == 'en' ? 'selected' : ''}>EN</option>
                             <option value="uk" ${lang == 'uk' ? 'selected' : ''}>UA</option>
@@ -52,16 +54,16 @@
                                     <c:if test="${isModerator}">
                                         <li><a class="dropdown-item" href="${contextPath}/event/statistics"><fmt:message key="header.button.event-statistics"/></a></li>
                                     </c:if>
-                                    <li><a class="dropdown-item" href="${contextPath}/profile"><fmt:message key="header.button.profile"/></a></li>
+                                    <li><a class="dropdown-item" href="${contextPath}/user/profile"><fmt:message key="header.button.profile"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="${contextPath}/signout"><fmt:message key="header.button.sign-out"/></a></li>
+                                    <li><a class="dropdown-item" href="${contextPath}/user/signout"><fmt:message key="header.button.sign-out"/></a></li>
                                 </ul>
                             </div>
                         </c:when>    
                         <c:otherwise>
                             <div class="d-flex flex-row">
-                                <a role="button" href="${contextPath}/login" class="btn btn-outline-primary me-2"><fmt:message key="header.button.login"/></a>
-                                <a role="button" href="${contextPath}/registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
+                                <a role="button" href="${contextPath}/user/login" class="btn btn-outline-primary me-2"><fmt:message key="header.button.login"/></a>
+                                <a role="button" href="${contextPath}/user/registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
                             </div>
                         </c:otherwise>
                     </c:choose>

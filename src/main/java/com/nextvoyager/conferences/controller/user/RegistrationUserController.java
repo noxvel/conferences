@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/registration")
+@WebServlet("/user/registration")
 public class RegistrationUserController extends HttpServlet {
 
     private final UserService userService = AppContext.getInstance().getUserService();
@@ -48,7 +48,7 @@ public class RegistrationUserController extends HttpServlet {
 
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("userRole", user.getRole());
-            resp.sendRedirect("home");
+            resp.sendRedirect(req.getContextPath() + "/home");
         }
     }
 }

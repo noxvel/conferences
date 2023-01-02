@@ -36,7 +36,7 @@ public class EventStatisticsSave extends HttpServlet {
 
         // Default values for list of events
         int page = 1;
-        int limit = 5;
+        int limit = 10;
 
         if (pageParam != null) {
             page = Integer.parseInt(pageParam);

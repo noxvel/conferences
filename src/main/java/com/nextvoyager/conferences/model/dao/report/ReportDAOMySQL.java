@@ -164,12 +164,12 @@ public class ReportDAOMySQL implements ReportDAO {
 
         String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW, true)
+                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
                 .build();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW, true)
+                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
@@ -199,14 +199,14 @@ public class ReportDAOMySQL implements ReportDAO {
 
         String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER, true)
-                .setFilter(SQL_ADD_WHERE_STATUS, true)
+                .setFilter(SQL_ADD_WHERE_SPEAKER)
+                .setFilter(SQL_ADD_WHERE_STATUS)
                 .build();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER, true)
-                .setFilter(SQL_ADD_WHERE_STATUS, true)
+                .setFilter(SQL_ADD_WHERE_SPEAKER)
+                .setFilter(SQL_ADD_WHERE_STATUS)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
@@ -288,12 +288,12 @@ public class ReportDAOMySQL implements ReportDAO {
 
         String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_SPEAKER)
-                .setFilter(SQL_ADD_WHERE_STATUS, true)
+                .setFilter(SQL_ADD_WHERE_STATUS)
                 .build();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_SPEAKER)
-                .setFilter(SQL_ADD_WHERE_STATUS, true)
+                .setFilter(SQL_ADD_WHERE_STATUS)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 
@@ -346,12 +346,12 @@ public class ReportDAOMySQL implements ReportDAO {
 
         String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
                 .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_STATUS, true)
+                .setFilter(SQL_ADD_WHERE_STATUS)
                 .build();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST)
                 .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_STATUS, true)
+                .setFilter(SQL_ADD_WHERE_STATUS)
                 .setLimit(SQL_LIST_LIMIT)
                 .build();
 

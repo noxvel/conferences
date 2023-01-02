@@ -25,7 +25,7 @@ public class EventStatisticsController extends HttpServlet {
 
         // Default values for list of events
         int page = 1;
-        int limit = 5;
+        int limit = 10;
 
         if (pageParam != null) {
             page = Integer.parseInt(pageParam);
@@ -54,7 +54,6 @@ public class EventStatisticsController extends HttpServlet {
         req.setAttribute("eventTimeFilter", eventTimeFilter);
         req.setAttribute("numOfPages", numOfPages);
         req.getRequestDispatcher("/WEB-INF/jsp/event/event-statistics.jsp").forward(req,resp);
-
 
     }
 

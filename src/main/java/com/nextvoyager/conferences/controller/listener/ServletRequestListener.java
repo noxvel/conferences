@@ -1,9 +1,9 @@
 package com.nextvoyager.conferences.controller.listener;
 
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletRequestEvent;
 import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,6 +14,13 @@ public class ServletRequestListener implements jakarta.servlet.ServletRequestLis
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         HttpServletRequest servletRequest = (HttpServletRequest) sre.getServletRequest();
+        HttpSession currentSession = servletRequest.getSession();
+
+        currentSession.setAttribute("originRequestURL", servletRequest.getRequestURL());
+        currentSession.setAttribute("originRequestQuery", servletRequest.getQueryString());
+
+        System.out.println(servletRequest.getQueryString());
+
         LOGGER.info("Request initialized to address - " + servletRequest.getRequestURI() +
                 ", from remote IP: " + servletRequest.getRemoteAddr());
     }

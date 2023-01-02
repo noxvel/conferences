@@ -19,6 +19,7 @@
             <div class="d-flex flex-row align-items-center">
                 <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">
                     <form class="row row-cols-lg-auto g-3 align-items-center" action="${contextPath}/event-list-sort" method="post">
+                        <input type="hidden" name="redirectPath" value="${originRequestURL}" />
                         <div class="col-12">
                             <select name="sortType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
                                 <option ${sortType == 'Date' ? 'selected' : ''} value="Date" >
@@ -51,6 +52,7 @@
                 </div>
                 <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
                     <form action="${contextPath}/event-list-filter" method="post" class="d-flex flex-row align-items-center">
+                        <input type="hidden" name="redirectPath" value="${originRequestURL}" />
                         <select name="timeFilter" class="form-select" id="timefilterSelect" aria-label="time filter select">
                             <option ${eventTimeFilter == 'AllTime' ? 'selected' : ''} value="AllTime">
                                 <fmt:message key="home.filter.time-filter.all-time"/>

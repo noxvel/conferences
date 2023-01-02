@@ -27,6 +27,7 @@
                 <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">
                     <form class="row row-cols-lg-auto g-3 align-items-center" action="event-list-sort" method="post">
                         <div class="col-12">
+                            <input type="hidden" name="redirectPath" value="${sessionScope.originRequestURL}" />
                             <select name="sortType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
                                 <option ${sortType == 'Date' ? 'selected' : ''} value="Date" >
                                     <fmt:message key="home.sort.date"/>
@@ -58,6 +59,7 @@
                 </div>
                 <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
                     <form action="event-list-filter" method="post" class="d-flex flex-row align-items-center">
+                        <input type="hidden" name="redirectPath" value="${sessionScope.originRequestURL}" />
                         <select name="timeFilter" class="form-select" id="timefilterSelect" aria-label="time filter select">
                             <option ${eventTimeFilter == 'AllTime' ? 'selected' : ''} value="AllTime">
                                 <fmt:message key="home.filter.time-filter.all-time"/>
@@ -70,8 +72,8 @@
                             </option>
                         </select>
                         <c:if test="${isSpeaker or isOrdinaryUser}">
-                            <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="true" name="showInWhichParticipated" 
+                            <div class="form-check d-flex align-items-center ms-3">
+                                    <input class="form-check-input w-25" type="checkbox" value="true" name="showInWhichParticipated" 
                                                             id="showInWhichParticipated" ${showEventParticipated ? 'checked' : ''}>
                                     <label class="form-check-label" for="showInWhichParticipated">
                                         <fmt:message key="home.filter.in-which-participated"/>

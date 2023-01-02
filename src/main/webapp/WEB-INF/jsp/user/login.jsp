@@ -37,10 +37,10 @@
                             <div class="col d-flex justify-content-center">
                             </div>
 
-                            <div class="col">
+                            <%-- <div class="col">
                             <!-- Simple link -->
                             <a href="#!"><fmt:message key="login.text.forgot-password"/></a>
-                            </div>
+                            </div> --%>
                         </div>
 
                         <!-- Submit button -->

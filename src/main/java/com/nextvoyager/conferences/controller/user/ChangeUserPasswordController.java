@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/change-password")
+@WebServlet("/user/change-password")
 public class ChangeUserPasswordController extends HttpServlet {
 
     private final UserService userService = AppContext.getInstance().getUserService();

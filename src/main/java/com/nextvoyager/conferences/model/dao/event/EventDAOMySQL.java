@@ -203,13 +203,13 @@ public class EventDAOMySQL implements EventDAO{
         offset = (page - 1) * limit;
 
         String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(getTimeFilter(timeFilter))
                 .setFilter(participated ? SQL_LIST_WHERE_SPEAKER_PARTICIPATED : null)
-                .setFilter(getTimeFilter(timeFilter),true)
                 .build();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST_REPORT_COUNT_FOR_SPEAKER)
+                .setFilter(getTimeFilter(timeFilter))
                 .setFilter(participated ? SQL_LIST_WHERE_SPEAKER_PARTICIPATED : null)
-                .setFilter(getTimeFilter(timeFilter),true)
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
                 .setLimit(SQL_LIST_LIMIT)
@@ -240,13 +240,13 @@ public class EventDAOMySQL implements EventDAO{
         offset = (page - 1) * limit;
 
         String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(getTimeFilter(timeFilter))
                 .setFilter(participated ? SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED : null)
-                .setFilter(getTimeFilter(timeFilter),true)
                 .build();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST_REPORT_COUNT_REPORT_STATUS)
+                .setFilter(getTimeFilter(timeFilter) )
                 .setFilter(participated ? SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED : null)
-                .setFilter(getTimeFilter(timeFilter), true)
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
                 .setLimit(SQL_LIST_LIMIT)

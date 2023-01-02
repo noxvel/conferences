@@ -15,10 +15,14 @@ public class ChangeLanguage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String lang = req.getParameter("lang");
+        String redirectPath = req.getParameter("redirectPath");
 
         HttpSession session = req.getSession();
         session.setAttribute("lang", lang);
-
-        resp.sendRedirect("home");
+        if (redirectPath != null) {
+            resp.sendRedirect(redirectPath);
+        } else {
+            resp.sendRedirect("home");
+        }
     }
 }

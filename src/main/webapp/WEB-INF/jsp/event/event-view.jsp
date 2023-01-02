@@ -21,13 +21,9 @@
                     <li class="breadcrumb-item active" aria-current="page">${event.name}</li>
                 </ol>
             </nav>
-            <div class="h4 pb-2 mb-3 border-bottom border-dark">
+            <div class="border-bottom border-dark">
                 <h3>${event.name}</h3>
             </div>
-            <h4><fmt:message key="event-view.text.location"/>: ${event.place}</h4>
-            <h5><fmt:message key="event-view.text.event-date"/>: 
-                <fmt:formatDate type="date" value="${event.beginDate}" /> - <fmt:formatDate type="date" value="${event.endDate}" /> 
-            </h5>
 
             <section class="py-3 text-center container">
                 <div class="d-flex flex-row">
@@ -64,6 +60,11 @@
                     </div> 
                 </div>
             </section>
+
+            <h4><fmt:message key="event-view.text.location"/>: ${event.place}</h4>
+            <h5><fmt:message key="event-view.text.event-date"/>: 
+                <fmt:formatDate type="date" value="${event.beginDate}" /> - <fmt:formatDate type="date" value="${event.endDate}" /> 
+            </h5>
 
             <nav>
                 <div class="nav nav-tabs" id="nav-tab-event-view" role="tablist">

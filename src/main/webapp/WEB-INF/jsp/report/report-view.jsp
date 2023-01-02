@@ -19,28 +19,18 @@
                     <li class="breadcrumb-item active" aria-current="page">${report.topic}</li>
                 </ol>
             </nav>
-            <div class="h4 pb-2 mb-3 border-bottom border-dark">
+            <div class="border-bottom border-dark">
                 <h3>${report.topic}</h3>
             </div>
-            <c:if test="${userRole == 'MODERATOR' or userRole == 'SPEAKER'}">
-                <mytag:report-status-color reportStatus="${report.status}"/>
-                <h4 class="${empty reportColor ? '' : 'text-' += reportColor}">
-                    <mytag:report-status-i18n reportStatus="${report.status}"/>
-                </h4>
-            </c:if>
-            <h5><fmt:message key="report-view.text-speaker"/> 
-             <c:choose>
-                <c:when test="${report.speaker != null}">
-                    ${report.speaker.firstName} ${report.speaker.lastName}
-                </c:when>
-                <c:otherwise>
-                    <fmt:message key="report-view.text.no-speaker"/>
-                </c:otherwise>
-            </c:choose>
-            </h5>
-            
-            <section class="py-3 text-center">
+
+            <section class="py-3">
                 <c:if test="${userRole == 'MODERATOR' or userRole == 'SPEAKER'}">
+                    <mytag:report-status-color reportStatus="${report.status}"/>
+                    <div>
+                        <h4 class="${empty reportColor ? '' : 'text-' += reportColor}">
+                            <mytag:report-status-i18n reportStatus="${report.status}"/>
+                        </h4>
+                    </div>
                     <div class="d-flex flex-row align-items-center p-2 border border-success rounded-3">
                         <div class="fs-5 me-2 "><fmt:message key="report-view.text.available-actions"/>: </div>
                         <div class="d-grid gap-2 d-md-block">
@@ -129,6 +119,13 @@
                                     </c:when>
                                 </c:choose>
                             </div>
+                            <c:if test="${report.status == 'CANCELED'}">
+                                <div>
+                                    <a role="button" href="delete?reportID=${report.id}" class="btn btn-danger">
+                                        <fmt:message key="report-view.button.delete"/>
+                                    </a>
+                                </div>
+                            </c:if>
                         </c:if>
                         <c:if test="${report.status != 'CANCELED'}">
                             <div>
@@ -140,20 +137,26 @@
                                 </a>
                             </div>
                         </c:if>
-                        <c:if test="${report.status == 'CANCELED'}">
-                            <div>
-                                <a role="button" href="delete?reportID=${report.id}" class="btn btn-danger">
-                                    <fmt:message key="report-view.button.delete"/>
-                                </a>
-                            </div>
-                        </c:if>
                     </div>
                 </c:if>
             </section>
 
-            <h4><fmt:message key="report-view.text.description"/></h4>
-            <fmt:message key="report-view.text.no-description" var="textNoDescription"/>
-            <p class="mt-5">${not empty report.description ? report.description : textNoDescription}</p>
+            <div class="mt-3">
+                <h5><fmt:message key="report-view.text-speaker"/> 
+                <c:choose>
+                    <c:when test="${report.speaker != null}">
+                        ${report.speaker.firstName} ${report.speaker.lastName}
+                    </c:when>
+                    <c:otherwise>
+                        <fmt:message key="report-view.text.no-speaker"/>
+                    </c:otherwise>
+                </c:choose>
+                </h5>
+
+                <h4 class="mt-3"><fmt:message key="report-view.text.description"/></h4>
+                <fmt:message key="report-view.text.no-description" var="textNoDescription"/>
+                <p class="mt-1">${not empty report.description ? report.description : textNoDescription}</p>
+            </div>
 
         </div>   
 

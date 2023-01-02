@@ -8,21 +8,20 @@ public class SelectQueryBuilder {
 
     protected final StringBuilder stringBuilder;
 
+    private byte filterCount = 0;
+
     public SelectQueryBuilder(String baseQuery){
         this.stringBuilder = new StringBuilder();
         this.stringBuilder.append(baseQuery);
     }
 
     public SelectQueryBuilder setFilter(String filter) {
-        return setFilter(filter, false);
-    }
-
-    public SelectQueryBuilder setFilter(String filter, boolean isAdditional) {
         if (filter == null) return this;
 
-        setFilterKeyWord(isAdditional);
+        setFilterKeyWord();
 
         this.stringBuilder.append(filter);
+        this.filterCount++;
         return this;
     }
 
@@ -33,12 +32,9 @@ public class SelectQueryBuilder {
         return this;
     }
 
-    public SelectQueryBuilder setInFilter(String filter, int filterCount) {
-        return setInFilter(filter, filterCount, false);
-    }
 
-    public SelectQueryBuilder setInFilter(String filter, int filterCount, boolean isAdditional) {
-        setFilterKeyWord(isAdditional);
+    public SelectQueryBuilder setInFilter(String filter, int filterCount) {
+        setFilterKeyWord();
 
         this.stringBuilder.append(filter);
         StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
@@ -46,11 +42,12 @@ public class SelectQueryBuilder {
             stringJoiner.add("?");
         }
         this.stringBuilder.append(stringJoiner.toString());
+        this.filterCount++;
         return this;
     }
 
-    private void setFilterKeyWord(boolean isAdditional) {
-        if (isAdditional) {
+    private void setFilterKeyWord() {
+        if (this.filterCount > 0) {
             this.stringBuilder.append("AND ");
         } else {
             this.stringBuilder.append("WHERE ");

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet("/user/login")
 public class LoginUserController extends HttpServlet {
 
     private final UserService userService = AppContext.getInstance().getUserService();
@@ -67,7 +67,7 @@ public class LoginUserController extends HttpServlet {
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("userRole", user.getRole());
             logger.info("user is login - " + user.getEmail());
-            resp.sendRedirect("home");
+            resp.sendRedirect(req.getContextPath() + "/home");
         }
     }
 }

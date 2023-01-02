@@ -16,10 +16,11 @@ public class FilterEventList extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String showEventParticipatedParam = req.getParameter("showInWhichParticipated");
         String timeFilterParam = req.getParameter("timeFilter");
+        String redirectPath = req.getParameter("redirectPath");
 
         req.getSession().setAttribute("filterByEventParticipated", showEventParticipatedParam != null);
         req.getSession().setAttribute("eventTimeFilter", EventDAO.TimeFilter.valueOf(timeFilterParam));
-        resp.sendRedirect("home");
+        resp.sendRedirect(redirectPath);
     }
 
 }

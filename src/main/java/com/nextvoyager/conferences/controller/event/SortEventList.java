@@ -15,6 +15,7 @@ public class SortEventList extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String sortTypeParam = req.getParameter("sortType");
         String sortDirectionParam = req.getParameter("sortDirection");
+        String redirectPath = req.getParameter("redirectPath");
 
         EventDAO.SortType sortType = EventDAO.SortType.Date;
         if (sortTypeParam != null) {
@@ -27,6 +28,6 @@ public class SortEventList extends HttpServlet {
 
         req.getSession().setAttribute("eventListSortType", sortType);
         req.getSession().setAttribute("eventListSortDirection", sortDirection);
-        resp.sendRedirect("home");
+        resp.sendRedirect(redirectPath);
     }
 }
