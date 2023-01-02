@@ -23,17 +23,17 @@
 
         <div class="container">
             <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-                <a href="${contextPath}/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-2 fw-bold">
+                <a href="${contextPath}/pages/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-2 fw-bold">
                     Conferences
                 </a>
 
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="${contextPath}/home" class="nav-link px-2 link-dark"><fmt:message key="header.link.home"/></a></li>
+                    <li><a href="${contextPath}/pages/home" class="nav-link px-2 link-dark"><fmt:message key="header.link.home"/></a></li>
                     <li><a href="${contextPath}/about.jsp" class="nav-link px-2 link-dark"><fmt:message key="header.link.about"/></a></li>
                 </ul>
 
                 <div class="d-flex flex-row align-items-center">
-                    <form class="me-5" id="changeLanguage" action="${contextPath}/change-language" method="post">
+                    <form class="me-5" id="changeLanguage" action="${contextPath}/pages/change-language" method="post">
                         <input type="hidden" name="redirectPath" 
                             value="${sessionScope.originRequestURL}${sessionScope.originRequestQuery == null ? '' : '?' += sessionScope.originRequestQuery}" />
                         <select name="lang" class="form-select" onchange="submit()" aria-label="Default select example">
@@ -49,21 +49,21 @@
                                 </a>
                                 <ul class="dropdown-menu text-small" data-popper-placement="top-start">
                                     <c:if test="${isSpeaker or isModerator}">
-                                        <li><a class="dropdown-item" href="${contextPath}/report-list"><fmt:message key="header.button.list-of-reports"/></a></li>
+                                        <li><a class="dropdown-item" href="${contextPath}/pages/report/list"><fmt:message key="header.button.list-of-reports"/></a></li>
                                     </c:if>
                                     <c:if test="${isModerator}">
-                                        <li><a class="dropdown-item" href="${contextPath}/event/statistics"><fmt:message key="header.button.event-statistics"/></a></li>
+                                        <li><a class="dropdown-item" href="${contextPath}/pages/event/statistics"><fmt:message key="header.button.event-statistics"/></a></li>
                                     </c:if>
-                                    <li><a class="dropdown-item" href="${contextPath}/user/profile"><fmt:message key="header.button.profile"/></a></li>
+                                    <li><a class="dropdown-item" href="${contextPath}/pages/user/profile"><fmt:message key="header.button.profile"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="${contextPath}/user/signout"><fmt:message key="header.button.sign-out"/></a></li>
+                                    <li><a class="dropdown-item" href="${contextPath}/pages/user/sign-out"><fmt:message key="header.button.sign-out"/></a></li>
                                 </ul>
                             </div>
                         </c:when>    
                         <c:otherwise>
                             <div class="d-flex flex-row">
-                                <a role="button" href="${contextPath}/user/login" class="btn btn-outline-primary me-2"><fmt:message key="header.button.login"/></a>
-                                <a role="button" href="${contextPath}/user/registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
+                                <a role="button" href="${contextPath}/pages/user/login" class="btn btn-outline-primary me-2"><fmt:message key="header.button.login"/></a>
+                                <a role="button" href="${contextPath}/pages/user//registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
                             </div>
                         </c:otherwise>
                     </c:choose>

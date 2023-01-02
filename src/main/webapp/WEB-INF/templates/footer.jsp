@@ -13,7 +13,7 @@
             </p>
 
             <ul class="nav col-md-4 justify-content-end">
-                <li class="nav-item"><a href="${contextPath}/home" class="nav-link px-2 text-muted"><fmt:message key="footer.link.home"/></a></li>
+                <li class="nav-item"><a href="${contextPath}/pages/home" class="nav-link px-2 text-muted"><fmt:message key="footer.link.home"/></a></li>
                 <li class="nav-item"><a href="${contextPath}/about.jsp" class="nav-link px-2 text-muted"><fmt:message key="footer.link.about"/></a></li>
             </ul>
             </footer>
