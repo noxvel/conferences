@@ -69,6 +69,13 @@
                         <fmt:message key="registration.password.bad-feedback"/>
                       </div>
                     </div>
+                    
+                    <div class="form-outline mb-4">
+                        <select name="userRole" id="userRole" class="form-select">
+                            <option selected value="ORDINARY_USER"><fmt:message key="registration.role.ordinary-user"/></option>
+                            <option value="SPEAKER"><fmt:message key="registration.role.speaker"/></option>
+                        </select>
+                    </div>
 
                     <!-- Submit button -->
                     <div class="d-grid gap-2">

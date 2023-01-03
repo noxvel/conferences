@@ -19,10 +19,6 @@ public class ServletRequestListener implements jakarta.servlet.ServletRequestLis
         currentSession.setAttribute("originRequestURL", servletRequest.getRequestURL());
         currentSession.setAttribute("originRequestQuery", servletRequest.getQueryString());
 
-        System.out.println(servletRequest.getRequestURI());
-        System.out.println(servletRequest.getRequestURL());
-        System.out.println(servletRequest.getQueryString());
-
         LOGGER.info("Request initialized to address - " + servletRequest.getRequestURI() +
                 ", from remote IP: " + servletRequest.getRemoteAddr());
     }

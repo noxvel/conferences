@@ -34,14 +34,14 @@
                     <div class="d-flex flex-row align-items-center p-2 border border-success rounded-3">
                         <div class="fs-5 me-2 "><fmt:message key="report-view.text.available-actions"/>: </div>
                         <div class="d-grid gap-2 d-md-block">
-                            <c:if test="${not empty currentUser and (currentUser.role == 'MODERATOR' 
-                                        or (currentUser.role == 'SPEAKER' and currentUser.id == report.speaker.id and report.status == 'OFFERED_BY_SPEAKER'))}">
+                            <c:if test="${not empty currentUser and (userRole == 'MODERATOR' 
+                                        or (userRole== 'SPEAKER' and currentUser.id == report.speaker.id and report.status == 'OFFERED_BY_SPEAKER'))}">
                                 <a role="button" href="edit?reportID=${report.id}" class="btn btn-secondary">
                                     <fmt:message key="report-view.button.edit"/>
                                 </a>
                             </c:if>
                         </div>
-                        <c:if test="${currentUser.role == 'SPEAKER'}">
+                        <c:if test="${userRole == 'SPEAKER'}">
                             <div class="btn-group ms-3">
                                 <c:choose>
                                     <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
@@ -85,7 +85,7 @@
                                 </c:choose>
                             </div>
                         </c:if>
-                        <c:if test="${currentUser.role == 'MODERATOR'}">
+                        <c:if test="${userRole == 'MODERATOR'}">
                             <div class="btn-group ms-3">
                                 <c:choose>
                                     <c:when test="${report.status == 'OFFERED_BY_SPEAKER'}">
@@ -126,16 +126,16 @@
                                     </a>
                                 </div>
                             </c:if>
-                        </c:if>
-                        <c:if test="${report.status != 'CANCELED'}">
-                            <div>
-                                <fmt:message key="report-view.moderator.tooltip.cancel-report" var="tooltipModeratorCancelReport"/>
-                                <a role="button" href="${contextPath}/pages/moderator-report-action?reportID=${report.id}&action=cancel-report-moderator" 
-                                    class="btn btn btn-outline-danger ms-2"
-                                    data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorCancelReport}">
-                                    <fmt:message key="report-view.moderator.button.cancel-report"/>
-                                </a>
-                            </div>
+                            <c:if test="${report.status != 'CANCELED'}">
+                                <div>
+                                    <fmt:message key="report-view.moderator.tooltip.cancel-report" var="tooltipModeratorCancelReport"/>
+                                    <a role="button" href="${contextPath}/pages/moderator-report-action?reportID=${report.id}&action=cancel-report-moderator" 
+                                        class="btn btn btn-outline-danger ms-2"
+                                        data-bs-toggle="tooltip" data-bs-title="${tooltipModeratorCancelReport}">
+                                        <fmt:message key="report-view.moderator.button.cancel-report"/>
+                                    </a>
+                                </div>
+                            </c:if>
                         </c:if>
                     </div>
                 </c:if>

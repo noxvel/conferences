@@ -51,7 +51,7 @@
                         <!-- Register buttons -->
                         <div class="text-center">
                             <p><fmt:message key="login.text.not-member"/>
-                                <a href="/conferences/registration"><fmt:message key="login.button.register"/></a>
+                                <a href="/conferences/pages/user/registration"><fmt:message key="login.button.register"/></a>
                             </p>
                         </div>
                     </form>

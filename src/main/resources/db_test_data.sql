@@ -9,8 +9,10 @@ INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'ORDINARY_USER');
 -- -----------------------------------------------------
 INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'moderator@mail.com', md5('123'), 1, 'Іван', 'Гармата');
 INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'speaker@mail.com', md5('123'), 2, 'Богдан', 'Хмельницький');
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'speaker2@mail.com', md5('123'), 2, 'Іван', 'Франко');
 INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'user@mail.com', md5('123'), 3, 'Микола', 'Пупкін');
 INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'user2@mail.com', md5('123'), 3, 'Леся', 'Українка');
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'user3@mail.com', md5('123'), 3, 'Володимир', 'Адамчук');
 -- -----------------------------------------------------
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'FREE');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'OFFERED_BY_SPEAKER');
@@ -32,19 +34,24 @@ INSERT INTO event (id, name, place, begin_date, end_date, description)  VALUES (
 
 -- -----------------------------------------------------
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Java', NULL, 1, 1, @lorem_ipsum);
-INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in Java', 2, 4, 1, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in Java', 2, 5, 1, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 1', 3, 3, 1, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 2', 2, 3, 1, @lorem_ipsum);
 
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in C++', NULL, 1, 2, @lorem_ipsum);
-INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in C++', 2, 2, 2, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in C++', 2, 5, 2, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 1', 3, 5, 2, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 2', 2, 3, 2, @lorem_ipsum);
 
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Python', NULL, 1, 3, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in Python', 2, 3, 3, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Types in Python', 2, 2, 3, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 1', NULL, 1, 3, @lorem_ipsum);
-INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 2', 2, 3, 3, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 2', 2, 5, 3, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 3', NULL, 1, 3, @lorem_ipsum);
-INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 4', NULL, 1, 3, @lorem_ipsum);
-INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 5', 2, 3, 3, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 4', 3, 1, 3, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 5', 3, 5, 3, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 6', 2, 5, 3, @lorem_ipsum);
 
 -- INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Ruby', NULL, 1, 4, @lorem_ipsum 
 -- INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in Ruby', 2, 4, 4, @lorem_ipsum);
@@ -52,22 +59,33 @@ INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, descripti
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Kotlin', NULL, 1, 5, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in Kotlin', 2, 5, 5, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Async programming', NULL, 1, 5, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 1', 3, 3, 5, @lorem_ipsum);
 
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Scala', NULL, 1, 6, @lorem_ipsum);
 
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in Android', NULL, 1, 7, @lorem_ipsum);
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Old in Android', 2, 3, 7, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 2', 2, 5, 7, @lorem_ipsum);
 
 INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'New in JavaScript', NULL, 1, 8, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 1', 3, 5, 8, @lorem_ipsum);
+INSERT INTO report (id, topic, speaker_id, report_status_id, event_id, description)  VALUES (DEFAULT, 'Test report 2', 2, 3, 8, @lorem_ipsum);
 
 
 -- -----------------------------------------------------
-INSERT INTO event_has_participant (event_id, user_id)  VALUES (1, 3);
-INSERT INTO event_has_participant (event_id, user_id)  VALUES (2, 3);
-INSERT INTO event_has_participant (event_id, user_id)  VALUES (4, 3);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (1, 4);
 INSERT INTO event_has_participant (event_id, user_id)  VALUES (2, 4);
-INSERT INTO event_has_participant (event_id, user_id)  VALUES (3, 4);
 INSERT INTO event_has_participant (event_id, user_id)  VALUES (4, 4);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (1, 5);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (2, 5);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (3, 5);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (7, 5);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (4, 5);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (8, 5);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (9, 6);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (5, 6);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (7, 6);
+INSERT INTO event_has_participant (event_id, user_id)  VALUES (1, 6);
 
 
 

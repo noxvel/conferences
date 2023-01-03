@@ -13,6 +13,8 @@ public interface UserService {
 
     User find(String emailParam, String passwordParam);
 
+    User find(Integer id);
+
     boolean existEmail(String emailParam);
 
     void update(User user);
@@ -20,4 +22,5 @@ public interface UserService {
     void changePassword(User user);
 
     boolean checkPassword(User user);
+
 }

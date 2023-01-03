@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReportServiceTest {
 
-
     @Mock
     ReportDAO dao;
 

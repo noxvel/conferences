@@ -1,55 +1,61 @@
 package com.nextvoyager.conferences.controller.frontcontroller;
-
-import com.nextvoyager.conferences.controller.actions.ChangeLanguage;
-import com.nextvoyager.conferences.controller.actions.HomePageController;
+import com.nextvoyager.conferences.controller.actions.ChangeLanguageAction;
+import com.nextvoyager.conferences.controller.actions.HomePageAction;
 import com.nextvoyager.conferences.controller.actions.event.*;
 import com.nextvoyager.conferences.controller.actions.report.*;
 import com.nextvoyager.conferences.controller.actions.user.*;
-import com.nextvoyager.conferences.controller.actions.user.moderator.ModeratorReportAction;
-import com.nextvoyager.conferences.controller.actions.user.speaker.SpeakerReportAction;
+import com.nextvoyager.conferences.controller.actions.user.moderator.ModeratorReportApprovalAction;
+import com.nextvoyager.conferences.controller.actions.user.speaker.SpeakerReportApprovalAction;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
 import java.util.Map;
+import static com.nextvoyager.conferences.controller.frontcontroller.ControllerAction.*;
 
 public class ControllerActionFactory {
 
     private static final Map<String, ControllerAction> actions = new HashMap<>();
 
+    public static final String POST = "POST/";
+    public static final String GET = "GET/";
+
     static{
-        actions.put("GET/home", new HomePageController());
-        actions.put("POST/change-language", new ChangeLanguage());
+        actions.put(GET + HOME, new HomePageAction());
+        actions.put(POST + CHANGE_LANGUAGE, new ChangeLanguageAction());
 
-        actions.put("GET/event/create", new EventCreateControllerPost());
-        actions.put("POST/event/create", new EventDeleteController());
-        actions.put("GET/event/edit", new EventEditControllerGet());
-        actions.put("POST/event/edit", new EventEditControllerPost());
-        actions.put("POST/event/register", new EventRegisterController());
-        actions.put("GET/event/statistics", new EventStatisticsController());
-        actions.put("GET/event/save-statistics", new EventStatisticsSave());
-        actions.put("GET/event/view", new EventViewController());
-        actions.put("POST/event-list-filter", new FilterEventList());
-        actions.put("POST/event-list-sort", new SortEventList());
+        actions.put(GET + EVENT_CREATE, new EventCreateGetAction());
+        actions.put(POST + EVENT_CREATE, new EventCreatePostAction());
+        actions.put(GET + EVENT_DELETE, new EventDeleteAction());
+        actions.put(GET + EVENT_EDIT, new EventEditGetAction());
+        actions.put(POST + EVENT_EDIT, new EventEditPostAction());
+        actions.put(POST + EVENT_REGISTER, new EventRegisterAction());
+        actions.put(GET + EVENT_STATISTICS, new EventStatisticsAction());
+        actions.put(GET + EVENT_SAVE_STATISTICS, new EventStatisticsSaveAction());
+        actions.put(GET + EVENT_VIEW, new EventViewAction());
+        actions.put(POST + EVENT_LIST_FILTER, new EventListFilterAction());
+        actions.put(POST + EVENT_LIST_SORT, new EventListSortAction());
 
-        actions.put("GET/report/create", new ReportCreateControllerGet());
-        actions.put("POST/report/create", new ReportCreateControllerPost());
-        actions.put("GET/report/delete", new ReportDeleteController());
-        actions.put("GET/report/edit", new ReportEditControllerGet());
-        actions.put("POST/report/edit", new ReportEditControllerPost());
-        actions.put("GET/report/list", new ReportListController());
-        actions.put("GET/report/view", new ReportViewController());
+        actions.put(GET + REPORT_CREATE, new ReportCreateGetAction());
+        actions.put(POST + REPORT_CREATE, new ReportCreatePostAction());
+        actions.put(GET + REPORT_DELETE, new ReportDeleteAction());
+        actions.put(GET + REPORT_EDIT, new ReportEditGetAction());
+        actions.put(POST + REPORT_EDIT, new ReportEditPostAction());
+        actions.put(GET + REPORT_LIST, new ReportListAction());
+        actions.put(GET + REPORT_VIEW, new ReportViewAction());
+        actions.put(POST + REPORT_LIST_FILTER, new ReportListFilterAction());
 
-        actions.put("GET/moderator-report-action", new ModeratorReportAction());
-        actions.put("GET/speaker-report-action", new SpeakerReportAction());
-        actions.put("GET/user/change-password", new ChangeUserPasswordControllerGet());
-        actions.put("POST/user/change-password", new ChangeUserPasswordControllerPost());
-        actions.put("GET/user/login", new LoginUserControllerGet());
-        actions.put("POST/user/login", new LoginUserControllerPost());
-        actions.put("GET/user/profile", new ProfileUserControllerGet());
-        actions.put("POST/user/profile", new ProfileUserControllerPost());
-        actions.put("GET/user/registration", new RegistrationUserControllerGet());
-        actions.put("POST/user/registration", new RegistrationUserControllerPost());
-        actions.put("GET/user/sign-out", new ReportViewController());
+        actions.put(GET + USER_LOGIN, new LoginUserGetAction());
+        actions.put(POST + USER_LOGIN, new LoginUserPostAction());
+        actions.put(GET + USER_PROFILE, new ProfileUserGetAction());
+        actions.put(POST + USER_PROFILE, new ProfileUserPostAction());
+        actions.put(GET + USER_REGISTRATION, new RegistrationUserGetAction());
+        actions.put(POST + USER_REGISTRATION, new RegistrationUserPostAction());
+        actions.put(GET + USER_CHANGE_PASSWORD, new ChangeUserPasswordGetAction());
+        actions.put(POST + USER_CHANGE_PASSWORD, new ChangeUserPasswordPostAction());
+        actions.put(GET + USER_SIGN_OUT, new SignOutUserAction());
+        actions.put(GET + MODERATOR_REPORT_APPROVAL, new ModeratorReportApprovalAction());
+        actions.put(GET + SPEAKER_REPORT_APPROVAL, new SpeakerReportApprovalAction());
+
     }
 
     public static ControllerAction getAction(HttpServletRequest request) {

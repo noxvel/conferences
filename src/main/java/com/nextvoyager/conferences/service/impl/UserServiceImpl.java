@@ -29,6 +29,10 @@ public class UserServiceImpl implements UserService {
         return userDAO.find(emailParam, passwordParam);
     }
 
+    public User find(Integer userID) {
+        return userDAO.find(userID);
+    }
+
     @Override
     public boolean checkPassword(User user) {
         return userDAO.checkPassword(user);

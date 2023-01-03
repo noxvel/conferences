@@ -19,7 +19,7 @@
         <script type="text/javascript" src="${contextPath}/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="${contextPath}/js/jquery-3.6.1.min.js"></script>
     </head>
-    <body class="d-flex flex-column h-100">
+    <body class="d-flex flex-column min-vh-100">
 
         <div class="container">
             <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -45,7 +45,11 @@
                         <c:when test="${sessionScope.user != null}">
                             <div class="dropdown text-end">
                                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
-                                    <c:out value="${sessionScope.user.firstName} ${sessionScope.user.lastName}"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 18 18">
+                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                        </svg>
+                                        <c:out value="${sessionScope.user.firstName} ${sessionScope.user.lastName}"/>
                                 </a>
                                 <ul class="dropdown-menu text-small" data-popper-placement="top-start">
                                     <c:if test="${isSpeaker or isModerator}">
@@ -63,7 +67,7 @@
                         <c:otherwise>
                             <div class="d-flex flex-row">
                                 <a role="button" href="${contextPath}/pages/user/login" class="btn btn-outline-primary me-2"><fmt:message key="header.button.login"/></a>
-                                <a role="button" href="${contextPath}/pages/user//registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
+                                <a role="button" href="${contextPath}/pages/user/registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
                             </div>
                         </c:otherwise>
                     </c:choose>
@@ -71,3 +75,5 @@
 
             </header>
         </div>
+
+        <main class="container flex-fill">

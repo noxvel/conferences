@@ -13,8 +13,6 @@
 
     <jsp:include page="/WEB-INF/templates/header.jsp"/>
 
-    <main>
-
         <section class="py-2 text-center container">
             <div class="d-flex flex-row align-items-center">
                 <div class="d-grid gap-2 d-md-block">
@@ -25,7 +23,7 @@
                     </c:if>
                 </div>
                 <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">
-                    <form class="row row-cols-lg-auto g-3 align-items-center" action="event-list-sort" method="post">
+                    <form class="row row-cols-lg-auto g-3 align-items-center" action="event/list-sort" method="post">
                         <div class="col-12">
                             <input type="hidden" name="redirectPath" value="${sessionScope.originRequestURL}" />
                             <select name="sortType" class="form-select" id="sortTypeSelect" aria-label="sort type select">
@@ -58,7 +56,7 @@
                     </form>
                 </div>
                 <div class="ms-3 p-2 d-flex align-items-center bg-secondary bg-opacity-10 border border-secondary rounded">
-                    <form action="event-list-filter" method="post" class="d-flex flex-row align-items-center">
+                    <form action="event/list-filter" method="post" class="d-flex flex-row align-items-center">
                         <input type="hidden" name="redirectPath" value="${sessionScope.originRequestURL}" />
                         <select name="timeFilter" class="form-select" id="timefilterSelect" aria-label="time filter select">
                             <option ${eventTimeFilter == 'AllTime' ? 'selected' : ''} value="AllTime">
@@ -145,8 +143,6 @@
                 </nav>
             </div>
         </div>
-
-    </main>
 
     <script>
 

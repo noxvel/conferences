@@ -72,10 +72,10 @@
                             role="tab" aria-controls="nav-reports" aria-selected="false"><fmt:message key="event-view.tab-button.reports"/></button>
                     <button class="nav-link" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" 
                             role="tab" aria-controls="nav-description" aria-selected="true"><fmt:message key="event-view.tab-button.description"/></button>
-                    <c:if test="${isModerator}">
+                    <%-- <c:if test="${isModerator}">
                         <button class="nav-link" id="nav-participants-tab" data-bs-toggle="tab" data-bs-target="#nav-participants" type="button" 
                             role="tab" aria-controls="nav-participants" aria-selected="true"><fmt:message key="event-view.tab-button.participants"/></button>
-                    </c:if>
+                    </c:if> --%>
                 </div>
             </nav>
             <div class="tab-content pt-3" id="nav-tabContent">
@@ -88,7 +88,7 @@
                                     <fmt:message key="event-view.button.create-new-report"/>
                                 </a>
                                 <div class="ms-2">
-                                    <form action="${contextPath}/pages/report-list-filter" method="post">
+                                    <form action="${contextPath}/pages/report/list-filter" method="post">
                                         <input type="hidden" name="redirectPath" value="event/view?eventID=${event.id}"/>
                                         <div class="input-group">
                                             <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
@@ -121,14 +121,24 @@
                                                 <mytag:report-status-i18n reportStatus="${report.status}"/>
                                             </h6>
                                         </c:if>
+                                        <h6><fmt:message key="report-view.text-speaker"/> 
+                                        <c:choose>
+                                            <c:when test="${report.speaker != null}">
+                                                ${report.speaker.firstName} ${report.speaker.lastName}
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:message key="report-view.text.no-speaker"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        </h6>
                                         <p class="card-text">${fn:substring(report.description, 0, 140)}...</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <a role="button" href="${contextPath}/report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">
+                                                <a role="button" href="${contextPath}/pages/report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">
                                                     <fmt:message key="event-view.report.button.view"/>
                                                 </a>
                                                 <c:if test="${isModerator}">
-                                                    <a role="button" href="${contextPath}/report/edit?reportID=${report.id}" class="btn btn-sm btn-outline-secondary">
+                                                    <a role="button" href="${contextPath}/pages/report/edit?reportID=${report.id}" class="btn btn-sm btn-outline-secondary">
                                                     <fmt:message key="event-view.report.button.edit"/>
                                                 </a>
                                                 </c:if>
