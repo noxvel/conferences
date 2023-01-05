@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    UserDAO userDAO;
+    private final UserDAO userDAO;
 
     public static UserServiceImpl getInstance(UserDAO userDAO) {
         return new UserServiceImpl(userDAO);

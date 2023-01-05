@@ -47,19 +47,20 @@ public class ReportDAOMySQL implements ReportDAO {
 
     // Vars ---------------------------------------------------------------------------------------
 
-    private final DAOFactory daoFactory;
+//    private final DAOFactory daoFactory;
+    private DAOFactory daoFactory = DAOFactory.getInstance();
 
     // Constructors -------------------------------------------------------------------------------
 
-    /**
-     * Construct a Report DAO for the given DAOFactory. Package private so that it can be constructed
-     * inside the DAO package only.
-     *
-     * @param daoFactory The DAOFactory to construct this Report DAO for.
-     */
-    public ReportDAOMySQL(DAOFactory daoFactory) {
-        this.daoFactory = daoFactory;
-    }
+//    /**
+//     * Construct a Report DAO for the given DAOFactory. Package private so that it can be constructed
+//     * inside the DAO package only.
+//     *
+//     * @param daoFactory The DAOFactory to construct this Report DAO for.
+//     */
+//    public ReportDAOMySQL(DAOFactory daoFactory) {
+//        this.daoFactory = daoFactory;
+//    }
 
     // Actions ------------------------------------------------------------------------------------
 

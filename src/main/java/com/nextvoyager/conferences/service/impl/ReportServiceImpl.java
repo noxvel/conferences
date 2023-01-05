@@ -13,8 +13,8 @@ import java.util.List;
 
 public class ReportServiceImpl implements ReportService {
 
-    ReportDAO reportDAO;
-    UserDAO userDAO;
+    private final ReportDAO reportDAO;
+    private final UserDAO userDAO;
 
     public static ReportServiceImpl getInstance(ReportDAO reportDAO,UserDAO userDAO) {
         return new ReportServiceImpl(reportDAO, userDAO);

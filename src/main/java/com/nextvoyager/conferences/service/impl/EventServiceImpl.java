@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EventServiceImpl implements EventService {
 
-    EventDAO eventDAO;
+    private final EventDAO eventDAO;
 
     public static EventServiceImpl getInstance(EventDAO eventDAO) {
         return new EventServiceImpl(eventDAO);

@@ -65,19 +65,21 @@ public class EventDAOMySQL implements EventDAO{
 
     // Vars ---------------------------------------------------------------------------------------
 
-    private final DAOFactory daoFactory;
+//    private final DAOFactory daoFactory;
+//    private DBManager instance = DBManager.getInstance();
+    private DAOFactory daoFactory = DAOFactory.getInstance();
 
     // Constructors -------------------------------------------------------------------------------
 
-    /**
-     * Construct an Event DAO for the given DAOFactory. Package private so that it can be constructed
-     * inside the DAO package only.
-     *
-     * @param daoFactory The DAOFactory to construct this Event DAO for.
-     */
-    public EventDAOMySQL(DAOFactory daoFactory) {
-        this.daoFactory = daoFactory;
-    }
+//    /**
+//     * Construct an Event DAO for the given DAOFactory. Package private so that it can be constructed
+//     * inside the DAO package only.
+//     *
+//     * @param daoFactory The DAOFactory to construct this Event DAO for.
+//     */
+//    public EventDAOMySQL(DAOFactory daoFactory) {
+//        this.daoFactory = daoFactory;
+//    }
 
     // Actions ------------------------------------------------------------------------------------
 
