@@ -87,7 +87,7 @@ public abstract class DAOFactory {
      * missing in the classpath or cannot be loaded, or if a required property is missing in the
      * properties file, or if either the driver cannot be loaded or the datasource cannot be found.
      */
-    private static DAOFactory getInstance(String name) throws DAOConfigurationException {
+    private static synchronized DAOFactory getInstance(String name) throws DAOConfigurationException {
         if (name == null) {
             throw new DAOConfigurationException("Database name is null.");
         }
@@ -97,18 +97,22 @@ public abstract class DAOFactory {
         String password = properties.getProperty(PROPERTY_PASSWORD, false);
         String username = properties.getProperty(PROPERTY_USERNAME, password != null);
 
-        // Else assume URL as DataSource URL and lookup it in the JNDI.
-        DataSource dataSource;
-        try {
-            dataSource = (DataSource) new InitialContext().lookup(url);
-        } catch (NamingException e) {
-            throw new DAOConfigurationException(
-                    "DataSource '" + url + "' is missing in JNDI.", e);
-        }
-        if (username != null) {
-            instance = new DataSourceWithLoginDAOFactory(dataSource, username, password);
-        } else {
-            instance = new DataSourceDAOFactory(dataSource);
+        if (url.equals("test")) {
+            instance = new DataSourceTestFactory();
+        }else{
+            // Else assume URL as DataSource URL and lookup it in the JNDI.
+            DataSource dataSource;
+            try {
+                dataSource = (DataSource) new InitialContext().lookup(url);
+            } catch (NamingException e) {
+                throw new DAOConfigurationException(
+                        "DataSource '" + url + "' is missing in JNDI.", e);
+            }
+            if (username != null) {
+                instance = new DataSourceWithLoginDAOFactory(dataSource, username, password);
+            } else {
+                instance = new DataSourceDAOFactory(dataSource);
+            }
         }
 
         return instance;
@@ -122,10 +126,26 @@ public abstract class DAOFactory {
      */
     public abstract Connection getConnection() throws SQLException, ClassNotFoundException;
 
+    public UserDAO getUserDAO(){
+        return new UserDAOMySQL(instance);
+    }
+    public ReportDAO getReportDAO(){
+        return new ReportDAOMySQL(instance);
+    }
+    public EventDAO getEventDAO(){
+        return new EventDAOMySQL(instance);
+    }
+
 }
 
 // Default DAOFactory implementations -------------------------------------------------------------
-
+class DataSourceTestFactory extends DAOFactory{
+    private DataSource dataSource;
+    @Override
+    public Connection getConnection() throws SQLException, ClassNotFoundException {
+        return dataSource.getConnection();
+    }
+}
 
 /**
  * The DataSource based DAOFactory.

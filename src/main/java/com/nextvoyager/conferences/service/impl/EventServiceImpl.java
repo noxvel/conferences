@@ -13,11 +13,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventDAO eventDAO;
 
-    public static EventServiceImpl getInstance(EventDAO eventDAO) {
-        return new EventServiceImpl(eventDAO);
-    }
-
-    private EventServiceImpl(EventDAO eventDAO) {
+    public EventServiceImpl(EventDAO eventDAO) {
         this.eventDAO = eventDAO;
     }
 

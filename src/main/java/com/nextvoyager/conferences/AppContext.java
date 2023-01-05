@@ -17,21 +17,29 @@ import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 public class AppContext {
     private static volatile AppContext appContext = new AppContext();
 
-//    private final DAOFactory daoFactory = DAOFactory.getInstance();
-//    private final EventDAO eventDAO = daoFactory.getEventDAO();
-//    private final ReportDAO reportDAO = daoFactory.getReportDAO();
-//    private final UserDAO userDAO = daoFactory.getUserDAO();
+    private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final EventDAO eventDAO = daoFactory.getEventDAO();
+    private final ReportDAO reportDAO = daoFactory.getReportDAO();
+    private final UserDAO userDAO = daoFactory.getUserDAO();
 
-    private final EventDAO eventDAO = new EventDAOMySQL();
-    private final ReportDAO reportDAO = new ReportDAOMySQL();
-    private final UserDAO userDAO = new UserDAOMySQL();
-
-    private final EventService eventService = EventServiceImpl.getInstance(eventDAO);
-    private final ReportService reportService = ReportServiceImpl.getInstance(reportDAO,userDAO);
-    private final UserService userService = UserServiceImpl.getInstance(userDAO);
+    private final EventService eventService = new EventServiceImpl(eventDAO);
+    private final ReportService reportService = new ReportServiceImpl(reportDAO,userDAO);
+    private final UserService userService = new UserServiceImpl(userDAO);
 
     public static AppContext getInstance() {
         return appContext;
+    }
+
+    public EventDAO getEventDAO() {
+        return eventDAO;
+    }
+
+    public ReportDAO getReportDAO() {
+        return reportDAO;
+    }
+
+    public UserDAO getUserDAO() {
+        return userDAO;
     }
 
     public EventService getEventService() {

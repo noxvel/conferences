@@ -24,11 +24,15 @@ public class User implements Serializable {
     private Set<Event> events;
 
     public User() {
-
     }
 
     public User(Integer id) {
         this.id = id;
+    }
+
+    public User(Integer id, Role role) {
+        this.id = id;
+        this.role = role;
     }
 
     @Override

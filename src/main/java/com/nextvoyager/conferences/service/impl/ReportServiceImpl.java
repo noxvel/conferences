@@ -16,11 +16,7 @@ public class ReportServiceImpl implements ReportService {
     private final ReportDAO reportDAO;
     private final UserDAO userDAO;
 
-    public static ReportServiceImpl getInstance(ReportDAO reportDAO,UserDAO userDAO) {
-        return new ReportServiceImpl(reportDAO, userDAO);
-    }
-
-    private ReportServiceImpl(ReportDAO reportDAO, UserDAO userDAO) {
+    public ReportServiceImpl(ReportDAO reportDAO, UserDAO userDAO) {
         this.reportDAO = reportDAO;
         this.userDAO = userDAO;
     }

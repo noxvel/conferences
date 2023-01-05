@@ -2,10 +2,15 @@ package com.nextvoyager.conferences.controller.actions.report;
 
 import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
+import com.nextvoyager.conferences.model.dao.report.ReportDAO;
+import com.nextvoyager.conferences.model.dao.report.ReportDAOMySQL;
+import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.model.dao.user.UserDAOMySQL;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,12 +26,13 @@ public class ReportCreateGetAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+
         Integer eventID = Integer.valueOf(req.getParameter("eventID"));
 
         Report.Status[] statuses;
         List<User> speakers;
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         User currentUser = (User) session.getAttribute("user");
 
         if (currentUser.getRole() == User.Role.SPEAKER) {

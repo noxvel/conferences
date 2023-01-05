@@ -48,14 +48,14 @@ public class UserDAOMySQL implements UserDAO{
 
     // Constructors -------------------------------------------------------------------------------
 
-//    /**
-//     * Construct a User DAO for the given DAOFactory. Package private so that it can be constructed
-//     * inside the DAO package only.
-//     * @param daoFactory The DAOFactory to construct this User DAO for.
-//     */
-//    public UserDAOMySQL(DAOFactory daoFactory) {
-//        this.daoFactory = daoFactory;
-//    }
+    /**
+     * Construct a User DAO for the given DAOFactory. Package private so that it can be constructed
+     * inside the DAO package only.
+     * @param daoFactory The DAOFactory to construct this User DAO for.
+     */
+    public UserDAOMySQL(DAOFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 
     // Actions ------------------------------------------------------------------------------------
 

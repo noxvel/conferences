@@ -11,11 +11,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
 
-    public static UserServiceImpl getInstance(UserDAO userDAO) {
-        return new UserServiceImpl(userDAO);
-    }
-
-    private UserServiceImpl(UserDAO userDAO) {
+    public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 

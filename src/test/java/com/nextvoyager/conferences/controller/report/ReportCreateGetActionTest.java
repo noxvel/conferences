@@ -19,6 +19,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReportCreateGetActionTest {
@@ -27,27 +31,30 @@ public class ReportCreateGetActionTest {
     @Mock
     HttpServletResponse resp;
     @Mock
-    UserDAO dao;
-    @Mock
-    DAOFactory daoFactory;
+    UserService userService;
     @Mock
     HttpSession session;
+    @Mock
+    DataSource dataSource;
 
     @InjectMocks
     ReportCreateGetAction action;
 
-    private User speaker = new User();
+    private User speaker = new User(1, User.Role.SPEAKER);
+    private List<User> userList = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        speaker.setRole(User.Role.SPEAKER);
+        MockitoAnnotations.initMocks(this);
+        userList.add(speaker);
+
     }
 
     @Test
     public void testExecute() throws ServletException {
         Mockito.when(req.getParameter("eventID")).thenReturn("1");
         Mockito.when(req.getSession()).thenReturn(session);
+        Mockito.when(userService.listWithOneRole(User.Role.SPEAKER)).thenReturn(userList);
         Mockito.when(session.getAttribute("user")).thenReturn(speaker);
         String result = action.execute(req,resp);
         assertEquals(ControllerAction.REPORT_CREATE, result);
