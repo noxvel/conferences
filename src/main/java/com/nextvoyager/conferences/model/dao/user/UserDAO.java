@@ -1,6 +1,7 @@
 package com.nextvoyager.conferences.model.dao.user;
 
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 
 import java.util.List;
@@ -80,4 +81,6 @@ public interface UserDAO {
     void changePassword(User user) throws DAOException;
 
     boolean checkPassword(User user) throws DAOException;
+
+    List<User> receiveEventNotificationsList(Event event);
 }

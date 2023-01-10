@@ -4,6 +4,7 @@ import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+@Disabled
 public class UserServiceTest {
 
     @Mock

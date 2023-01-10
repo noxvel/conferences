@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Optional;
 
 //@WebServlet("/user/profile")
 public class ProfileUserPostAction implements ControllerAction {
@@ -20,6 +21,7 @@ public class ProfileUserPostAction implements ControllerAction {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String firstNameParam = req.getParameter("firstName");
         String lastNameParam = req.getParameter("lastName");
+        String receiveNotifications = req.getParameter("receiveNotifications");
 //        String emailParam = req.getParameter("email");
 
         HttpSession session = req.getSession(false);
@@ -27,6 +29,7 @@ public class ProfileUserPostAction implements ControllerAction {
 
         user.setFirstName(firstNameParam);
         user.setLastName(lastNameParam);
+        user.setReceiveNotifications(receiveNotifications != null);
 //        user.setEmail(emailParam);
 
         userService.update(user);

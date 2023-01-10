@@ -15,7 +15,7 @@ public class ProfileUserGetAction implements ControllerAction {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
 
         if (session != null && session.getAttribute("user") != null) {
             User currentUser = (User) session.getAttribute("user");

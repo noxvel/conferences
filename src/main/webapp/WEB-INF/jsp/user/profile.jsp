@@ -44,6 +44,17 @@
                         </div>
                       </div>
                     </div>
+                    <div class="row">
+                      <div class="col-md-12 mb-4">
+                        <div class="form-check">
+                          <input ${currentUser.receiveNotifications ? 'checked' : ''} class="form-check-input" type="checkbox" 
+                                    value="true" name="receiveNotifications" id="receiveNotifications">
+                          <label class="form-check-label" for="receiveNotifications">
+                            <fmt:message key="profile.receive-notifications.label"/>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
 
                     <%-- <!-- Email input -->
                     <div class="form-outline mb-4">

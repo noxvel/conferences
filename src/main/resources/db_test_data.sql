@@ -7,12 +7,12 @@ INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'MODERATOR');
 INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'SPEAKER');
 INSERT INTO user_role (id, name)  VALUES (DEFAULT, 'ORDINARY_USER');
 -- -----------------------------------------------------
-INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'moderator@mail.com', md5('123'), 1, 'Іван', 'Гармата');
-INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'speaker@mail.com', md5('123'), 2, 'Богдан', 'Хмельницький');
-INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'speaker2@mail.com', md5('123'), 2, 'Іван', 'Франко');
-INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'user@mail.com', md5('123'), 3, 'Микола', 'Пупкін');
-INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'user2@mail.com', md5('123'), 3, 'Леся', 'Українка');
-INSERT INTO user (id, email, password, user_role_id, first_name, last_name) VALUES (DEFAULT, 'user3@mail.com', md5('123'), 3, 'Володимир', 'Адамчук');
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name, receive_notifications) VALUES (DEFAULT, 'moderator@mail.com', md5('123'), 1, 'Іван', 'Гармата', DEFAULT);
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name, receive_notifications) VALUES (DEFAULT, 'speaker@mail.com', md5('123'), 2, 'Богдан', 'Хмельницький', 1);
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name, receive_notifications) VALUES (DEFAULT, 'speaker2@mail.com', md5('123'), 2, 'Іван', 'Франко', DEFAULT);
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name, receive_notifications) VALUES (DEFAULT, 'user@mail.com', md5('123'), 3, 'Микола', 'Пупкін', 1);
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name, receive_notifications) VALUES (DEFAULT, 'user2@mail.com', md5('123'), 3, 'Леся', 'Українка', DEFAULT);
+INSERT INTO user (id, email, password, user_role_id, first_name, last_name, receive_notifications) VALUES (DEFAULT, 'user3@mail.com', md5('123'), 3, 'Володимир', 'Адамчук', DEFAULT);
 -- -----------------------------------------------------
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'FREE');
 INSERT INTO report_status (id, name)  VALUES (DEFAULT, 'OFFERED_BY_SPEAKER');

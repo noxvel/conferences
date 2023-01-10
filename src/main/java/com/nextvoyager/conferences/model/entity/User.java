@@ -20,6 +20,7 @@ public class User implements Serializable {
     private User.Role role;
     private String firstName;
     private String lastName;
+    private Boolean receiveNotifications;
 
     private Set<Event> events;
 

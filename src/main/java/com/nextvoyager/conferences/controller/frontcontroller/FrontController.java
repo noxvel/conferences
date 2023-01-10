@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
                 resp.sendRedirect(view);
             }
         } catch (Exception e) {
-            LOGGER.warn("Executing action failed");
+            LOGGER.error("Executing action failed" + e.getMessage());
             throw new ServletException("Executing action failed.", e);
         }
     }

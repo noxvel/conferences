@@ -22,7 +22,7 @@ public class AppContext {
     private final ReportDAO reportDAO = daoFactory.getReportDAO();
     private final UserDAO userDAO = daoFactory.getUserDAO();
 
-    private final EventService eventService = new EventServiceImpl(eventDAO);
+    private final EventService eventService = new EventServiceImpl(eventDAO, userDAO);
     private final ReportService reportService = new ReportServiceImpl(reportDAO,userDAO);
     private final UserService userService = new UserServiceImpl(userDAO);
 

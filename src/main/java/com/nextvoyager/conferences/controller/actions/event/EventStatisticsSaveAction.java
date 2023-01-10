@@ -1,24 +1,19 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
-import com.lowagie.text.*;
-import com.lowagie.text.Font;
-import com.lowagie.text.pdf.PdfWriter;
 import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
-import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.util.PDFCreator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.List;
 
 //@WebServlet("/event/save-statistics")
 public class EventStatisticsSaveAction implements ControllerAction {
@@ -37,6 +32,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
         }
 
         HttpSession currentSession = req.getSession();
+        String lang = (String) currentSession.getAttribute("lang");
 
         EventDAO.SortType eventListSortType = Optional.ofNullable((EventDAO.SortType) currentSession
                 .getAttribute("eventListSortType")).orElse(EventDAO.SortType.Date);
@@ -52,7 +48,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
-        ByteArrayOutputStream pdfByteArray = generatePDFFile(countAndList.getList());
+        ByteArrayOutputStream pdfByteArray = PDFCreator.generateStatisticsFile(countAndList.getList(),lang);
 
         // setting some response headers
         resp.setHeader("Expires", "0");
@@ -73,75 +69,4 @@ public class EventStatisticsSaveAction implements ControllerAction {
 
     }
 
-    private ByteArrayOutputStream generatePDFFile(List<Event> eventsList) {
-
-        Document myPDFDoc = new Document(PageSize.A4);
-
-        // Define a string as title
-        String title = "Event statistics";
-
-        // Let's create a Table object
-        Table myTable = new Table(4); // 4 columns
-        myTable.setPadding(2f);
-        myTable.setSpacing(1f);
-        myTable.setWidth(100f);
-
-        // Create the header of the table
-        List<String> headerTable = new ArrayList<>();
-        headerTable.add("Event");
-        headerTable.add("Reports count");
-        headerTable.add("Participants count");
-        headerTable.add("Participants came");
-
-        headerTable.forEach(e -> {
-            Cell current = new Cell(new Phrase(e));
-            current.setHeader(true);
-            current.setBackgroundColor(Color.LIGHT_GRAY);
-            myTable.addCell(current);
-        });
-
-        eventsList.forEach((el) -> {
-            myTable.addCell(new Cell(new Phrase(el.getName())));
-            myTable.addCell(new Cell(new Phrase(el.getReportsCount().toString())));
-            myTable.addCell(new Cell(new Phrase(el.getParticipantsCount().toString())));
-            myTable.addCell(new Cell(new Phrase(el.getParticipantsCame().toString())));
-        });
-
-        ByteArrayOutputStream pdfByteArray = new ByteArrayOutputStream();
-
-        final PdfWriter pdfWriter = PdfWriter.getInstance(myPDFDoc, pdfByteArray);
-
-        //1) Create a pdf object with using the class
-        myPDFDoc.open();  // Open the Document
-
-        /* Here we add some metadata to the generated pdf */
-        myPDFDoc.addTitle("Event statistics");
-        myPDFDoc.addSubject("This is a event statistics file");
-        myPDFDoc.addKeywords("Statistics, Events");
-        myPDFDoc.addCreator("Auto generate");
-        /* End of the adding metadata section */
-
-        // Create a Font object
-        Font titleFont = new Font(Font.COURIER, 20f, Font.BOLDITALIC, Color.BLACK);
-
-        // Create a paragraph with the new font
-        Paragraph paragraph = new Paragraph(title,titleFont);
-
-        // Element class provides properties to align
-        // Content elements within the document
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-
-        myPDFDoc.add(paragraph);
-
-        // Adding an empty line
-        myPDFDoc.add(new Paragraph(Chunk.NEWLINE));
-
-        // Include the table to the document
-        myPDFDoc.add(myTable);
-
-        myPDFDoc.close();
-        pdfWriter.close();
-
-        return pdfByteArray;
-    }
 }

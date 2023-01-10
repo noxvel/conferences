@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `conferences`.`user` (
   `first_name` VARCHAR(255) NULL,
   `last_name` VARCHAR(255) NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `receive_notifications` TINYINT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   INDEX `fk_user_user_role_idx` (`user_role_id` ASC) VISIBLE,

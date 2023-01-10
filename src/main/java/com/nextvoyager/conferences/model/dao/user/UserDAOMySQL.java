@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.model.dao.user;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 
 import java.sql.*;
@@ -16,30 +17,38 @@ public class UserDAOMySQL implements UserDAO{
     // Constants ----------------------------------------------------------------------------------
 
     private static final String SQL_FIND_BY_ID =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
+            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
                     "WHERE u.id = ?";
     private static final String SQL_FIND_BY_EMAIL_AND_PASSWORD =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
+            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
                     "WHERE email = ? AND password = MD5(?)";
     private static final String SQL_LIST_ORDER_BY_ID =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
+            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
                     "ORDER BY u.id";
     private static final String SQL_LIST_WITH_ONLY_ONE_ROLE =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, r.name AS user_role_name FROM user AS u " +
+            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
                     "WHERE u.user_role_id = ? " +
                     "ORDER BY u.id";
     private static final String SQL_INSERT =
             "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
     private static final String SQL_UPDATE =
-            "UPDATE user SET email = ?, first_name = ?, last_name = ?, user_role_id = ? WHERE id = ?";
+            "UPDATE user SET email = ?, first_name = ?, last_name = ?, user_role_id = ?, receive_notifications = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM user WHERE id = ?";
     private static final String SQL_EXIST_EMAIL = "SELECT id FROM user WHERE email = ?";
     private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = MD5(?) WHERE id = ?";
     private static final String SQL_CHECK_PASSWORD = "SELECT id FROM user WHERE id = ? AND password = MD5(?)";
+    private static final String SQL_LIST_WHO_RECEIVE_NOTIFICATIONS =
+        "SELECT DISTINCT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
+            "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
+            "WHERE u.receive_notifications " +
+            "AND (EXISTS (SELECT id FROM report WHERE report.event_id = ? AND report.speaker_id = u.id) " +
+            "OR " +
+            "EXISTS (SELECT ehp.user_id FROM event_has_participant AS ehp WHERE ehp.event_id = ? AND ehp.user_id = u.id)) " +
+            "ORDER BY u.id";
 
     // Vars ---------------------------------------------------------------------------------------
 
@@ -137,6 +146,30 @@ public class UserDAOMySQL implements UserDAO{
     }
 
     @Override
+    public List<User> receiveEventNotificationsList(Event event) {
+        List<User> users = new ArrayList<>();
+
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(event.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_LIST_WHO_RECEIVE_NOTIFICATIONS, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            while (resultSet.next()) {
+                users.add(map(resultSet));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return users;
+    }
+
+    @Override
     public void create(User user) throws IllegalArgumentException, DAOException {
         if (user.getId() != null) {
             throw new IllegalArgumentException("User is already created, the user ID is not null.");
@@ -179,10 +212,11 @@ public class UserDAOMySQL implements UserDAO{
 
         ValueDAO[] values = {
                 new ValueDAO(user.getEmail(), Types.VARCHAR),
-                new ValueDAO(user.getFirstName(),Types.VARCHAR),
-                new ValueDAO(user.getLastName(),Types.VARCHAR),
-                new ValueDAO(user.getRole().getId(),Types.INTEGER),
-                new ValueDAO(user.getId(),Types.INTEGER)
+                new ValueDAO(user.getFirstName(), Types.VARCHAR),
+                new ValueDAO(user.getLastName(), Types.VARCHAR),
+                new ValueDAO(user.getRole().getId(), Types.INTEGER),
+                new ValueDAO(user.getReceiveNotifications(), Types.BOOLEAN),
+                new ValueDAO(user.getId(), Types.INTEGER)
         };
 
         try (
@@ -264,6 +298,7 @@ public class UserDAOMySQL implements UserDAO{
         }
     }
 
+
     @Override
     public boolean checkPassword(User user) throws DAOException {
         if (user.getId() == null) {
@@ -305,6 +340,7 @@ public class UserDAOMySQL implements UserDAO{
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));
         user.setRole(User.Role.valueOf(resultSet.getString("user_role_name")));
+        user.setReceiveNotifications(resultSet.getBoolean("receive_notifications"));
         return user;
     }
 }
