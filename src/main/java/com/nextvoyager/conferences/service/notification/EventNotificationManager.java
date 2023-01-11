@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 public class EventNotificationManager {
 
     public static void notify(List<User> userList, Event event, NotificationType type) {
-        List<String> sendToEmails = userList.stream().map(User::getEmail).collect(Collectors.toList());
-        EmailSender.send(sendToEmails, prepareNotificationSubject(event,type), prepareNotificationText(event,type));
+        if (!userList.isEmpty()) {
+            String sendToEmails = userList.stream()
+                    .map(User::getEmail)
+                    .collect(Collectors.joining(","));
+            EmailSender.send(sendToEmails, prepareNotificationSubject(event,type), prepareNotificationText(event,type));
+        }
     }
 
     private static String prepareNotificationText(Event event, NotificationType type) {

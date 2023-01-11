@@ -3,6 +3,8 @@ package com.nextvoyager.conferences.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +16,8 @@ public class Event {
     private Integer id;
     private String name;
     private String place;
-    private Date beginDate;
-    private Date endDate;
+    private LocalDateTime beginDate;
+    private LocalDateTime endDate;
     private Integer reportsCount;
     private Integer participantsCount;
     private Integer participantsCame;

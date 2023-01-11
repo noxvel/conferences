@@ -13,6 +13,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,15 +37,11 @@ public class EventServiceTest {
         testEvent.setId(1);
         testEvent.setName("Java conference");
         testEvent.setPlace("Odesa");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        try {
-            Date endDate = format.parse("2022/10/14 12:00:00");
-            Date beginDate = format.parse("2022/10/12 12:00:00");
-            testEvent.setBeginDate(beginDate);
-            testEvent.setEndDate(endDate);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime endDate = LocalDateTime.parse("2022/10/14 12:00:00", format);
+        LocalDateTime beginDate = LocalDateTime.parse("2022/10/12 12:00:00", format);
+        testEvent.setBeginDate(beginDate);
+        testEvent.setEndDate(endDate);
         testEvent.setParticipantsCame(100);
         testEvent.setDescription("New description");
         testList.add(testEvent);

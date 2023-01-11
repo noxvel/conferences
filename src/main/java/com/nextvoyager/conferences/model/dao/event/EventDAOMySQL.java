@@ -12,9 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
-import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.toSqlDate;
-import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.*;
 
 public class EventDAOMySQL implements EventDAO{
 
@@ -301,8 +299,8 @@ public class EventDAOMySQL implements EventDAO{
         ValueDAO[] values = {
                 new ValueDAO(event.getName(), Types.VARCHAR),
                 new ValueDAO(event.getPlace(), Types.VARCHAR),
-                new ValueDAO(toSqlDate(event.getBeginDate()), Types.DATE),
-                new ValueDAO(toSqlDate(event.getEndDate()), Types.DATE),
+                new ValueDAO(event.getBeginDate(), Types.TIMESTAMP),
+                new ValueDAO(event.getEndDate(), Types.TIMESTAMP),
                 new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
                 new ValueDAO(event.getDescription(), Types.VARCHAR)
         };
@@ -337,8 +335,8 @@ public class EventDAOMySQL implements EventDAO{
         ValueDAO[] values = {
                 new ValueDAO(event.getName(), Types.VARCHAR),
                 new ValueDAO(event.getPlace(), Types.VARCHAR),
-                new ValueDAO(toSqlDate(event.getBeginDate()), Types.DATE),
-                new ValueDAO(toSqlDate(event.getEndDate()), Types.DATE),
+                new ValueDAO(event.getBeginDate(), Types.TIMESTAMP),
+                new ValueDAO(event.getEndDate(), Types.TIMESTAMP),
                 new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
                 new ValueDAO(event.getDescription(), Types.VARCHAR),
                 new ValueDAO(event.getId(), Types.INTEGER)
@@ -442,8 +440,8 @@ public class EventDAOMySQL implements EventDAO{
         event.setId(resultSet.getInt("id"));
         event.setName(resultSet.getString("name"));
         event.setPlace(resultSet.getString("place"));
-        event.setBeginDate(resultSet.getDate("begin_date"));
-        event.setEndDate(resultSet.getDate("end_date"));
+        event.setBeginDate(resultSet.getTimestamp("begin_date").toLocalDateTime());
+        event.setEndDate(resultSet.getTimestamp("end_date").toLocalDateTime());
         event.setParticipantsCame(resultSet.getInt("participants_came"));
         event.setDescription(resultSet.getString("description"));
         return event;
@@ -454,8 +452,8 @@ public class EventDAOMySQL implements EventDAO{
         event.setId(resultSet.getInt("id"));
         event.setName(resultSet.getString("name"));
         event.setPlace(resultSet.getString("place"));
-        event.setBeginDate(resultSet.getDate("begin_date"));
-        event.setEndDate(resultSet.getDate("end_date"));
+        event.setBeginDate(resultSet.getTimestamp("begin_date").toLocalDateTime());
+        event.setEndDate(resultSet.getTimestamp("end_date").toLocalDateTime());
         event.setDescription(resultSet.getString("description"));
         event.setParticipantsCame(resultSet.getInt("participants_came"));
         event.setReportsCount(resultSet.getInt("r_count"));

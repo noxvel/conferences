@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 //@WebServlet("/event/edit")
@@ -22,8 +23,8 @@ public class EventEditPostAction implements ControllerAction {
         String idParam = req.getParameter("eventID");
         String nameParam = req.getParameter("name");
         String placeParam = req.getParameter("place");
-        String beginDateParam = req.getParameter("beginDateISO");
-        String endDateParam = req.getParameter("endDateISO");
+        String beginDateParam = req.getParameter("beginDate");
+        String endDateParam = req.getParameter("endDate");
         String descriptionParam = req.getParameter("description");
         String participantsCameParam = req.getParameter("participantsCame");
 
@@ -31,8 +32,8 @@ public class EventEditPostAction implements ControllerAction {
         event.setId(Integer.valueOf(idParam));
         event.setName(nameParam);
         event.setPlace(placeParam);
-        event.setBeginDate(Date.from(Instant.parse(beginDateParam)));
-        event.setEndDate(Date.from(Instant.parse(endDateParam)));
+        event.setBeginDate(LocalDateTime.parse(beginDateParam));
+        event.setEndDate(LocalDateTime.parse(endDateParam));
         event.setDescription(descriptionParam);
         event.setParticipantsCame(Integer.valueOf(participantsCameParam));
 

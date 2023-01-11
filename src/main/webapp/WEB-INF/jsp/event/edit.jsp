@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<fmt:formatDate value="${event.beginDate}" var="beginDate" pattern="yyyy-MM-dd'T'HH:mm"/>
-<fmt:formatDate value="${event.endDate}" var="endDate" pattern="yyyy-MM-dd'T'HH:mm"/>
 
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="text" />
@@ -23,14 +21,12 @@
                 </div>
                 <div class="col-md-6">
                     <label for="beginDate" class="form-label"><fmt:message key="event-edit.begin-date.label"/></label>
-                    <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="${beginDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
+                    <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="${event.beginDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
                 </div>
-                <input type="hidden" id="beginDateISO" name="beginDateISO" value="" />
                 <div class="col-md-6">
                     <label for="endDate" class="form-label"><fmt:message key="event-edit.end-date.label"/></label>
-                    <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="${endDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
+                    <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="${event.endDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
                 </div>
-                <input type="hidden" id="endDateISO" name="endDateISO" value="" />
                 <div class="input-group">
                     <span class="input-group-text"><fmt:message key="event-edit.description.label"/></span>
                     <textarea name="description" class="form-control" rows="6 aria-label="Description" >${event.description}</textarea>
@@ -54,18 +50,5 @@
 
         </div>
 
-
-        <script>
-
-            $(document).ready(function() {
-                $("#createEvent").submit(function( event ) {
-                    let beginDate = $('#beginDate');
-                    let endDate = $('#endDate');
-                    $("#beginDateISO").val(new Date(beginDate.val()).toISOString());
-                    $("#endDateISO").val(new Date(endDate.val()).toISOString());
-                });
-            });
-
-        </script>
 
     <jsp:include page="/WEB-INF/templates/footer.jsp"/>

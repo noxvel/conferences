@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="mytag" tagdir="/WEB-INF/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
@@ -95,9 +96,23 @@
                             <div class="card shadow-sm">
                                 <div class="card-body">
                                     <h5 class="card-title">${event.name}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">${event.place}</h6>
-                                    <h6 class="card-subtitle mb-2 text-muted">
-                                        <fmt:formatDate type="date" value="${event.beginDate}" /> - <fmt:formatDate type="date" value="${event.endDate}" />
+                                    <h6 class="card-subtitle mb-2 text-muted d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                        </svg>
+                                        <div class="ms-1">
+                                            <c:out value="${event.place}"/>
+                                        </div>
+                                    </h6>
+                                    <h6 class="card-subtitle mb-2 text-muted d-flex align-items-center">
+                                        <fmt:parseDate value="${event.beginDate}" pattern="yyyy-MM-dd" var="beginDate" type="date"/>
+                                        <fmt:parseDate value="${event.endDate}" pattern="yyyy-MM-dd" var="endDate" type="date"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar4" viewBox="0 0 16 16">
+                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                                        </svg>
+                                        <div class="ms-1">
+                                            <fmt:formatDate type="date" value="${beginDate}" /> - <fmt:formatDate type="date" value="${endDate}" />
+                                        </div>
                                     </h6>
                                     <p class="card-text">${fn:substring(event.description, 0, 140)}...</p>
                                     <div class="d-flex justify-content-between align-items-center">
@@ -119,45 +134,11 @@
                         </div>
                     </c:forEach>
                     
-                 
                 </div>
-                <nav aria-label="Home page navigation" class="p-3">
-                    <ul class="pagination justify-content-center">
-                        <li class="${(page == 1) ? 'page-item disabled' : 'page-item'}">
-                            <a class="page-link" href="home?page=${page == 1 ? page : page - 1}"><span aria-hidden="true">&laquo;</span></a>
-                        </li>
 
-                        <c:forEach begin="1" end="${numOfPages}" varStatus="loop">
-                            <c:if test="${loop.index > page - 5 && (loop.index < page + 5)}">
-                                <li class="${(loop.index == page) ? 'page-item active' : 'page-item'}">
-                                    <a class="page-link" href="home?page=${loop.index}">${loop.index}</a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
+                <mytag:pagination arialLabel="Home page navigation" page="${page}" numOfPages="${numOfPages}" linkPath="home?" />
 
-                        <li class="${numOfPages == page ? 'page-item disabled' : 'page-item'}">
-                            <a class="page-link" href="home?page=${numOfPages == page ? page : page + 1}"><span aria-hidden="true">&raquo;</span></a>
-                        </li>
-
-                    </ul>
-                </nav>
             </div>
         </div>
-
-    <script>
-
-        // $(document).ready(() => {
-        //     $("filterSpeakerParticipated").submit((event) => {
-        //         event.preventDefault();
-        //         let elSpeakerPrticipated = $("#showInWhichParticipated");
-        //         $.post("filterBySpeakerParticipated", { showInWhichParticipated: elSpeakerPrticipated.checked });
-        //         $("#showInWhichParticipated").click(( event ) => {
-        //             $.post("filterBySpeakerParticipated", { showInWhichParticipated: event.target.checked });
-        //             $.get("home");
-        //         });
-        //     })
-        // });
-
-    </script>
     
     <jsp:include page="/WEB-INF/templates/footer.jsp"/>

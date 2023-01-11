@@ -23,12 +23,10 @@
                     <label for="beginDate" class="form-label"><fmt:message key="event-create.begin-date.label"/></label>
                     <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="2022-01-01T00:00" min="2020-01-01T00:00" max="2100-01-01T00:00">
                 </div>
-                <input type="hidden" id="beginDateISO" name="beginDateISO" value="" />
                 <div class="col-md-6">
                     <label for="endDate" class="form-label"><fmt:message key="event-create.end-date.label"/></label>
                     <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="2022-01-01T00:00" min="2020-01-01T00:00" max="2100-01-01T00:00">
                 </div>
-                <input type="hidden" id="endDateISO" name="endDateISO" value="" />
                 <div class="input-group">
                     <span class="input-group-text"><fmt:message key="event-create.description.label"/></span>
                     <fmt:message key="event-create.description.placeholder" var="descriptionPlaceholder"/>
@@ -46,19 +44,5 @@
             </form>
 
         </div>
-
-
-        <script>
-
-            $(document).ready(function() {
-                $("#createEvent").submit(function( event ) {
-                    let beginDate = $('#beginDate');
-                    let endDate = $('#endDate');
-                    $("#beginDateISO").val(new Date(beginDate.val()).toISOString());
-                    $("#endDateISO").val(new Date(endDate.val()).toISOString());
-                });
-            });
-
-        </script>
 
     <jsp:include page="/WEB-INF/templates/footer.jsp"/>

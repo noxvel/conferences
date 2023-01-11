@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS `conferences`.`event` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `place` VARCHAR(255) NOT NULL,
-  `begin_date` DATETIME NOT NULL,
-  `end_date` DATETIME NOT NULL,
+  `begin_date` TIMESTAMP NOT NULL,
+  `end_date` TIMESTAMP NOT NULL,
   `participants_came` INT ZEROFILL NULL,
   `description` VARCHAR(4096) NULL,
   PRIMARY KEY (`id`));

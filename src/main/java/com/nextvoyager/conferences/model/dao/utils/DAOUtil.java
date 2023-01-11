@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class DAOUtil {
 
@@ -51,13 +53,8 @@ public class DAOUtil {
         }
     }
 
-    /**
-     * Converts the given java.util.Date to java.sql.Date.
-     * @param date The java.util.Date to be converted to java.sql.Date.
-     * @return The converted java.sql.Date.
-     */
-    public static Date toSqlDate(java.util.Date date) {
-        return (date != null) ? new Date(date.getTime()) : null;
+    public static Timestamp toSqlTimestamp(LocalDateTime dateTime) {
+        return (dateTime != null) ? Timestamp.valueOf(dateTime) : null;
     }
 
     @Getter

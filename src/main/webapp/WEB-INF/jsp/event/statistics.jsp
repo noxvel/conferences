@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="mytag" tagdir="/WEB-INF/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
@@ -105,26 +106,10 @@
                         </tbody>
                     </table>
                 </div>
-                <nav aria-label="Event statistics navigation" class="p-3">
-                    <ul class="pagination justify-content-center">
-                        <li class="${(page == 1) ? 'page-item disabled' : 'page-item'}">
-                            <a class="page-link" href="${contextPath}/pages/event/statistics?page=${page == 1 ? page : page - 1}"><span aria-hidden="true">&laquo;</span></a>
-                        </li>
 
-                        <c:forEach begin="1" end="${numOfPages}" varStatus="loop">
-                            <c:if test="${loop.index > page - 5 && (loop.index < page + 5)}">
-                                <li class="${(loop.index == page) ? 'page-item active' : 'page-item'}">
-                                    <a class="page-link" href="${contextPath}/pages/event/statistics?page=${loop.index}">${loop.index}</a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
+                <mytag:pagination arialLabel="Event statistics navigation" page="${page}" numOfPages="${numOfPages}" 
+                                linkPath="${contextPath}/pages/event/statistics?" />
 
-                        <li class="${numOfPages == page ? 'page-item disabled' : 'page-item'}">
-                            <a class="page-link" href="${contextPath}/pages/event/statistics?page=${numOfPages == page ? page : page + 1}"><span aria-hidden="true">&raquo;</span></a>
-                        </li>
-
-                    </ul>
-                </nav>
             </div>
         </div>
 

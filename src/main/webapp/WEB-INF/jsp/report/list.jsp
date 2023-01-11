@@ -72,26 +72,9 @@
                 
             </div>
 
-            <nav aria-label="Reports list page navigation" class="p-3">
-                <ul class="pagination justify-content-center">
-                    <li class="${(page == 1) ? 'page-item disabled' : 'page-item'}">
-                        <a class="page-link" href="list?page=${page == 1 ? page : page - 1}"><span aria-hidden="true">&laquo;</span></a>
-                    </li>
+            <mytag:pagination arialLabel="Report list page navigation" page="${page}" numOfPages="${numOfPages}" 
+                            linkPath="list?" />
 
-                    <c:forEach begin="1" end="${numOfPages}" varStatus="loop">
-                        <c:if test="${loop.index > page - 5 && (loop.index < page + 5)}">
-                            <li class="${(loop.index == page) ? 'page-item active' : 'page-item'}">
-                                <a class="page-link" href="list?page=${loop.index}">${loop.index}</a>
-                            </li>
-                        </c:if>
-                    </c:forEach>
-
-                    <li class="${numOfPages == page ? 'page-item disabled' : 'page-item'}">
-                        <a class="page-link" href="list?page=${numOfPages == page ? page : page + 1}"><span aria-hidden="true">&raquo;</span></a>
-                    </li>
-
-                </ul>
-            </nav>
 
         </div>
 

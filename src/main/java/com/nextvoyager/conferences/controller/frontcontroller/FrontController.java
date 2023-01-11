@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @WebServlet("/pages/*")
 public class FrontController extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger(FrontController.class);
+    private static final Logger LOG = LogManager.getLogger(FrontController.class);
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
                 resp.sendRedirect(view);
             }
         } catch (Exception e) {
-            LOGGER.error("Executing action failed" + e.getMessage());
+            LOG.error("Executing failed: Exception - " + e.getClass().getName() + ", message: "+ e.getMessage());
             throw new ServletException("Executing action failed.", e);
         }
     }

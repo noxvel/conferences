@@ -1,13 +1,15 @@
 package com.nextvoyager.conferences.util;
 
+import com.nextvoyager.conferences.controller.frontcontroller.FrontController;
 import com.nextvoyager.conferences.model.dao.exeption.DAOConfigurationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -16,6 +18,7 @@ import java.util.Properties;
 public class EmailSender {
     public static final String PROPERTIES_FILE = "email.properties";
     public static final Properties PROPERTIES = new Properties();
+    private static final Logger LOG = LogManager.getLogger(EmailSender.class);
 
     static {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -42,16 +45,16 @@ public class EmailSender {
         return property;
     }
 
-    public static void send(List<String> sendToEmails, String subject, String body) {
-        new SendEmail(sendToEmails, subject, body).start();
+    public static void send(String sendToEmails, String subject, String body) {
+//        new SendEmail(sendToEmails, subject, body).start();
     }
 
     private static class SendEmail extends Thread{
-        private final List<String> toEmails;
+        private final String toEmails;
         private final String subject;
         private final String body;
 
-        public SendEmail(List<String> toEmails, String subject, String body) {
+        public SendEmail(String toEmails, String subject, String body) {
             this.toEmails = toEmails;
             this.subject = subject;
             this.body = body;
@@ -83,17 +86,20 @@ public class EmailSender {
                 };
             }
             Session session = Session.getInstance(props, auth);
-            // Used to debug SMTP issues
-            session.setDebug(true);
 
-            System.out.println(("Text to users - " + toEmails + ", text - " + body));
+            boolean debug = Boolean.parseBoolean(getProperty("debug"));
+            if (debug) {
+                // Used to debug SMTP issues
+                session.setDebug(true);
+            }
+
             sendEmail(session,fromEmail,toEmails,subject,body);
         }
 
         /**
          * Utility method to send email
          */
-        private static void sendEmail(Session session, String fromEmail, List<String> toEmails, String subject, String body){
+        private static void sendEmail(Session session, String fromEmail, String toEmails, String subject, String body){
             try {
                 MimeMessage msg = new MimeMessage(session);
                 //set message headers
@@ -102,16 +108,17 @@ public class EmailSender {
                 msg.addHeader("Content-Transfer-Encoding", "8bit");
 
                 msg.setFrom(new InternetAddress(fromEmail));
-                msg.setRecipients(Message.RecipientType.TO, String.join(",", toEmails));
-//            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmails));
 
                 msg.setSubject(subject, "UTF-8");
 
                 msg.setText(body, "UTF-8");
 
                 Transport.send(msg);
+                LOG.info(("Sent email about the event changes, to users - " + toEmails + ", text - " + body));
             }
             catch (MessagingException e) {
+                LOG.error("Error while send email");
                 e.printStackTrace();
             }
         }

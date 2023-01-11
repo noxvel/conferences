@@ -63,7 +63,10 @@
 
             <h4><fmt:message key="event-view.text.location"/>: ${event.place}</h4>
             <h5><fmt:message key="event-view.text.event-date"/>: 
-                <fmt:formatDate type="date" value="${event.beginDate}" /> - <fmt:formatDate type="date" value="${event.endDate}" /> 
+                <fmt:parseDate value="${event.beginDate}" pattern="yyyy-MM-dd'T'HH:mm" var="beginDate" type="both"/>
+                <fmt:parseDate value="${event.endDate}" pattern="yyyy-MM-dd'T'HH:mm" var="endDate" type="both"/>
+                    <fmt:formatDate type="both" dateStyle="medium" timeStyle="short" value="${beginDate}" /> - 
+                    <fmt:formatDate type="both" dateStyle="medium" timeStyle="short" value="${endDate}" /> 
             </h5>
 
             <nav>
@@ -150,27 +153,9 @@
                         </c:forEach>
                     </div>
 
-                    <nav aria-label="Event page navigation" class="p-3">
-                        <ul class="pagination justify-content-center">
-                            <li class="${(page == 1) ? 'page-item disabled' : 'page-item'}">
-                                <a class="page-link" href="view?eventID=${event.id}&page=${page == 1 ? page : page - 1}"><span aria-hidden="true">&laquo;</span></a>
-                            </li>
+                    <mytag:pagination arialLabel="Event page navigation" page="${page}" numOfPages="${numOfPages}" 
+                                linkPath="view?eventID=${event.id}&" />
 
-                            <c:forEach begin="1" end="${numOfPages}" varStatus="loop">
-                                <c:if test="${loop.index > page - 5 && (loop.index < page + 5)}">
-                                    <li class="${(loop.index == page) ? 'page-item active' : 'page-item'}">
-                                        <a class="page-link" href="view?eventID=${event.id}&page=${loop.index}">${loop.index}</a>
-                                    </li>
-                                </c:if>
-                            </c:forEach>
-
-                            <li class="${numOfPages == page ? 'page-item disabled' : 'page-item'}">
-                                <a class="page-link" href="view?eventID=${event.id}&page=${numOfPages == page ? page : page + 1}"><span aria-hidden="true">&raquo;</span></a>
-                            </li>
-
-                        </ul>
-                    </nav>               
-                
                 </div>
                 <div class="tab-pane fade" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab" tabindex="0">
                     <c:out value="${event.description}" />

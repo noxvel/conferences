@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,8 +25,8 @@ public class EventCreatePostAction implements ControllerAction {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nameParam = req.getParameter("name");
         String placeParam = req.getParameter("place");
-        String beginDateParam = req.getParameter("beginDateISO");
-        String endDateParam = req.getParameter("endDateISO");
+        String beginDateParam = req.getParameter("beginDate");
+        String endDateParam = req.getParameter("endDate");
         String descriptionParam = req.getParameter("description");
 
         validate(nameParam,placeParam,beginDateParam,endDateParam,descriptionParam);
@@ -32,8 +34,8 @@ public class EventCreatePostAction implements ControllerAction {
         Event event = new Event();
         event.setName(nameParam);
         event.setPlace(placeParam);
-        event.setBeginDate(Date.from(Instant.parse(beginDateParam)));
-        event.setEndDate(Date.from(Instant.parse(endDateParam)));
+        event.setBeginDate(LocalDateTime.parse(beginDateParam));
+        event.setEndDate(LocalDateTime.parse(endDateParam));
         event.setDescription(descriptionParam);
 
         eventService.create(event);
