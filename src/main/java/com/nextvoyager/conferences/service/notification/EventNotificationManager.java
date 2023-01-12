@@ -2,7 +2,7 @@ package com.nextvoyager.conferences.service.notification;
 
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.util.EmailSender;
+import com.nextvoyager.conferences.util.emailcreator.EmailCreator;
 import lombok.Getter;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class EventNotificationManager {
             String sendToEmails = userList.stream()
                     .map(User::getEmail)
                     .collect(Collectors.joining(","));
-            EmailSender.send(sendToEmails, prepareNotificationSubject(event,type), prepareNotificationText(event,type));
+            EmailCreator.send(sendToEmails, prepareNotificationSubject(event,type), prepareNotificationText(event,type));
         }
     }
 

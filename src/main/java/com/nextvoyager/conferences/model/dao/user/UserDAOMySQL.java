@@ -52,8 +52,7 @@ public class UserDAOMySQL implements UserDAO{
 
     // Vars ---------------------------------------------------------------------------------------
 
-//    private final DAOFactory daoFactory;
-    private DAOFactory daoFactory = DAOFactory.getInstance();
+    private final DAOFactory daoFactory;
 
     // Constructors -------------------------------------------------------------------------------
 

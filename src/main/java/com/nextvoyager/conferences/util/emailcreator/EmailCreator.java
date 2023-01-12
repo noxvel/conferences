@@ -1,6 +1,5 @@
-package com.nextvoyager.conferences.util;
+package com.nextvoyager.conferences.util.emailcreator;
 
-import com.nextvoyager.conferences.controller.frontcontroller.FrontController;
 import com.nextvoyager.conferences.model.dao.exeption.DAOConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,10 +14,10 @@ import java.util.Properties;
 /**
  * Utility class for send emails in another thread
  */
-public class EmailSender {
+public class EmailCreator {
     public static final String PROPERTIES_FILE = "email.properties";
     public static final Properties PROPERTIES = new Properties();
-    private static final Logger LOG = LogManager.getLogger(EmailSender.class);
+    private static final Logger LOG = LogManager.getLogger(EmailCreator.class);
 
     static {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

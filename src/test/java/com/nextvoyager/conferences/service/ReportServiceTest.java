@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.model;
+package com.nextvoyager.conferences.service;
 
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;

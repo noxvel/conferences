@@ -4,6 +4,7 @@ import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.util.filecreator.ExportFileFormat;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,10 +48,11 @@ public class EventStatisticsAction implements ControllerAction {
 
         req.setAttribute("events", countAndList.getList());
         req.setAttribute("page", page);
+        req.setAttribute("numOfPages", numOfPages);
+        req.setAttribute("fileFormats", ExportFileFormat.values());
         req.setAttribute("sortType", eventListSortType);
         req.setAttribute("sortDirection", eventListSortDirection);
         req.setAttribute("eventTimeFilter", eventTimeFilter);
-        req.setAttribute("numOfPages", numOfPages);
         return EVENT_STATISTICS;
 
     }

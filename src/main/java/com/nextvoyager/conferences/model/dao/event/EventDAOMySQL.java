@@ -63,7 +63,7 @@ public class EventDAOMySQL implements EventDAO{
 
     // Vars ---------------------------------------------------------------------------------------
 
-    private DAOFactory daoFactory = DAOFactory.getInstance();
+    private final DAOFactory daoFactory;
 
     // Constructors -------------------------------------------------------------------------------
 
@@ -110,6 +110,141 @@ public class EventDAOMySQL implements EventDAO{
         return event;
     }
 
+    @Override
+    public void create(Event event) throws IllegalArgumentException, DAOException {
+        if (event.getId() != null) {
+            throw new IllegalArgumentException("Event is already created, the event ID is not null.");
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(event.getName(), Types.VARCHAR),
+                new ValueDAO(event.getPlace(), Types.VARCHAR),
+                new ValueDAO(event.getBeginDate(), Types.TIMESTAMP),
+                new ValueDAO(event.getEndDate(), Types.TIMESTAMP),
+                new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
+                new ValueDAO(event.getDescription(), Types.VARCHAR)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Creating event failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    event.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new DAOException("Creating event failed, no generated key obtained.");
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void update(Event event) throws DAOException {
+        if (event.getId() == null) {
+            throw new IllegalArgumentException("Event is not created yet, the event ID is null.");
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(event.getName(), Types.VARCHAR),
+                new ValueDAO(event.getPlace(), Types.VARCHAR),
+                new ValueDAO(event.getBeginDate(), Types.TIMESTAMP),
+                new ValueDAO(event.getEndDate(), Types.TIMESTAMP),
+                new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
+                new ValueDAO(event.getDescription(), Types.VARCHAR),
+                new ValueDAO(event.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Updating event failed, no rows affected.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void delete(Event event) throws DAOException {
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Deleting event failed, no rows affected.");
+            } else {
+                event.setId(null);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void registerUser(Integer eventID, User user, boolean register) {
+
+        String currentSql = SQL_REGISTER_USER_TO_EVENT;
+        if (!register) {
+            currentSql = SQL_UNREGISTER_USER_TO_EVENT;
+        }
+
+        ValueDAO[] values = {
+                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(user.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, currentSql, false, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Deleting event failed, no rows affected.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public boolean isUserRegisterEvent(Event event, User user) {
+        boolean result = false;
+
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(user.getId(), Types.INTEGER)
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_IS_USER_REGISTER, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            if (resultSet.next()) {
+                result = true;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return result;
+    }
     @Override
     public List<Event> list(SortType sortType, SortDirection sortDirection, TimeFilter timeFilter) throws DAOException {
         List<Event> events = new ArrayList<>();
@@ -290,141 +425,7 @@ public class EventDAOMySQL implements EventDAO{
         return result;
     }
 
-    @Override
-    public void create(Event event) throws IllegalArgumentException, DAOException {
-        if (event.getId() != null) {
-            throw new IllegalArgumentException("Event is already created, the event ID is not null.");
-        }
 
-        ValueDAO[] values = {
-                new ValueDAO(event.getName(), Types.VARCHAR),
-                new ValueDAO(event.getPlace(), Types.VARCHAR),
-                new ValueDAO(event.getBeginDate(), Types.TIMESTAMP),
-                new ValueDAO(event.getEndDate(), Types.TIMESTAMP),
-                new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
-                new ValueDAO(event.getDescription(), Types.VARCHAR)
-        };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_INSERT, true, values)
-        ) {
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Creating event failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    event.setId(generatedKeys.getInt(1));
-                } else {
-                    throw new DAOException("Creating event failed, no generated key obtained.");
-                }
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void update(Event event) throws DAOException {
-        if (event.getId() == null) {
-            throw new IllegalArgumentException("Event is not created yet, the event ID is null.");
-        }
-
-        ValueDAO[] values = {
-                new ValueDAO(event.getName(), Types.VARCHAR),
-                new ValueDAO(event.getPlace(), Types.VARCHAR),
-                new ValueDAO(event.getBeginDate(), Types.TIMESTAMP),
-                new ValueDAO(event.getEndDate(), Types.TIMESTAMP),
-                new ValueDAO(event.getParticipantsCame(), Types.INTEGER),
-                new ValueDAO(event.getDescription(), Types.VARCHAR),
-                new ValueDAO(event.getId(), Types.INTEGER)
-        };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_UPDATE, false, values)
-        ) {
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Updating event failed, no rows affected.");
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void delete(Event event) throws DAOException {
-        ValueDAO[] values = {
-                new ValueDAO(event.getId(), Types.INTEGER)
-        };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_DELETE, false, values)
-        ) {
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Deleting event failed, no rows affected.");
-            } else {
-                event.setId(null);
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void registerUser(Integer eventID, User user, boolean register) {
-
-        String currentSql = SQL_REGISTER_USER_TO_EVENT;
-        if (!register) {
-            currentSql = SQL_UNREGISTER_USER_TO_EVENT;
-        }
-
-        ValueDAO[] values = {
-                new ValueDAO(eventID, Types.INTEGER),
-                new ValueDAO(user.getId(), Types.INTEGER)
-        };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, currentSql, false, values)
-        ) {
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new DAOException("Deleting event failed, no rows affected.");
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public boolean isUserRegisterEvent(Event event, User user) {
-        boolean result = false;
-
-        ValueDAO[] values = {
-                new ValueDAO(event.getId(), Types.INTEGER),
-                new ValueDAO(user.getId(), Types.INTEGER)
-        };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_IS_USER_REGISTER, false, values);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            if (resultSet.next()) {
-                result = true;
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return result;
-    }
 
     // Helpers ------------------------------------------------------------------------------------
 
@@ -435,7 +436,7 @@ public class EventDAOMySQL implements EventDAO{
      * @return The mapped Event from the current row of the given ResultSet.
      * @throws SQLException If something fails at database level.
      */
-    private static Event map(ResultSet resultSet) throws SQLException {
+    public static Event map(ResultSet resultSet) throws SQLException {
         Event event = new Event();
         event.setId(resultSet.getInt("id"));
         event.setName(resultSet.getString("name"));

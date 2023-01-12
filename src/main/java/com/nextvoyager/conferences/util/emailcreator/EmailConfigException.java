@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.util;
+package com.nextvoyager.conferences.util.emailcreator;
 
 public class EmailConfigException extends RuntimeException{
     public EmailConfigException() {

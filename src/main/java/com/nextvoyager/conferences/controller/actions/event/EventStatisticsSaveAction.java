@@ -4,7 +4,7 @@ import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.service.EventService;
-import com.nextvoyager.conferences.util.PDFCreator;
+import com.nextvoyager.conferences.util.filecreator.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +22,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pageParam = req.getParameter("page");
+        ExportFileFormat fileFormatParam = ExportFileFormat.valueOf(req.getParameter("fileFormat"));
 
         // Default values for list of events
         int page = 1;
@@ -48,22 +49,28 @@ public class EventStatisticsSaveAction implements ControllerAction {
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
-        ByteArrayOutputStream pdfByteArray = PDFCreator.generateStatisticsFile(countAndList.getList(),lang);
+        Optional<FileCreator> fileCreator = FileCreatorFactory.getFileCreator(fileFormatParam);
+        fileCreator.ifPresent((fc -> {
+            try (ByteArrayOutputStream fileByteArray = fc.generateStatisticsFile(countAndList.getList(), lang);
+                 OutputStream os = resp.getOutputStream()) {
 
-        // setting some response headers
-        resp.setHeader("Expires", "0");
-        resp.setHeader("Cache-Control",
-                "must-revalidate, post-check=0, pre-check=0");
-        resp.setHeader("Pragma", "public");
-        // setting the content type
-        resp.setContentType("application/pdf");
-        // the contentlength
-        resp.setContentLength(pdfByteArray.size());
-        // write ByteArrayOutputStream to the ServletOutputStream
-        OutputStream os = resp.getOutputStream();
-        pdfByteArray.writeTo(os);
-        os.flush();
-        os.close();
+                // setting some response headers
+                resp.setHeader("Expires", "0");
+                resp.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+                resp.setHeader("Pragma", "public");
+//                resp.setHeader("Content-disposition", "attachment");
+                // setting the content type
+                resp.setContentType(fc.getFileFormat().getContentType());
+                // the content length
+                resp.setContentLength(fileByteArray.size());
+
+                // write ByteArrayOutputStream to the ServletOutputStream
+                fileByteArray.writeTo(os);
+                os.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }));
 
         return req.getContextPath() + "/pages/event/statistics";
 
