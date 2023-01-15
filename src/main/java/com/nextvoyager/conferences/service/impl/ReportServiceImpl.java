@@ -1,6 +1,7 @@
 package com.nextvoyager.conferences.service.impl;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -47,42 +48,42 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit) {
+    public ListWithCount<Report> listWithPagination(int page, int limit) {
         return reportDAO.listWithPagination(page, limit);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Report.Status status) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Report.Status status) {
         return reportDAO.listWithPagination(page, limit, status);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, User speaker) {
         return reportDAO.listWithPagination(page, limit, speaker);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, User speaker, Report.Status status) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, User speaker, Report.Status status) {
         return reportDAO.listWithPagination(page, limit, speaker, status);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID) {
         return reportDAO.listWithPagination(page, limit, eventID);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker) {
         return reportDAO.listWithPagination(page, limit, eventID, speaker);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status) {
         return reportDAO.listWithPagination(page, limit, eventID, speaker, status);
     }
 
     @Override
-    public ReportDAO.ListWithCountResult listWithPagination(int page, int limit, Integer eventID, Report.Status status) {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, Report.Status status) {
         return reportDAO.listWithPagination(page, limit, eventID, status);
     }
 

@@ -1,8 +1,9 @@
 package com.nextvoyager.conferences.model.dao.event;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
+import com.nextvoyager.conferences.model.dao.ValueDAO;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
-import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.dao.utils.querybuilder.SelectQueryBuilder;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -17,6 +18,17 @@ import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.*;
 public class EventDAOMySQL implements EventDAO{
 
     // Constants ----------------------------------------------------------------------------------
+
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_NAME = "name";
+    private static final String FIELD_PLACE = "place";
+    private static final String FIELD_BEGIN_DATE = "begin_date";
+    private static final String FIELD_END_DATE = "end_date";
+    private static final String FIELD_DESCRIPTION = "description";
+    private static final String FIELD_PARTICIPANTS_CAME = "participants_came";
+    private static final String FIELD_REPORT_COUNT = "r_count";
+    private static final String FIELD_PARTICIPANTS_COUNT = "p_count";
+    private static final String FIELD_COUNT_ALL = "count_all";
 
     private static final String SQL_FIND_BY_ID =
             "SELECT e.id, e.name, e.place, e.begin_date, e.end_date, e.participants_came, e.description FROM event AS e " +
@@ -49,7 +61,6 @@ public class EventDAOMySQL implements EventDAO{
     private static final String SQL_LIST_ORDER_DIRECTION_ASC = "ASC ";
     private static final String SQL_LIST_ORDER_DIRECTION_DESC = "DESC ";
 
-    private static final String SQL_LIST_LIMIT = "LIMIT ?, ? ";
     private static final String SQL_LIST_WHERE_SPEAKER_PARTICIPATED = "EXISTS (SELECT id FROM report WHERE report.event_id = e.id AND report.speaker_id = ?) ";
     private static final String SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED = "EXISTS (SELECT ehp.event_id FROM event_has_participant AS ehp " +
                                                             "WHERE ehp.event_id = e.id AND ehp.user_id = ?) ";
@@ -93,16 +104,14 @@ public class EventDAOMySQL implements EventDAO{
      * @throws DAOException If something fails at database level.
      */
     private Event find(String sql, ValueDAO... values) throws DAOException {
-        Event event = null;
+        Event event;
 
         try (
                 Connection connection = daoFactory.getConnection();
                 PreparedStatement statement = prepareStatement(connection, sql, false, values);
                 ResultSet resultSet = statement.executeQuery()
         ) {
-            if (resultSet.next()) {
-                event = map(resultSet);
-            }
+            event = processEventRS(resultSet);
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
@@ -255,14 +264,14 @@ public class EventDAOMySQL implements EventDAO{
                 .setSortDirection(getSortDirection(sortDirection))
                 .build();
 
+        ValueDAO[] values = {};
+
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = connection.prepareStatement(currentSQL);
+                PreparedStatement statement = prepareStatement(connection, currentSQL, false, values);
                 ResultSet resultSet = statement.executeQuery()
         ) {
-            while (resultSet.next()) {
-                events.add(mapForList(resultSet));
-            }
+            processEventListRS(resultSet, events);
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
@@ -272,7 +281,7 @@ public class EventDAOMySQL implements EventDAO{
 
 
     @Override
-    public ListWithCountResult listWithPagination(Integer page, Integer limit, SortType sortType,
+    public ListWithCount<Event> listWithPagination(Integer page, Integer limit, SortType sortType,
                                                   SortDirection sortDirection, TimeFilter timeFilter) throws DAOException {
         int offset;
         offset = (page - 1) * limit;
@@ -285,7 +294,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setFilter(getTimeFilter(timeFilter))
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
-                .setLimit(SQL_LIST_LIMIT)
+                .setLimit()
                 .build();
 
         ValueDAO[] valuesAllCount = {};
@@ -299,7 +308,7 @@ public class EventDAOMySQL implements EventDAO{
     }
 
     @Override
-    public ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit, SortType sortType,
+    public ListWithCount<Event> listWithPaginationReportStatusFilter(int page, int limit, SortType sortType,
                                                                     SortDirection sortDirection, TimeFilter timeFilter,
                                                                     Report.Status status) throws DAOException {
         int offset;
@@ -313,7 +322,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setFilter(getTimeFilter(timeFilter))
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
-                .setLimit(SQL_LIST_LIMIT)
+                .setLimit()
                 .build();
 
         ValueDAO[] valuesAllCount = {};
@@ -329,7 +338,7 @@ public class EventDAOMySQL implements EventDAO{
 
 
     @Override
-    public ListWithCountResult listWithPaginationSpeaker(int page, int limit, SortType sortType,
+    public ListWithCount<Event> listWithPaginationSpeaker(int page, int limit, SortType sortType,
                                                          SortDirection sortDirection, TimeFilter timeFilter,
                                                          User speaker, Boolean participated) {
         int offset;
@@ -345,7 +354,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setFilter(participated ? SQL_LIST_WHERE_SPEAKER_PARTICIPATED : null)
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
-                .setLimit(SQL_LIST_LIMIT)
+                .setLimit()
                 .build();
 
         ValueDAO[] valuesAllCount = {
@@ -366,7 +375,7 @@ public class EventDAOMySQL implements EventDAO{
     }
 
     @Override
-    public ListWithCountResult listWithPaginationOrdinaryUser(int page, int limit, SortType sortType,
+    public ListWithCount<Event> listWithPaginationOrdinaryUser(int page, int limit, SortType sortType,
                                                          SortDirection sortDirection, TimeFilter timeFilter,
                                                          User ordinaryUser, Boolean participated) {
         int offset;
@@ -382,7 +391,7 @@ public class EventDAOMySQL implements EventDAO{
                 .setFilter(participated ? SQL_LIST_WHERE_ORDINARY_USER_PARTICIPATED : null)
                 .setSortType(getSortType(sortType))
                 .setSortDirection(getSortDirection(sortDirection))
-                .setLimit(SQL_LIST_LIMIT)
+                .setLimit()
                 .build();
 
         ValueDAO[] valuesAllCount = {
@@ -399,11 +408,10 @@ public class EventDAOMySQL implements EventDAO{
         return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
     }
 
-    private ListWithCountResult listWithPagination(String sqlAllCount, String sql, ValueDAO[] valuesAllCount,
+    private ListWithCount<Event> listWithPagination(String sqlAllCount, String sql, ValueDAO[] valuesAllCount,
                                                              ValueDAO[] values) throws DAOException {
-        ListWithCountResult result = new ListWithCountResult();
-        List<Event> events = new ArrayList<>();
-        result.setList(events);
+        ListWithCount<Event> result = new ListWithCount<>();
+        result.setList(new ArrayList<>());
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -412,12 +420,7 @@ public class EventDAOMySQL implements EventDAO{
                 PreparedStatement statementList = prepareStatement(connection, sql, false, values);
                 ResultSet resultSetList = statementList.executeQuery()
         ) {
-            if (resultSetCountAll.next()) {
-                result.setCount(resultSetCountAll.getInt("count_all"));
-                while (resultSetList.next()) {
-                    events.add(mapForList(resultSetList));
-                }
-            }
+            processEventListRS(resultSetCountAll, resultSetList, result);
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
@@ -425,41 +428,51 @@ public class EventDAOMySQL implements EventDAO{
         return result;
     }
 
+    // Helpers -----------------------------------------------------------------------------------
 
+    public Event processEventRS(ResultSet rs) throws SQLException {
+        return processRS(rs, this::map);
+    }
 
-    // Helpers ------------------------------------------------------------------------------------
+    public void processEventListRS(ResultSet countRS, ResultSet listRS, ListWithCount<Event> result) throws SQLException {
+        processListRS(countRS,listRS,result,FIELD_COUNT_ALL, this::mapForList);
+    }
+
+    public void processEventListRS(ResultSet listRS, List<Event> result) throws SQLException {
+        processListRS(listRS,result,this::mapForList);
+    }
 
     /**
      * Map the current row of the given ResultSet to an Event.
      *
-     * @param resultSet The ResultSet of which the current row is to be mapped to an Event.
+     * @param eventRS The ResultSet of which the current row is to be mapped to an Event.
      * @return The mapped Event from the current row of the given ResultSet.
      * @throws SQLException If something fails at database level.
      */
-    public static Event map(ResultSet resultSet) throws SQLException {
-        Event event = new Event();
-        event.setId(resultSet.getInt("id"));
-        event.setName(resultSet.getString("name"));
-        event.setPlace(resultSet.getString("place"));
-        event.setBeginDate(resultSet.getTimestamp("begin_date").toLocalDateTime());
-        event.setEndDate(resultSet.getTimestamp("end_date").toLocalDateTime());
-        event.setParticipantsCame(resultSet.getInt("participants_came"));
-        event.setDescription(resultSet.getString("description"));
-        return event;
+    private Event map(ResultSet eventRS) throws SQLException{
+        return new Event.EventBuilder()
+                .setId(eventRS.getInt(FIELD_ID))
+                .setName(eventRS.getString(FIELD_NAME))
+                .setPlace(eventRS.getString(FIELD_PLACE))
+                .setBeginDate(eventRS.getTimestamp(FIELD_BEGIN_DATE).toLocalDateTime())
+                .setEndDate(eventRS.getTimestamp(FIELD_END_DATE).toLocalDateTime())
+                .setDescription(eventRS.getString(FIELD_DESCRIPTION))
+                .setParticipantsCame(eventRS.getInt(FIELD_PARTICIPANTS_CAME))
+                .build();
     }
 
-    private static Event mapForList(ResultSet resultSet) throws SQLException {
-        Event event = new Event();
-        event.setId(resultSet.getInt("id"));
-        event.setName(resultSet.getString("name"));
-        event.setPlace(resultSet.getString("place"));
-        event.setBeginDate(resultSet.getTimestamp("begin_date").toLocalDateTime());
-        event.setEndDate(resultSet.getTimestamp("end_date").toLocalDateTime());
-        event.setDescription(resultSet.getString("description"));
-        event.setParticipantsCame(resultSet.getInt("participants_came"));
-        event.setReportsCount(resultSet.getInt("r_count"));
-        event.setParticipantsCount(resultSet.getInt("p_count"));
-        return event;
+    private Event mapForList(ResultSet eventListRS) throws SQLException{
+        return new Event.EventBuilder()
+            .setId(eventListRS.getInt(FIELD_ID))
+            .setName(eventListRS.getString(FIELD_NAME))
+            .setPlace(eventListRS.getString(FIELD_PLACE))
+            .setBeginDate(eventListRS.getTimestamp(FIELD_BEGIN_DATE).toLocalDateTime())
+            .setEndDate(eventListRS.getTimestamp(FIELD_END_DATE).toLocalDateTime())
+            .setDescription(eventListRS.getString(FIELD_DESCRIPTION))
+            .setParticipantsCame(eventListRS.getInt(FIELD_PARTICIPANTS_CAME))
+            .setReportsCount(eventListRS.getInt(FIELD_REPORT_COUNT))
+            .setParticipantsCount(eventListRS.getInt(FIELD_PARTICIPANTS_COUNT))
+            .build();
     }
 
     private static String getSortDirection(SortDirection sortDirection) {
@@ -503,7 +516,5 @@ public class EventDAOMySQL implements EventDAO{
         }
         return result;
     }
-
-
 
 }

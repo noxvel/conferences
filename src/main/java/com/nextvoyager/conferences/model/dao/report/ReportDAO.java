@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.model.dao.report;
 
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
@@ -11,33 +12,6 @@ public interface ReportDAO {
 
     // Actions ------------------------------------------------------------------------------------
 
-    /**
-     * Returns the report from the database matching the given ID, otherwise null.
-     * @param id The ID of the report to be returned.
-     * @return The report from the database matching the given ID, otherwise null.
-     * @throws DAOException If something fails at database level.
-     */
-    Report find(Integer id) throws DAOException;
-
-    List<Report> list() throws DAOException;
-
-    /**
-     * Returns a list of all reports from the database ordered by report ID. The list is never null and
-     * is empty when the database does not contain any report.
-     * @return A list of all reports from the database ordered by report ID.
-     * @throws DAOException If something fails at database level.
-     */
-    List<Report> list(Integer eventID) throws DAOException;
-
-    ListWithCountResult listWithPagination(Integer page, Integer limit) throws DAOException;
-
-    ListWithCountResult listWithPagination(int page, int limit, Report.Status status);
-    ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker) throws DAOException;
-    ListWithCountResult listWithPagination(Integer page, Integer limit, User speaker, Report.Status status) throws DAOException;
-
-    ListWithCountResult listWithPagination(Integer page, Integer limit, Integer eventID) throws DAOException;
-
-    ListWithCountResult listWithPagination(Integer page, Integer limit,Integer eventID, Report.Status status) throws DAOException;
     /**
      * Create the given report in the database. The report ID must be null, otherwise it will throw
      * IllegalArgumentException. After creating, the DAO will set the obtained ID in the given report.
@@ -63,15 +37,32 @@ public interface ReportDAO {
      * @throws DAOException If something fails at database level.
      */
     void delete(Report report) throws DAOException;
+    /**
+     * Returns the report from the database matching the given ID, otherwise null.
+     * @param id The ID of the report to be returned.
+     * @return The report from the database matching the given ID, otherwise null.
+     * @throws DAOException If something fails at database level.
+     */
 
-    ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker);
+    Report find(Integer id) throws DAOException;
 
-    ListWithCountResult listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
+    List<Report> list() throws DAOException;
 
+    /**
+     * Returns a list of all reports from the database ordered by report ID. The list is never null and
+     * is empty when the database does not contain any report.
+     * @return A list of all reports from the database ordered by report ID.
+     * @throws DAOException If something fails at database level.
+     */
+    List<Report> list(Integer eventID) throws DAOException;
 
-    @Data
-    class ListWithCountResult{
-        private Integer count;
-        private List<Report> list;
-    }
+    ListWithCount<Report> listWithPagination(int page, int limit) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit, Report.Status status);
+    ListWithCount<Report> listWithPagination(int page, int limit, User speaker) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit, User speaker, Report.Status status) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit,Integer eventID, Report.Status status) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker);
+    ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
+
 }

@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.service.impl;
 
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.Event;
@@ -58,27 +59,27 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDAO.ListWithCountResult listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
-                                                           EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter) {
+    public ListWithCount<Event> listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
+                                                   EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter) {
         return eventDAO.listWithPagination(page, limit, sortType, sortDirection, timeFilter);
     }
 
     @Override
-    public EventDAO.ListWithCountResult listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
+    public ListWithCount<Event> listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
                                                                              EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
                                                                   User speaker, Boolean participated) {
         return eventDAO.listWithPaginationSpeaker(page, limit, sortType, sortDirection, timeFilter, speaker, participated);
     }
 
     @Override
-    public EventDAO.ListWithCountResult listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType sortType,
+    public ListWithCount<Event> listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType sortType,
                                                                        EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
                                                                        User ordinaryUser, Boolean participated) {
         return eventDAO.listWithPaginationOrdinaryUser(page, limit, sortType, sortDirection, timeFilter, ordinaryUser, participated);
     }
 
     @Override
-    public EventDAO.ListWithCountResult listWithPaginationReportStatusFilter(int page,
+    public ListWithCount<Event> listWithPaginationReportStatusFilter(int page,
                                                                              int limit, EventDAO.SortType sortType,
                                                                              EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
                                                                              Report.Status reportStatus) {

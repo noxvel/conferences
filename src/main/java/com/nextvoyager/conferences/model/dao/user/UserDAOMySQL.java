@@ -1,6 +1,7 @@
 package com.nextvoyager.conferences.model.dao.user;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ValueDAO;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
@@ -9,12 +10,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.prepareStatement;
-import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.ValueDAO;
+import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.*;
 
 public class UserDAOMySQL implements UserDAO{
 
     // Constants ----------------------------------------------------------------------------------
+
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_FIRST_NAME = "first_name";
+    public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_USER_ROLE_NAME = "user_role_name";
+    public static final String FIELD_RECEIVE_NOTIFICATIONS = "receive_notifications";
 
     private static final String SQL_FIND_BY_ID =
             "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
@@ -92,9 +99,7 @@ public class UserDAOMySQL implements UserDAO{
                 PreparedStatement statement = prepareStatement(connection, sql, false, values);
                 ResultSet resultSet = statement.executeQuery()
         ) {
-            if (resultSet.next()) {
-                user = map(resultSet);
-            }
+            user = processUserRS(resultSet);
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
@@ -104,63 +109,35 @@ public class UserDAOMySQL implements UserDAO{
 
     @Override
     public List<User> list() throws DAOException {
-        List<User> users = new ArrayList<>();
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_LIST_ORDER_BY_ID);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            while (resultSet.next()) {
-                users.add(map(resultSet));
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return users;
+        return list(SQL_LIST_ORDER_BY_ID);
     }
 
     @Override
     public List<User> listWithOneRole(User.Role userRole) throws DAOException {
-        List<User> users = new ArrayList<>();
-
         ValueDAO[] values = {
                 new ValueDAO(userRole.getId(), Types.INTEGER)
         };
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_LIST_WITH_ONLY_ONE_ROLE, false, values);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            while (resultSet.next()) {
-                users.add(map(resultSet));
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return users;
+        return list(SQL_LIST_WITH_ONLY_ONE_ROLE, values);
     }
 
     @Override
     public List<User> receiveEventNotificationsList(Event event) {
-        List<User> users = new ArrayList<>();
-
         ValueDAO[] values = {
                 new ValueDAO(event.getId(), Types.INTEGER),
                 new ValueDAO(event.getId(), Types.INTEGER)
         };
+        return list(SQL_LIST_WHO_RECEIVE_NOTIFICATIONS, values);
+    }
+
+    private List<User> list(String sql, ValueDAO... values) {
+        List<User> users = new ArrayList<>();
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_LIST_WHO_RECEIVE_NOTIFICATIONS, false, values);
+                PreparedStatement statement = prepareStatement(connection, sql, false, values);
                 ResultSet resultSet = statement.executeQuery()
         ) {
-            while (resultSet.next()) {
-                users.add(map(resultSet));
-            }
+            processUserListRS(resultSet,users);
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
@@ -326,20 +303,27 @@ public class UserDAOMySQL implements UserDAO{
 
     // Helpers ------------------------------------------------------------------------------------
 
+    public User processUserRS(ResultSet rs) throws SQLException {
+        return processRS(rs, this::map);
+    }
+
+    public void processUserListRS(ResultSet listRS, List<User> result) throws SQLException {
+        processListRS(listRS,result,this::map);
+    }
     /**
      * Map the current row of the given ResultSet to a User.
      * @param resultSet The ResultSet of which the current row is to be mapped to a User.
      * @return The mapped User from the current row of the given ResultSet.
      * @throws SQLException If something fails at database level.
      */
-    private static User map(ResultSet resultSet) throws SQLException {
+    private User map(ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.setId(resultSet.getInt("id"));
-        user.setEmail(resultSet.getString("email"));
-        user.setFirstName(resultSet.getString("first_name"));
-        user.setLastName(resultSet.getString("last_name"));
-        user.setRole(User.Role.valueOf(resultSet.getString("user_role_name")));
-        user.setReceiveNotifications(resultSet.getBoolean("receive_notifications"));
+        user.setId(resultSet.getInt(FIELD_ID));
+        user.setEmail(resultSet.getString(FIELD_EMAIL));
+        user.setFirstName(resultSet.getString(FIELD_FIRST_NAME));
+        user.setLastName(resultSet.getString(FIELD_LAST_NAME));
+        user.setRole(User.Role.valueOf(resultSet.getString(FIELD_USER_ROLE_NAME)));
+        user.setReceiveNotifications(resultSet.getBoolean(FIELD_RECEIVE_NOTIFICATIONS));
         return user;
     }
 }

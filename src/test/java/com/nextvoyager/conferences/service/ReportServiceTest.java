@@ -38,6 +38,7 @@ public class ReportServiceTest {
         testReport.setTopic("New in Java");
         testReport.setSpeaker(new User(1));
         testReport.setEvent(new Event(1));
+        testReport.setStatus(Report.Status.CONFIRMED);
         testReport.setDescription("New description for report");
         testList.add(testReport);
 

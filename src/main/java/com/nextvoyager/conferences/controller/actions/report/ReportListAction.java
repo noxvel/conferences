@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.controller.actions.report;
 
 import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
@@ -35,7 +36,7 @@ public class ReportListAction implements ControllerAction {
             page = Integer.parseInt(pageParam);
         }
 
-        ReportDAO.ListWithCountResult countAndList;
+        ListWithCount<Report> countAndList;
 
         HttpSession currentSession = req.getSession();
         User.Role userRole = (User.Role) currentSession.getAttribute("userRole");

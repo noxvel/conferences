@@ -1,11 +1,12 @@
 package com.nextvoyager.conferences.model.dao.utils;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
+import com.nextvoyager.conferences.model.dao.ResultSetMapper;
+import com.nextvoyager.conferences.model.dao.ValueDAO;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class DAOUtil {
 
@@ -53,21 +54,33 @@ public class DAOUtil {
         }
     }
 
-    public static Timestamp toSqlTimestamp(LocalDateTime dateTime) {
-        return (dateTime != null) ? Timestamp.valueOf(dateTime) : null;
+    public static <T> T processRS(ResultSet resultSet, ResultSetMapper<T> map) throws SQLException {
+        T element = null;
+        if (resultSet.next()) {
+            element = map.apply(resultSet);
+        }
+        return element;
     }
 
-    @Getter
-    @Setter
-    public static class ValueDAO {
-        Object value;
-        int type;
-
-        public ValueDAO(Object value, int type) {
-            this.value = value;
-            this.type = type;
+    public static <T> void processListRS(ResultSet countRS, ResultSet listRS, ListWithCount<T> result,
+                                         String allCountField, ResultSetMapper<T> map) throws SQLException {
+        if (countRS.next()) {
+            result.setCount(countRS.getInt(allCountField));
+            List<T> list = result.getList();
+            while (listRS.next()) {
+                list.add(map.apply(listRS));
+            }
         }
+    }
 
+    public static <T> void processListRS(ResultSet listRS, List<T> result, ResultSetMapper<T> map) throws SQLException {
+        while (listRS.next()) {
+            result.add(map.apply(listRS));
+        }
+    }
+
+    public static Timestamp toSqlTimestamp(LocalDateTime dateTime) {
+        return (dateTime != null) ? Timestamp.valueOf(dateTime) : null;
     }
 
 }

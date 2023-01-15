@@ -2,7 +2,9 @@ package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.util.filecreator.ExportFileFormat;
 import jakarta.servlet.ServletException;
@@ -41,7 +43,7 @@ public class EventStatisticsAction implements ControllerAction {
         EventDAO.TimeFilter eventTimeFilter = Optional.ofNullable((EventDAO.TimeFilter) currentSession
                 .getAttribute("eventTimeFilter")).orElse(EventDAO.TimeFilter.AllTime);
 
-        EventDAO.ListWithCountResult countAndList = eventService.listWithPagination(page, limit, eventListSortType,
+        ListWithCount<Event> countAndList = eventService.listWithPagination(page, limit, eventListSortType,
                 eventListSortDirection, eventTimeFilter);
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);

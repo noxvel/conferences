@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -53,7 +54,7 @@ public class EventViewAction implements ControllerAction {
             }
         }
 
-        ReportDAO.ListWithCountResult countAndList;
+        ListWithCount<Report> countAndList;
         Optional<Report.Status> reportStatusFilter = Optional.empty();
 
         // Get list of all confirmed reports for not registered or the ordinary user

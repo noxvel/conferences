@@ -1,20 +1,17 @@
 package com.nextvoyager.conferences.model;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.dao.event.EventDAOMySQL;
-import com.nextvoyager.conferences.model.dao.exeption.DAOException;
-import com.nextvoyager.conferences.model.dao.utils.DAOUtil;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -25,29 +22,34 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
+@ExtendWith(MockitoExtension.class)
 public class EventDAOTest {
-
-//    EventDAO dao = AppContext.getInstance().getEventDAO();
 
     @Mock
     DAOFactory daoFactory;
-
     @Mock
     Connection connection;
-
     @Mock
     PreparedStatement preparedStatement;
-
     @Mock
     ResultSet resultSet;
 
     @Mock
-    DAOUtil.ValueDAO valueDAO;
+    EventDAO.SortType sortType;
+    @Mock
+    EventDAO.SortDirection sortDirection;
+    @Mock
+    EventDAO.TimeFilter timeFilter;
+    @Mock
+    Report.Status reportStatus;
+    @Mock
+    User mockUser;
 
-    private Event testEvent = new Event();
-    private User testUser = new User(1, User.Role.ORDINARY_USER);
+    private final Event testEvent = new Event();
+    private final User testUser = new User(1, User.Role.ORDINARY_USER);
     List<Event> testList = new ArrayList<>();
 
+    @Spy
     @InjectMocks
     EventDAOMySQL dao;
 
@@ -65,7 +67,7 @@ public class EventDAOTest {
         testEvent.setDescription("New description");
         testList.add(testEvent);
 
-        MockitoAnnotations.openMocks(this);
+//        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -73,10 +75,16 @@ public class EventDAOTest {
         Mockito.when(daoFactory.getConnection()).thenReturn(connection);
         Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        Mockito.when(resultSet.next()).thenReturn(true);
-        dao.find(1);
-        Mockito.verify(resultSet, Mockito.times(1)).next();
-//        assertEquals(testEvent, dao.find(1));
+
+        Mockito.doReturn(testEvent).when(dao).processEventRS(any(ResultSet.class));
+        assertEquals(testEvent, dao.find(1));
+
+//        // Mock scope for use static methods
+//        try (MockedStatic<EventDAOMySQL> mocked = mockStatic(EventDAOMySQL.class)) {
+//            // Mocking
+//            mocked.when(() -> EventDAOMySQL.map(resultSet)).thenReturn(testEvent);
+//            assertEquals(testEvent, dao.find(1));
+//        }
     }
 
     @Test
@@ -129,23 +137,33 @@ public class EventDAOTest {
     }
 
     @Test
-    public void list(){
-//        List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter) throws DAOException;
-//
-//        EventDAO.ListWithCountResult listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
-//                EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter) throws DAOException;
-//
-//        EventDAO.ListWithCountResult listWithPaginationReportStatusFilter(int page, int limit, EventDAO.SortType sortType,
-//        EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
-//        Report.Status status) throws DAOException;
-//
-//        EventDAO.ListWithCountResult listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
-//        EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
-//        User speaker, Boolean participated);
-//
-//        EventDAO.ListWithCountResult listWithPaginationOrdinaryUser(int page, int limit, EventDAO.SortType sortType,
-//        EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
-//        User ordinaryUser, Boolean participated);
+    public void list() throws SQLException, ClassNotFoundException {
+        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
+        Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        Mockito.doNothing().when(dao).processEventListRS(any(ResultSet.class), any(List.class));
+        dao.list(sortType, sortDirection, timeFilter);
+        Mockito.verify(dao, Mockito.times(1)).processEventListRS(any(ResultSet.class), any(List.class));
+//        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
+
+    }
+
+    @Test
+    public void listWithPagination() throws SQLException, ClassNotFoundException {
+        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
+        Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        Mockito.doNothing().when(dao).processEventListRS(any(ResultSet.class), any(ResultSet.class), any(ListWithCount.class));
+
+        dao.listWithPagination(1, 6, sortType, sortDirection, timeFilter);
+        dao.listWithPaginationReportStatusFilter(1, 6, sortType, sortDirection, timeFilter, reportStatus);
+        dao.listWithPaginationSpeaker(1, 6, sortType, sortDirection, timeFilter, mockUser, false);
+        dao.listWithPaginationOrdinaryUser(1, 6, sortType, sortDirection, timeFilter, mockUser, false);
+
+        Mockito.verify(dao, Mockito.times(4)).processEventListRS(any(ResultSet.class),
+                any(ResultSet.class), any(ListWithCount.class));
 
     }
 

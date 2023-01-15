@@ -2,6 +2,7 @@ package com.nextvoyager.conferences.controller.actions;
 
 import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -34,7 +35,7 @@ public class HomePageAction implements ControllerAction {
             page = Integer.parseInt(pageParam);
         }
 
-        EventDAO.ListWithCountResult countAndList;
+        ListWithCount<Event> countAndList;
 
         HttpSession currentSession = req.getSession();
 

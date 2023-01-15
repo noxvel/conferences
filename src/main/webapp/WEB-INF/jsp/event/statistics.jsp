@@ -45,7 +45,7 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-secondary" type="submit">
+                            <button class="btn btn-warning" type="submit">
                                 <fmt:message key="home.sort.button"/>
                             </button>
                         </div>

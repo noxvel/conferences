@@ -20,15 +20,15 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
 
-        <header class="py-3 mb-3 border-bottom">
+        <header class="py-3 mb-3 border-bottom bg-warning bg-gradient">
             <div class="container d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
                 <a href="${contextPath}/pages/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none fs-2 fw-bold">
                     Conferences
                 </a>
 
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="${contextPath}/pages/home" class="nav-link px-2 link-dark"><fmt:message key="header.link.home"/></a></li>
-                    <li><a href="${contextPath}/about.jsp" class="nav-link px-2 link-dark"><fmt:message key="header.link.about"/></a></li>
+                    <li><a href="${contextPath}/pages/home" class="nav-link px-2 link-dark fs-5"><fmt:message key="header.link.home"/></a></li>
+                    <li><a href="${contextPath}/about.jsp" class="nav-link px-2 link-dark fs-5"><fmt:message key="header.link.about"/></a></li>
                 </ul>
 
                 <div class="d-flex flex-row align-items-center">
@@ -74,8 +74,8 @@
                         </c:when>    
                         <c:otherwise>
                             <div class="d-flex flex-row">
-                                <a role="button" href="${contextPath}/pages/user/login" class="btn btn-outline-primary me-2"><fmt:message key="header.button.login"/></a>
-                                <a role="button" href="${contextPath}/pages/user/registration" class="btn btn-primary"><fmt:message key="header.button.signup"/></a>
+                                <a role="button" href="${contextPath}/pages/user/login" class="btn btn-outline-dark me-2"><fmt:message key="header.button.login"/></a>
+                                <a role="button" href="${contextPath}/pages/user/registration" class="btn btn-dark"><fmt:message key="header.button.signup"/></a>
                             </div>
                         </c:otherwise>
                     </c:choose>

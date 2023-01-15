@@ -64,8 +64,8 @@ public class SelectQueryBuilder {
         return this;
     }
 
-    public SelectQueryBuilder setLimit(String limit) {
-        this.stringBuilder.append(limit);
+    public SelectQueryBuilder setLimit() {
+        this.stringBuilder.append("LIMIT ?, ? ");
         return this;
     }
 
