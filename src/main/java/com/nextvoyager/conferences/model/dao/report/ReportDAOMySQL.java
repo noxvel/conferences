@@ -491,15 +491,15 @@ public class ReportDAOMySQL implements ReportDAO {
 
     // Helpers ------------------------------------------------------------------------------------
 
-    public Report processReportRS(ResultSet rs) throws SQLException {
+    protected Report processReportRS(ResultSet rs) throws SQLException {
         return processRS(rs, this::map);
     }
 
-    public void processReportListRS(ResultSet countRS, ResultSet listRS, ListWithCount<Report> result) throws SQLException {
+    protected void processReportListRS(ResultSet countRS, ResultSet listRS, ListWithCount<Report> result) throws SQLException {
         processListRS(countRS,listRS,result,FIELD_COUNT_ALL, this::map);
     }
 
-    public void processReportListRS(ResultSet listRS, List<Report> result) throws SQLException {
+    protected void processReportListRS(ResultSet listRS, List<Report> result) throws SQLException {
         processListRS(listRS,result,this::map);
     }
 

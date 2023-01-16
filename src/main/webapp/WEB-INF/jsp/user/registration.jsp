@@ -79,7 +79,7 @@
 
                     <!-- Submit button -->
                     <div class="d-grid gap-2">
-                      <button type="submit" class="btn btn-primary btn-block mb-5">
+                      <button type="submit" class="btn btn-warning btn-block mb-5">
                         <fmt:message key="registration.button.signup"/>
                       </button>
                     </div>

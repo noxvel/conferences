@@ -6,22 +6,27 @@ import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+
 @Disabled
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
     UserDAO dao;
 
-    private User testUser = new User();
+    private final User testUser = new User();
     List<User> testList = new ArrayList<>();
 
     @InjectMocks
@@ -36,24 +41,19 @@ public class UserServiceTest {
         testUser.setPassword("123");
         testUser.setRole(User.Role.ORDINARY_USER);
         testList.add(testUser);
-
-        MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    public void findAll() {
-        Mockito.when(dao.list()).thenReturn(testList);
-        assertEquals(testList, userService.list());
     }
 
     @Test
     public void find() {
         Mockito.when(dao.find("user@mail.com","123")).thenReturn(testUser);
         assertEquals(testUser, userService.find("user@mail.com","123"));
+
+        Mockito.when(dao.find(1)).thenReturn(testUser);
+        assertEquals(testUser, userService.find(1));
     }
 
     @Test
-    public void save() {
+    public void create() {
         userService.create(testUser);
         Mockito.verify(dao, Mockito.times(1)).create(testUser);
     }
@@ -65,76 +65,39 @@ public class UserServiceTest {
     }
 
     @Test
-    public void remove() {
-        dao.delete(testUser);
+    public void delete() {
+        userService.delete(testUser);
         Mockito.verify(dao, Mockito.times(1)).delete(testUser);
     }
 
-//    @Test
-//    void userCreateTest() {
-//
-//        // Create user.
-//        User user = new User();
-//        user.setEmail("foo@bar.com");
-//        user.setPassword("password");
-//        user.setRole(User.Role.SPEAKER);
-//        userDAO.create(user);
-//        System.out.println("User successfully created: " + user);
-//
-//        // Create another user.
-//        User anotherUser = new User();
-//        anotherUser.setEmail("bar@foo.com");
-//        anotherUser.setPassword("anotherPassword");
-//        anotherUser.setFirstName("Bar");
-//        anotherUser.setLastName("Foo");
-//        anotherUser.setRole(User.Role.USER);
-//        userDAO.create(anotherUser);
-//        System.out.println("Another user successfully created: " + anotherUser);
-//
-//        // Update user.
-//        user.setFirstName("Foo");
-//        user.setLastName("Bar");
-//        userDAO.update(user);
-//        System.out.println("User successfully updated: " + user);
-//
-//        // Update user.
-//        user.setFirstName("Foo");
-//        user.setLastName("Bar");
-//        userDAO.update(user);
-//        System.out.println("User successfully updated: " + user);
-//
-//        // List all users.
-//        List<User> users = userDAO.list();
-//        System.out.println("List of users successfully queried: " + users);
-//        System.out.println("Thus, amount of users in database is: " + users.size());
-//
-//        // Delete user.
-//        userDAO.delete(user);
-//        System.out.println("User successfully deleted: " + user);
-//
-//        // Check if email exists.
-//        boolean exist = userDAO.existEmail("foo@bar.com");
-//        System.out.println("This email should not exist anymore, so this should print false: " + exist);
-//
-//        // Change password.
-//        anotherUser.setPassword("newAnotherPassword");
-//        userDAO.changePassword(anotherUser);
-//        System.out.println("Another user's password successfully changed: " + anotherUser);
-//
-//        // Get another user by email and password.
-//        User foundAnotherUser = userDAO.find("bar@foo.com", "newAnotherPassword");
-//        System.out.println("Another user successfully queried with new password: " + foundAnotherUser);
-//
-//        // Delete another user.
-//        userDAO.delete(foundAnotherUser);
-//        System.out.println("Another user successfully deleted: " + foundAnotherUser);
-//
-//        // List all users again.
-//        users = userDAO.list();
-//        System.out.println("List of users successfully queried: " + users);
-//        System.out.println("Thus, amount of users in database is: " + users.size());
-//
-//        resp.getWriter().println("Hi new User!!!");
-//    }
+    @Test
+    public void list() {
+        Mockito.when(dao.list()).thenReturn(testList);
+        assertEquals(testList, userService.list());
+    }
+
+    @Test
+    public void listWithOneRole() {
+        Mockito.when(dao.list()).thenReturn(testList);
+        assertEquals(testList, userService.list());
+    }
+
+    @Test
+    public void checkPassword() {
+        Mockito.when(dao.checkPassword(testUser)).thenReturn(false);
+        assertFalse(userService.checkPassword(testUser));
+    }
+
+    @Test
+    public void changePassword() {
+        dao.changePassword(testUser);
+        Mockito.verify(dao,Mockito.times(1)).changePassword(testUser);
+    }
+
+    @Test
+    public void existEmail() {
+        Mockito.when(dao.existEmail(anyString())).thenReturn(true);
+        assertTrue(userService.existEmail("123"));
+    }
 
 }

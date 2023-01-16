@@ -11,9 +11,9 @@ import java.util.List;
 public interface ReportService {
     Report find(Integer reportID);
     void create(Report report);
+    void create(String approvalAction, Report report, User speaker);
     void update(Report report);
     void update(String speakerAction, Report report, User speaker);
-    void create(String approvalAction, Report report, User speaker);
     void delete(Report report);
     List<Report> list(Integer eventID);
     ListWithCount<Report> listWithPagination(int page, int limit);

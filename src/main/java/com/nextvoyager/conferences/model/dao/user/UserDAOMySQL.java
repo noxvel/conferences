@@ -251,7 +251,7 @@ public class UserDAOMySQL implements UserDAO{
     }
 
     @Override
-    public void changePassword(User user) throws DAOException {
+    public void changePassword(User user) throws DAOException, IllegalArgumentException {
         if (user.getId() == null) {
             throw new IllegalArgumentException("User is not created yet, the user ID is null.");
         }
@@ -303,11 +303,11 @@ public class UserDAOMySQL implements UserDAO{
 
     // Helpers ------------------------------------------------------------------------------------
 
-    public User processUserRS(ResultSet rs) throws SQLException {
+    protected User processUserRS(ResultSet rs) throws SQLException {
         return processRS(rs, this::map);
     }
 
-    public void processUserListRS(ResultSet listRS, List<User> result) throws SQLException {
+    protected void processUserListRS(ResultSet listRS, List<User> result) throws SQLException {
         processListRS(listRS,result,this::map);
     }
     /**

@@ -28,16 +28,6 @@ public interface UserDAO {
     User find(String email, String password) throws DAOException;
 
     /**
-     * Returns a list of all users from the database ordered by user ID. The list is never null and
-     * is empty when the database does not contain any user.
-     * @return A list of all users from the database ordered by user ID.
-     * @throws DAOException If something fails at database level.
-     */
-    List<User> list() throws DAOException;
-
-    List<User> listWithOneRole(User.Role userRole) throws DAOException;
-
-    /**
      * Create the given user in the database. The user ID must be null, otherwise it will throw
      * IllegalArgumentException. After creating, the DAO will set the obtained ID in the given user.
      * @param user The user to be created in the database.
@@ -64,6 +54,18 @@ public interface UserDAO {
     void delete(User user) throws DAOException;
 
     /**
+     * Returns a list of all users from the database ordered by user ID. The list is never null and
+     * is empty when the database does not contain any user.
+     * @return A list of all users from the database ordered by user ID.
+     * @throws DAOException If something fails at database level.
+     */
+    List<User> list() throws DAOException;
+
+    List<User> listWithOneRole(User.Role userRole) throws DAOException;
+
+    List<User> receiveEventNotificationsList(Event event);
+
+    /**
      * Returns true if the given email address exist in the database.
      * @param email The email address which is to be checked in the database.
      * @return True if the given email address exist in the database.
@@ -82,5 +84,4 @@ public interface UserDAO {
 
     boolean checkPassword(User user) throws DAOException;
 
-    List<User> receiveEventNotificationsList(Event event);
 }

@@ -16,27 +16,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) {
-        userDAO.create(user);
-    }
-
-    @Override
     public User find(String emailParam, String passwordParam) {
         return userDAO.find(emailParam, passwordParam);
     }
 
+    @Override
     public User find(Integer userID) {
         return userDAO.find(userID);
     }
 
     @Override
-    public boolean checkPassword(User user) {
-        return userDAO.checkPassword(user);
-    }
-
-    @Override
-    public void changePassword(User user) {
-        userDAO.changePassword(user);
+    public void create(User user) {
+        userDAO.create(user);
     }
 
     @Override
@@ -45,8 +36,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existEmail(String emailParam) {
-        return userDAO.existEmail(emailParam);
+    public void delete(User user) {
+        userDAO.delete(user);
+    }
+
+    @Override
+    public List<User> list() {
+        return userDAO.list();
     }
 
     @Override
@@ -55,8 +51,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> list() {
-        return userDAO.list();
+    public boolean checkPassword(User user) {
+        return userDAO.checkPassword(user);
     }
+    @Override
+    public void changePassword(User user) {
+        userDAO.changePassword(user);
+    }
+    @Override
+    public boolean existEmail(String emailParam) {
+        return userDAO.existEmail(emailParam);
+    }
+
 
 }

@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class EventNotificationManager {
 
+    private EventNotificationManager(){};
+
     public static void notify(List<User> userList, Event event, NotificationType type) {
         if (!userList.isEmpty()) {
             String sendToEmails = userList.stream()

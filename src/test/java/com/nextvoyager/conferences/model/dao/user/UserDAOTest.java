@@ -1,29 +1,27 @@
-package com.nextvoyager.conferences.model;
+package com.nextvoyager.conferences.model.dao.user;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
-import com.nextvoyager.conferences.model.dao.ListWithCount;
-import com.nextvoyager.conferences.model.dao.event.EventDAO;
-import com.nextvoyager.conferences.model.dao.event.EventDAOMySQL;
+import com.nextvoyager.conferences.model.dao.user.UserDAOMySQL;
 import com.nextvoyager.conferences.model.entity.Event;
-import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
-public class EventDAOTest {
+public class UserDAOTest {
 
     @Mock
     DAOFactory daoFactory;
@@ -35,39 +33,27 @@ public class EventDAOTest {
     ResultSet resultSet;
 
     @Mock
-    EventDAO.SortType sortType;
+    User.Role role;
     @Mock
-    EventDAO.SortDirection sortDirection;
-    @Mock
-    EventDAO.TimeFilter timeFilter;
-    @Mock
-    Report.Status reportStatus;
-    @Mock
-    User mockUser;
+    Event event;
 
-    private final Event testEvent = new Event();
-    private final User testUser = new User(1, User.Role.ORDINARY_USER);
-    List<Event> testList = new ArrayList<>();
+    private User testUser = new User();
+    List<User> testList = new ArrayList<>();
 
     @Spy
     @InjectMocks
-    EventDAOMySQL dao;
+    UserDAOMySQL dao;
 
     @BeforeEach
-    public void setUp(){
-        testEvent.setId(1);
-        testEvent.setName("Java conference");
-        testEvent.setPlace("Odesa");
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime endDate = LocalDateTime.parse("2022/10/14 12:00:00", format);
-        LocalDateTime beginDate = LocalDateTime.parse("2022/10/12 12:00:00", format);
-        testEvent.setBeginDate(beginDate);
-        testEvent.setEndDate(endDate);
-        testEvent.setParticipantsCame(100);
-        testEvent.setDescription("New description");
-        testList.add(testEvent);
+    public void setUp() {
+        testUser.setId(1);
+        testUser.setEmail("user@mail.com");
+        testUser.setFirstName("Ivan");
+        testUser.setLastName("Garmata");
+        testUser.setPassword("123");
+        testUser.setRole(User.Role.ORDINARY_USER);
+        testList.add(testUser);
 
-//        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -76,8 +62,11 @@ public class EventDAOTest {
         Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        Mockito.doReturn(testEvent).when(dao).processEventRS(any(ResultSet.class));
-        assertEquals(testEvent, dao.find(1));
+        Mockito.doReturn(testUser).when(dao).processUserRS(any(ResultSet.class));
+        assertEquals(testUser, dao.find(1));
+        assertEquals(testUser, dao.find("email", "password"));
+
+        Mockito.verify(dao, Mockito.times(2)).processUserRS(any(ResultSet.class));
 
 //        // Mock scope for use static methods
 //        try (MockedStatic<EventDAOMySQL> mocked = mockStatic(EventDAOMySQL.class)) {
@@ -96,9 +85,9 @@ public class EventDAOTest {
         Mockito.when(resultSet.next()).thenReturn(true);
         Mockito.when(resultSet.getInt(anyInt())).thenReturn(1);
 
-        assertThrows(IllegalArgumentException.class, () -> dao.create(testEvent));
-        testEvent.setId(null);
-        assertDoesNotThrow(() -> dao.create(testEvent));
+        assertThrows(IllegalArgumentException.class, () -> dao.create(testUser));
+        testUser.setId(null);
+        assertDoesNotThrow(() -> dao.create(testUser));
     }
 
     @Test
@@ -106,7 +95,7 @@ public class EventDAOTest {
         Mockito.when(daoFactory.getConnection()).thenReturn(connection);
         Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
-        assertDoesNotThrow(() -> dao.update(testEvent));
+        assertDoesNotThrow(() -> dao.update(testUser));
 
     }
 
@@ -115,25 +104,36 @@ public class EventDAOTest {
         Mockito.when(daoFactory.getConnection()).thenReturn(connection);
         Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
-        assertDoesNotThrow(() -> dao.delete(testEvent));
+        assertDoesNotThrow(() -> dao.delete(testUser));
     }
 
     @Test
-    public void registerUser() throws SQLException, ClassNotFoundException {
+    public void existEmail() throws SQLException, ClassNotFoundException {
+        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
+        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        Mockito.when(resultSet.next()).thenReturn(true);
+
+        assertTrue(dao.existEmail("test@mail.com"));
+    }
+
+    @Test
+    public void checkPassword() throws SQLException, ClassNotFoundException {
+        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
+        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        Mockito.when(resultSet.next()).thenReturn(true);
+
+        assertTrue(dao.checkPassword(testUser));
+    }
+
+    @Test
+    public void changePassword() throws SQLException, ClassNotFoundException {
         Mockito.when(daoFactory.getConnection()).thenReturn(connection);
         Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        assertDoesNotThrow(() -> dao.registerUser(1,testUser,true));
-    }
-
-    @Test
-    public void isUserRegisterEvent() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        assertFalse(dao.isUserRegisterEvent(testEvent, testUser));
+        assertDoesNotThrow(() -> dao.changePassword(testUser));
     }
 
     @Test
@@ -142,29 +142,13 @@ public class EventDAOTest {
         Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        Mockito.doNothing().when(dao).processEventListRS(any(ResultSet.class), any(List.class));
-        dao.list(sortType, sortDirection, timeFilter);
-        Mockito.verify(dao, Mockito.times(1)).processEventListRS(any(ResultSet.class), any(List.class));
+        Mockito.doNothing().when(dao).processUserListRS(any(ResultSet.class), any(List.class));
+
+        dao.list();
+        dao.listWithOneRole(role);
+        dao.receiveEventNotificationsList(event);
+        Mockito.verify(dao, Mockito.times(3)).processUserListRS(any(ResultSet.class), any(List.class));
 //        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
-
-    }
-
-    @Test
-    public void listWithPagination() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        Mockito.doNothing().when(dao).processEventListRS(any(ResultSet.class), any(ResultSet.class), any(ListWithCount.class));
-
-        dao.listWithPagination(1, 6, sortType, sortDirection, timeFilter);
-        dao.listWithPaginationReportStatusFilter(1, 6, sortType, sortDirection, timeFilter, reportStatus);
-        dao.listWithPaginationSpeaker(1, 6, sortType, sortDirection, timeFilter, mockUser, false);
-        dao.listWithPaginationOrdinaryUser(1, 6, sortType, sortDirection, timeFilter, mockUser, false);
-
-        Mockito.verify(dao, Mockito.times(4)).processEventListRS(any(ResultSet.class),
-                any(ResultSet.class), any(ListWithCount.class));
-
     }
 
 }

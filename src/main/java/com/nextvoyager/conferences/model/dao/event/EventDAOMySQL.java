@@ -430,15 +430,15 @@ public class EventDAOMySQL implements EventDAO{
 
     // Helpers -----------------------------------------------------------------------------------
 
-    public Event processEventRS(ResultSet rs) throws SQLException {
+    protected Event processEventRS(ResultSet rs) throws SQLException {
         return processRS(rs, this::map);
     }
 
-    public void processEventListRS(ResultSet countRS, ResultSet listRS, ListWithCount<Event> result) throws SQLException {
+    protected void processEventListRS(ResultSet countRS, ResultSet listRS, ListWithCount<Event> result) throws SQLException {
         processListRS(countRS,listRS,result,FIELD_COUNT_ALL, this::mapForList);
     }
 
-    public void processEventListRS(ResultSet listRS, List<Event> result) throws SQLException {
+    protected void processEventListRS(ResultSet listRS, List<Event> result) throws SQLException {
         processListRS(listRS,result,this::mapForList);
     }
 

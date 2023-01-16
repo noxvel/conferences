@@ -14,11 +14,11 @@ public interface EventService {
 
     void update(Event event);
 
-    boolean isUserRegisterEvent(Event event, User user);
-
     void create(Event event);
 
     void delete(Event event);
+
+    boolean isUserRegisterEvent(Event event, User user);
 
     void registerUser(Integer eventID, User user, boolean register);
 

@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.filter;
 
-import com.nextvoyager.conferences.controller.listener.ServletRequestListener;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +27,19 @@ public class AuthorizationFilter implements Filter {
     private final static List<String> ordinaryUserAccess = new ArrayList<>();
     private final static List<String> speakerAccess = new ArrayList<>();
     private final static List<String> moderatorAccess = new ArrayList<>();
+
+    public static List<String> getAllUserAccess(){
+        return Collections.unmodifiableList(allUserAccess);
+    }
+    public static List<String> getOrdinaryUserAccess(){
+        return Collections.unmodifiableList(ordinaryUserAccess);
+    }
+    public static List<String> getSpeakerAccess(){
+        return Collections.unmodifiableList(speakerAccess);
+    }
+    public static List<String> getModeratorAccess(){
+        return Collections.unmodifiableList(moderatorAccess);
+    }
 
     static{
         allUserAccess.add(HOME);
@@ -79,7 +92,7 @@ public class AuthorizationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
 
         User.Role userRole = (User.Role) session.getAttribute("userRole");
         String path = request.getPathInfo().substring(1);
