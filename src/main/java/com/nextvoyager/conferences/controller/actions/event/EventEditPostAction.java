@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
@@ -9,14 +8,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-//@WebServlet("/event/edit")
+//("/event/edit")
 public class EventEditPostAction implements ControllerAction {
 
-    private final EventService eventService = AppContext.getInstance().getEventService();
+    private final EventService eventService;
+
+    public EventEditPostAction(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

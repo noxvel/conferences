@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
@@ -10,10 +9,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/event/register")
-public class EventRegisterAction implements ControllerAction {
+//("/event/register")
+public class EventRegisterUserAction implements ControllerAction {
 
-    private final EventService eventService = AppContext.getInstance().getEventService();
+    private final EventService eventService;
+
+    public EventRegisterUserAction(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

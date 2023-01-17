@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
@@ -15,10 +14,14 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-//@WebServlet("/event/statistics")
+//("/event/statistics")
 public class EventStatisticsAction implements ControllerAction {
 
-    private final EventService eventService = AppContext.getInstance().getEventService();
+    private final EventService eventService;
+
+    public EventStatisticsAction(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

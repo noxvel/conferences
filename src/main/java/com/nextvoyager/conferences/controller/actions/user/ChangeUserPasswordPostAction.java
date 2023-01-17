@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.user;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
@@ -11,10 +10,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-//@WebServlet("/user/change-password")
+//("/user/change-password")
 public class ChangeUserPasswordPostAction implements ControllerAction {
 
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final UserService userService;
+
+    public ChangeUserPasswordPostAction(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

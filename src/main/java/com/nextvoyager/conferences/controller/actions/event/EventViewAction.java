@@ -1,9 +1,7 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
-import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
@@ -19,12 +17,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-//@WebServlet("/event/view")
+//("/event/view")
 public class EventViewAction implements ControllerAction {
 
-    private final ReportService reportService = AppContext.getInstance().getReportService();
-    private final EventService eventService = AppContext.getInstance().getEventService();
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final EventService eventService;
+    private final ReportService reportService;
+    private final UserService userService;
+
+    public EventViewAction(EventService eventService, ReportService reportService, UserService userService) {
+        this.eventService = eventService;
+        this.reportService = reportService;
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

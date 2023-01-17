@@ -10,10 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/event/edit")
+//("/event/edit")
 public class EventEditGetAction implements ControllerAction {
 
-    private final EventService eventService = AppContext.getInstance().getEventService();
+    private final EventService eventService;
+
+    public EventEditGetAction(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/report/list-filter")
+//("/report/list-filter")
 public class ReportListFilterAction implements ControllerAction {
 
     @Override

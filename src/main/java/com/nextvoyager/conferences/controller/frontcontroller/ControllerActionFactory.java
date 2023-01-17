@@ -1,4 +1,5 @@
 package com.nextvoyager.conferences.controller.frontcontroller;
+import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.actions.ChangeLanguageAction;
 import com.nextvoyager.conferences.controller.actions.HomePageAction;
 import com.nextvoyager.conferences.controller.actions.event.*;
@@ -6,6 +7,9 @@ import com.nextvoyager.conferences.controller.actions.report.*;
 import com.nextvoyager.conferences.controller.actions.user.*;
 import com.nextvoyager.conferences.controller.actions.user.moderator.ModeratorReportApprovalAction;
 import com.nextvoyager.conferences.controller.actions.user.speaker.SpeakerReportApprovalAction;
+import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.service.ReportService;
+import com.nextvoyager.conferences.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
@@ -14,47 +18,51 @@ import static com.nextvoyager.conferences.controller.frontcontroller.ControllerA
 
 public class ControllerActionFactory {
 
+    private static final UserService userService = AppContext.getInstance().getUserService();
+    private static final EventService eventService = AppContext.getInstance().getEventService();
+    private static final ReportService reportService = AppContext.getInstance().getReportService();
+
     private static final Map<String, ControllerAction> actions = new HashMap<>();
 
-    public static final String POST = "POST/";
-    public static final String GET = "GET/";
+    public static final String POST = "POST";
+    public static final String GET = "GET";
 
     static{
-        actions.put(GET + HOME, new HomePageAction());
+        actions.put(GET + HOME, new HomePageAction(eventService));
         actions.put(POST + CHANGE_LANGUAGE, new ChangeLanguageAction());
 
         actions.put(GET + EVENT_CREATE, new EventCreateGetAction());
-        actions.put(POST + EVENT_CREATE, new EventCreatePostAction());
-        actions.put(GET + EVENT_DELETE, new EventDeleteAction());
-        actions.put(GET + EVENT_EDIT, new EventEditGetAction());
-        actions.put(POST + EVENT_EDIT, new EventEditPostAction());
-        actions.put(POST + EVENT_REGISTER, new EventRegisterAction());
-        actions.put(GET + EVENT_STATISTICS, new EventStatisticsAction());
-        actions.put(GET + EVENT_SAVE_STATISTICS, new EventStatisticsSaveAction());
-        actions.put(GET + EVENT_VIEW, new EventViewAction());
+        actions.put(POST + EVENT_CREATE, new EventCreatePostAction(eventService));
+        actions.put(GET + EVENT_DELETE, new EventDeleteAction(eventService));
+        actions.put(GET + EVENT_EDIT, new EventEditGetAction(eventService));
+        actions.put(POST + EVENT_EDIT, new EventEditPostAction(eventService));
+        actions.put(POST + EVENT_REGISTER, new EventRegisterUserAction(eventService));
+        actions.put(GET + EVENT_STATISTICS, new EventStatisticsAction(eventService));
+        actions.put(GET + EVENT_SAVE_STATISTICS, new EventStatisticsSaveAction(eventService));
+        actions.put(GET + EVENT_VIEW, new EventViewAction(eventService,reportService,userService));
         actions.put(POST + EVENT_LIST_FILTER, new EventListFilterAction());
         actions.put(POST + EVENT_LIST_SORT, new EventListSortAction());
 
-        actions.put(GET + REPORT_CREATE, new ReportCreateGetAction());
-        actions.put(POST + REPORT_CREATE, new ReportCreatePostAction());
-        actions.put(GET + REPORT_DELETE, new ReportDeleteAction());
-        actions.put(GET + REPORT_EDIT, new ReportEditGetAction());
-        actions.put(POST + REPORT_EDIT, new ReportEditPostAction());
-        actions.put(GET + REPORT_LIST, new ReportListAction());
-        actions.put(GET + REPORT_VIEW, new ReportViewAction());
+        actions.put(GET + REPORT_CREATE, new ReportCreateGetAction(userService));
+        actions.put(POST + REPORT_CREATE, new ReportCreatePostAction(reportService,userService));
+        actions.put(GET + REPORT_DELETE, new ReportDeleteAction(reportService,userService));
+        actions.put(GET + REPORT_EDIT, new ReportEditGetAction(reportService,userService));
+        actions.put(POST + REPORT_EDIT, new ReportEditPostAction(reportService));
+        actions.put(GET + REPORT_LIST, new ReportListAction(reportService,userService));
+        actions.put(GET + REPORT_VIEW, new ReportViewAction(reportService));
         actions.put(POST + REPORT_LIST_FILTER, new ReportListFilterAction());
 
         actions.put(GET + USER_LOGIN, new LoginUserGetAction());
-        actions.put(POST + USER_LOGIN, new LoginUserPostAction());
+        actions.put(POST + USER_LOGIN, new LoginUserPostAction(userService));
         actions.put(GET + USER_PROFILE, new ProfileUserGetAction());
-        actions.put(POST + USER_PROFILE, new ProfileUserPostAction());
+        actions.put(POST + USER_PROFILE, new ProfileUserPostAction(userService));
         actions.put(GET + USER_REGISTRATION, new RegistrationUserGetAction());
-        actions.put(POST + USER_REGISTRATION, new RegistrationUserPostAction());
+        actions.put(POST + USER_REGISTRATION, new RegistrationUserPostAction(userService));
         actions.put(GET + USER_CHANGE_PASSWORD, new ChangeUserPasswordGetAction());
-        actions.put(POST + USER_CHANGE_PASSWORD, new ChangeUserPasswordPostAction());
+        actions.put(POST + USER_CHANGE_PASSWORD, new ChangeUserPasswordPostAction(userService));
         actions.put(GET + USER_SIGN_OUT, new SignOutUserAction());
-        actions.put(GET + MODERATOR_REPORT_APPROVAL, new ModeratorReportApprovalAction());
-        actions.put(GET + SPEAKER_REPORT_APPROVAL, new SpeakerReportApprovalAction());
+        actions.put(GET + MODERATOR_REPORT_APPROVAL, new ModeratorReportApprovalAction(reportService));
+        actions.put(GET + SPEAKER_REPORT_APPROVAL, new SpeakerReportApprovalAction(reportService));
 
     }
 

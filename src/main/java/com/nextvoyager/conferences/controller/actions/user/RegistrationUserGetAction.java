@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/user/registration")
+//("/user/registration")
 public class RegistrationUserGetAction implements ControllerAction {
 
     @Override

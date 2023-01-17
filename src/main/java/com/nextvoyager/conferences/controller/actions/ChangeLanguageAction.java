@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-//@WebServlet("/change-language")
+//("/change-language")
 public class ChangeLanguageAction implements ControllerAction {
 
     @Override

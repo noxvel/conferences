@@ -24,22 +24,16 @@ public class AuthorizationFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(AuthorizationFilter.class);
 
     private final static List<String> allUserAccess = new ArrayList<>();
+    private final static List<String> authorizedUserAccess = new ArrayList<>();
     private final static List<String> ordinaryUserAccess = new ArrayList<>();
     private final static List<String> speakerAccess = new ArrayList<>();
     private final static List<String> moderatorAccess = new ArrayList<>();
 
-    public static List<String> getAllUserAccess(){
-        return Collections.unmodifiableList(allUserAccess);
-    }
-    public static List<String> getOrdinaryUserAccess(){
-        return Collections.unmodifiableList(ordinaryUserAccess);
-    }
-    public static List<String> getSpeakerAccess(){
-        return Collections.unmodifiableList(speakerAccess);
-    }
-    public static List<String> getModeratorAccess(){
-        return Collections.unmodifiableList(moderatorAccess);
-    }
+    public static List<String> getAllUserAccess(){ return Collections.unmodifiableList(allUserAccess); }
+    public static List<String> getAuthorizedUserAccess(){ return Collections.unmodifiableList(authorizedUserAccess); }
+    public static List<String> getOrdinaryUserAccess(){ return Collections.unmodifiableList(ordinaryUserAccess); }
+    public static List<String> getSpeakerAccess(){ return Collections.unmodifiableList(speakerAccess); }
+    public static List<String> getModeratorAccess(){ return Collections.unmodifiableList(moderatorAccess); }
 
     static{
         allUserAccess.add(HOME);
@@ -51,18 +45,17 @@ public class AuthorizationFilter implements Filter {
         allUserAccess.add(EVENT_LIST_SORT);
         allUserAccess.add(REPORT_VIEW);
 
+        authorizedUserAccess.add(USER_PROFILE);
+        authorizedUserAccess.add(USER_CHANGE_PASSWORD);
+        authorizedUserAccess.add(USER_SIGN_OUT);
+
         ordinaryUserAccess.addAll(allUserAccess);
-        ordinaryUserAccess.add(USER_PROFILE);
-        ordinaryUserAccess.add(USER_CHANGE_PASSWORD);
-        ordinaryUserAccess.add(USER_SIGN_OUT);
+        ordinaryUserAccess.addAll(authorizedUserAccess);
         ordinaryUserAccess.add(EVENT_REGISTER);
 
         speakerAccess.addAll(allUserAccess);
-        speakerAccess.add(USER_PROFILE);
-        speakerAccess.add(USER_CHANGE_PASSWORD);
-        speakerAccess.add(USER_SIGN_OUT);
+        speakerAccess.addAll(authorizedUserAccess);
         speakerAccess.add(SPEAKER_REPORT_APPROVAL);
-        speakerAccess.add(EVENT_REGISTER);
         speakerAccess.add(REPORT_LIST);
         speakerAccess.add(REPORT_LIST_FILTER);
         speakerAccess.add(REPORT_CREATE);
@@ -71,6 +64,7 @@ public class AuthorizationFilter implements Filter {
         speakerAccess.add(REPORT_EDIT);
 
         moderatorAccess.addAll(allUserAccess);
+        moderatorAccess.addAll(authorizedUserAccess);
         moderatorAccess.add(USER_PROFILE);
         moderatorAccess.add(USER_CHANGE_PASSWORD);
         moderatorAccess.add(USER_SIGN_OUT);
@@ -78,7 +72,6 @@ public class AuthorizationFilter implements Filter {
         moderatorAccess.add(EVENT_CREATE);
         moderatorAccess.add(EVENT_DELETE);
         moderatorAccess.add(EVENT_EDIT);
-        moderatorAccess.add(EVENT_REGISTER);
         moderatorAccess.add(EVENT_STATISTICS);
         moderatorAccess.add(EVENT_SAVE_STATISTICS);
         moderatorAccess.add(REPORT_CREATE);
@@ -95,7 +88,7 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = request.getSession();
 
         User.Role userRole = (User.Role) session.getAttribute("userRole");
-        String path = request.getPathInfo().substring(1);
+        String path = request.getPathInfo();
 
         if (checkAccess(path,userRole)) {
             filterChain.doFilter(servletRequest, servletResponse); // Logged-in user found, so just continue request.

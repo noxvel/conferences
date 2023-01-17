@@ -17,11 +17,14 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-//@WebServlet("/home")
+//("/home")
 public class HomePageAction implements ControllerAction {
 
-    private final UserService userService = AppContext.getInstance().getUserService();
-    private final EventService eventService = AppContext.getInstance().getEventService();
+    private final EventService eventService;
+
+    public HomePageAction(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

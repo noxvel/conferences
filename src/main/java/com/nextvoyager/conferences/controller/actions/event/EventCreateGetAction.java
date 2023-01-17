@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/event/create")
+//("/event/create")
 public class EventCreateGetAction implements ControllerAction {
 
     @Override

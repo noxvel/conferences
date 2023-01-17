@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/user/change-password")
+//("/user/change-password")
 public class ChangeUserPasswordGetAction implements ControllerAction {
 
     @Override

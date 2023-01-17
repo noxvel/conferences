@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.user.speaker;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
@@ -11,10 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/speaker-report-action")
+//("/speaker-report-action")
 public class SpeakerReportApprovalAction implements ControllerAction {
 
-    private final ReportService reportService = AppContext.getInstance().getReportService();
+    private final ReportService reportService;
+
+    public SpeakerReportApprovalAction(ReportService reportService) {
+        this.reportService = reportService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

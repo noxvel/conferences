@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.user;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
@@ -13,13 +12,16 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-//@WebServlet("/user/login")
+//("/user/login")
 public class LoginUserPostAction implements ControllerAction {
 
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final UserService userService;
     private static final Logger logger = LogManager.getLogger(LoginUserPostAction.class);
+
+    public LoginUserPostAction(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

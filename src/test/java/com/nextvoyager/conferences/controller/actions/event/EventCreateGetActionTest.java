@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.event;
+package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.controller.actions.event.EventCreateGetAction;
 import com.nextvoyager.conferences.controller.filter.AuthorizationFilter;

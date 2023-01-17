@@ -1,9 +1,7 @@
 package com.nextvoyager.conferences.controller.actions.report;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
-import com.nextvoyager.conferences.model.dao.report.ReportDAO;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
@@ -17,11 +15,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-//@WebServlet("/report-list")
+//("/report-list")
 public class ReportListAction implements ControllerAction {
 
-    private final ReportService reportService = AppContext.getInstance().getReportService();
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final ReportService reportService;
+    private final UserService userService;
+
+    public ReportListAction(ReportService reportService, UserService userService) {
+        this.reportService = reportService;
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

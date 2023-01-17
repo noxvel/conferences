@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.user.moderator;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.service.ReportService;
@@ -10,10 +9,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/moderator-report-action")
+//("/moderator-report-action")
 public class ModeratorReportApprovalAction implements ControllerAction {
 
-    private final ReportService reportService = AppContext.getInstance().getReportService();
+    private final ReportService reportService;
+
+    public ModeratorReportApprovalAction(ReportService reportService) {
+        this.reportService = reportService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

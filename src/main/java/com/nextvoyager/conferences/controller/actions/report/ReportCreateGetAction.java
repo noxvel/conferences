@@ -1,28 +1,24 @@
 package com.nextvoyager.conferences.controller.actions.report;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
-import com.nextvoyager.conferences.model.dao.report.ReportDAO;
-import com.nextvoyager.conferences.model.dao.report.ReportDAOMySQL;
-import com.nextvoyager.conferences.model.dao.user.UserDAO;
-import com.nextvoyager.conferences.model.dao.user.UserDAOMySQL;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
-import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
 import java.util.List;
 
-//@WebServlet("/report/create")
+//("/report/create")
 public class ReportCreateGetAction implements ControllerAction {
 
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final UserService userService;
+
+    public ReportCreateGetAction(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {

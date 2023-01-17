@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/event/list-filter")
+//("/event/list-filter")
 public class EventListFilterAction implements ControllerAction {
 
     @Override

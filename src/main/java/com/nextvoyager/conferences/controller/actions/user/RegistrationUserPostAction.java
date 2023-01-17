@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.user;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
@@ -12,10 +11,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//@WebServlet("/user/registration")
+//("/user/registration")
 public class RegistrationUserPostAction implements ControllerAction {
 
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final UserService userService;
+
+    public RegistrationUserPostAction(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

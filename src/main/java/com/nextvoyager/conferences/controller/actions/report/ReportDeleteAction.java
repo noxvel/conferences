@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.report;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.service.ReportService;
@@ -11,11 +10,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-//@WebServlet("/report/delete")
+//("/report/delete")
 public class ReportDeleteAction implements ControllerAction {
 
-    private final ReportService reportService = AppContext.getInstance().getReportService();
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final ReportService reportService;
+    private final UserService userService;
+
+    public ReportDeleteAction(ReportService reportService, UserService userService) {
+        this.reportService = reportService;
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

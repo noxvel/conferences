@@ -97,22 +97,18 @@ public abstract class DAOFactory {
         String password = properties.getProperty(PROPERTY_PASSWORD, false);
         String username = properties.getProperty(PROPERTY_USERNAME, password != null);
 
-        if (url.equals("test")) {
-            instance = new DataSourceTestFactory();
-        }else{
-            // Else assume URL as DataSource URL and lookup it in the JNDI.
-            DataSource dataSource;
-            try {
-                dataSource = (DataSource) new InitialContext().lookup(url);
-            } catch (NamingException e) {
-                throw new DAOConfigurationException(
-                        "DataSource '" + url + "' is missing in JNDI.", e);
-            }
-            if (username != null) {
-                instance = new DataSourceWithLoginDAOFactory(dataSource, username, password);
-            } else {
-                instance = new DataSourceDAOFactory(dataSource);
-            }
+        // Assume URL as DataSource URL and lookup it in the JNDI.
+        DataSource dataSource;
+        try {
+            dataSource = (DataSource) new InitialContext().lookup(url);
+        } catch (NamingException e) {
+            throw new DAOConfigurationException(
+                    "DataSource '" + url + "' is missing in JNDI.", e);
+        }
+        if (username != null) {
+            instance = new DataSourceWithLoginDAOFactory(dataSource, username, password);
+        } else {
+            instance = new DataSourceDAOFactory(dataSource);
         }
 
         return instance;
@@ -138,20 +134,11 @@ public abstract class DAOFactory {
 
 }
 
-// Default DAOFactory implementations -------------------------------------------------------------
-class DataSourceTestFactory extends DAOFactory{
-    private DataSource dataSource;
-    @Override
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
-        return dataSource.getConnection();
-    }
-}
-
 /**
  * The DataSource based DAOFactory.
  */
 class DataSourceDAOFactory extends DAOFactory {
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     DataSourceDAOFactory(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -167,9 +154,9 @@ class DataSourceDAOFactory extends DAOFactory {
  * The DataSource-with-Login based DAOFactory.
  */
 class DataSourceWithLoginDAOFactory extends DAOFactory {
-    private DataSource dataSource;
-    private String username;
-    private String password;
+    private final DataSource dataSource;
+    private final String username;
+    private final String password;
 
     DataSourceWithLoginDAOFactory(DataSource dataSource, String username, String password) {
         this.dataSource = dataSource;

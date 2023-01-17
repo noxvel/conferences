@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.frontcontroller;
 
-import com.nextvoyager.conferences.controller.filter.AuthorizationFilter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,8 +19,8 @@ public class FrontController extends HttpServlet {
         try {
             ControllerAction controllerAction = ControllerActionFactory.getAction(req);
             String view = controllerAction.execute(req, resp);
-            if (view.equals(req.getPathInfo().substring(1))) {
-                req.getRequestDispatcher("/WEB-INF/jsp/" + view + ".jsp").forward(req, resp);
+            if (view.equals(req.getPathInfo())) {
+                req.getRequestDispatcher("/WEB-INF/jsp" + view + ".jsp").forward(req, resp);
             } else {
                 resp.sendRedirect(view);
             }

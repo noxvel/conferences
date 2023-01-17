@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions.report;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
@@ -15,11 +14,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//@WebServlet("/report/create")
+//("/report/create")
 public class ReportCreatePostAction implements ControllerAction {
 
-    private final ReportService reportService = AppContext.getInstance().getReportService();
-    private final UserService userService = AppContext.getInstance().getUserService();
+    private final ReportService reportService;
+    private final UserService userService;
+
+    public ReportCreatePostAction(ReportService reportService, UserService userService) {
+        this.reportService = reportService;
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +39,7 @@ public class ReportCreatePostAction implements ControllerAction {
         if (currentUser.getRole() == User.Role.SPEAKER) {
             validate(topicParam,eventParam,descriptionParam);
         } else {
-            validate(topicParam, speakerParam, descriptionParam, statusParam, eventParam);
+            validate(topicParam, eventParam, descriptionParam, speakerParam, statusParam);
         }
 
         Report report = new Report();
@@ -93,7 +97,7 @@ public class ReportCreatePostAction implements ControllerAction {
         }
 
     }
-    private void validate(String topic, String speaker, String event, String status, String description) throws ServletException{
+    private void validate(String topic, String event, String description, String speaker, String status) throws ServletException{
 
         List<String> errorMessages = new ArrayList<>();
 

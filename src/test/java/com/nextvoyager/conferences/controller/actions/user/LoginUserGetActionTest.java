@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.user;
+package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.actions.user.LoginUserGetAction;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
