@@ -20,7 +20,7 @@
                 <div class="d-flex flex-row">
                     <div class="ms-2">
                         <form action="${contextPath}/pages/report/list-filter" method="post">
-                            <input type="hidden" name="redirectPath" value="report/list"/>
+                            <input type="hidden" name="redirectPath" value="/report/list"/>
                             <div class="input-group">
                                 <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
                                     <option ${empty reportStatusFilter ? 'selected' : ''} value=""><fmt:message key="report-list.filter.status.all"/></option>

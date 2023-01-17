@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-
 //("/user/profile")
 public class ProfileUserPostAction implements ControllerAction {
 
@@ -20,7 +18,7 @@ public class ProfileUserPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String firstNameParam = req.getParameter("firstName");
         String lastNameParam = req.getParameter("lastName");
         String receiveNotifications = req.getParameter("receiveNotifications");
@@ -35,7 +33,7 @@ public class ProfileUserPostAction implements ControllerAction {
 //        user.setEmail(emailParam);
 
         userService.update(user);
-        return req.getContextPath() + "/pages/home";
+        return PREFIX_PATH + HOME;
 
     }
 }

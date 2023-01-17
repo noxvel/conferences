@@ -20,7 +20,7 @@ public class ReportEditPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
         String topicParam = req.getParameter("topic");
         String speakerParam = req.getParameter("speaker");
@@ -60,6 +60,6 @@ public class ReportEditPostAction implements ControllerAction {
 
         reportService.update(approvalAction, report, approvalSpeaker);
 
-        return req.getContextPath() + "/pages/report/view?reportID=" + report.getId();
+        return PREFIX_PATH + "/report/view?reportID=" + report.getId();
     }
 }

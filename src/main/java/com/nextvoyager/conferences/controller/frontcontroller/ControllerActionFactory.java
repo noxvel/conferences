@@ -24,8 +24,9 @@ public class ControllerActionFactory {
 
     private static final Map<String, ControllerAction> actions = new HashMap<>();
 
-    public static final String POST = "POST";
-    public static final String GET = "GET";
+    private static final String POST = "POST";
+    private static final String GET = "GET";
+
 
     static{
         actions.put(GET + HOME, new HomePageAction(eventService));

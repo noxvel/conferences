@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.controller.actions;
 
-import com.nextvoyager.conferences.AppContext;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
@@ -8,13 +7,10 @@ import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
-import com.nextvoyager.conferences.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
 import java.util.Optional;
 
 //("/home")
@@ -27,7 +23,7 @@ public class HomePageAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String pageParam = req.getParameter("page");
 
         // Default values for list of events

@@ -8,8 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 //("/speaker-report-action")
 public class SpeakerReportApprovalAction implements ControllerAction {
 
@@ -20,7 +18,7 @@ public class SpeakerReportApprovalAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
         String actionParam = req.getParameter("action");
 
@@ -29,6 +27,6 @@ public class SpeakerReportApprovalAction implements ControllerAction {
         Report report = reportService.find(reportID);
         reportService.update(actionParam, report, speaker);
 
-        return req.getContextPath() + "/pages/report/view?reportID=" + reportID;
+        return PREFIX_PATH + "/report/view?reportID=" + reportID;
     }
 }

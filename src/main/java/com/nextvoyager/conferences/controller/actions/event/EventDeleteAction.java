@@ -7,8 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 //("/event/delete")
 public class EventDeleteAction implements ControllerAction {
 
@@ -18,13 +16,13 @@ public class EventDeleteAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         Integer eventID = Integer.valueOf(req.getParameter("eventID"));
 
         Event event = eventService.find(eventID);
         eventService.delete(event);
 
-        return req.getContextPath() + "/pages/home";
+        return PREFIX_PATH + HOME;
     }
 
 }

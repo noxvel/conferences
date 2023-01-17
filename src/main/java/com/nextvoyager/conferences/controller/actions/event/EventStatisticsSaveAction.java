@@ -26,7 +26,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String pageParam = req.getParameter("page");
         ExportFileFormat fileFormatParam = ExportFileFormat.valueOf(req.getParameter("fileFormat"));
 
@@ -78,7 +78,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
             }
         }));
 
-        return req.getContextPath() + "/pages/event/statistics";
+        return PREFIX_PATH + "/event/statistics";
 
     }
 

@@ -9,7 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.util.List;
 
 //("/report/edit")
@@ -24,7 +23,7 @@ public class ReportEditGetAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
 
         List<User> speakers = userService.listWithOneRole(User.Role.SPEAKER);

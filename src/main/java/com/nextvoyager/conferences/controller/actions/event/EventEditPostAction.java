@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 //("/event/edit")
@@ -20,7 +19,7 @@ public class EventEditPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String idParam = req.getParameter("eventID");
         String nameParam = req.getParameter("name");
         String placeParam = req.getParameter("place");
@@ -40,6 +39,6 @@ public class EventEditPostAction implements ControllerAction {
 
         eventService.update(event);
 
-        return req.getContextPath() + "/pages/event/view?eventID=" + event.getId();
+        return PREFIX_PATH + "/event/view?eventID=" + event.getId();
     }
 }

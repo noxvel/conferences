@@ -7,6 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class EmptyAction implements ControllerAction {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return request.getPathInfo().substring(1);
+        return request.getPathInfo();
     }
 }

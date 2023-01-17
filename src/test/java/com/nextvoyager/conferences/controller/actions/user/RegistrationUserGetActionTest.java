@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.controller.actions.event;
+package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import jakarta.servlet.ServletException;
@@ -12,22 +12,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @Disabled
 @ExtendWith(MockitoExtension.class)
-public class EventCreateGetActionTest {
+public class RegistrationUserGetActionTest {
 
     @Mock
     HttpServletRequest req;
     @Mock
     HttpServletResponse resp;
-
     @InjectMocks
-    EventCreateGetAction action;
+    RegistrationUserGetAction action;
 
     @Test
     public void testExecute() throws ServletException {
         String result = action.execute(req,resp);
-        assertEquals(ControllerAction.EVENT_CREATE, result);
+        assertEquals(ControllerAction.USER_REGISTRATION, result);
     }
-
 }

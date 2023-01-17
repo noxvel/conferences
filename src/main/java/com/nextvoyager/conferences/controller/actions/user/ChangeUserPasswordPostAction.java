@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-
 //("/user/change-password")
 public class ChangeUserPasswordPostAction implements ControllerAction {
 
@@ -20,7 +18,7 @@ public class ChangeUserPasswordPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String currentPasswordParam = req.getParameter("currentPassword");
         String newPasswordParam = req.getParameter("newPassword");
 
@@ -34,9 +32,8 @@ public class ChangeUserPasswordPostAction implements ControllerAction {
         } else {
             user.setPassword(newPasswordParam);
             userService.changePassword(user);
-            return req.getContextPath() + "/pages/user/profile";
+            return PREFIX_PATH + "/user/profile";
         }
     }
-
 
 }

@@ -92,7 +92,7 @@
                                 </a>
                                 <div class="ms-2">
                                     <form action="${contextPath}/pages/report/list-filter" method="post">
-                                        <input type="hidden" name="redirectPath" value="event/view?eventID=${event.id}"/>
+                                        <input type="hidden" name="redirectPath" value="/event/view?eventID=${event.id}"/>
                                         <div class="input-group">
                                             <select name="reportStatusFilter" class="form-select" id="statusFilter" aria-label="Status filter">
                                                 <option ${empty reportStatusFilter ? 'selected' : ''} value=""><fmt:message key="event-view.filter.select.all"/></option>

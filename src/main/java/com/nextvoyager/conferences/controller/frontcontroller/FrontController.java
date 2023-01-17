@@ -22,7 +22,7 @@ public class FrontController extends HttpServlet {
             if (view.equals(req.getPathInfo())) {
                 req.getRequestDispatcher("/WEB-INF/jsp" + view + ".jsp").forward(req, resp);
             } else {
-                resp.sendRedirect(view);
+                resp.sendRedirect(req.getContextPath() + view);
             }
         } catch (Exception e) {
             LOG.error("Executing failed: Exception - " + e.getClass().getName() + ", message: "+ e.getMessage());

@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class ReportCreatePostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
 
         String topicParam = req.getParameter("topic");
         String speakerParam = req.getParameter("speaker");
@@ -75,7 +74,7 @@ public class ReportCreatePostAction implements ControllerAction {
 
         reportService.create(approvalAction, report, approvalSpeaker);
 
-        return req.getContextPath() + "/pages/report/view?reportID=" + report.getId();
+        return PREFIX_PATH + "/report/view?reportID=" + report.getId();
     }
 
     private void validate(String topic, String event, String description) throws ServletException{

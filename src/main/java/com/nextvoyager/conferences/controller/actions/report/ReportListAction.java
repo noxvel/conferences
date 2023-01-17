@@ -27,7 +27,7 @@ public class ReportListAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
 
         String pageParam = req.getParameter("page");
 

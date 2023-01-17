@@ -86,7 +86,6 @@ public class EventViewAction implements ControllerAction {
             }
         }
 
-
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
         List<Report> listOfReports = countAndList.getList();

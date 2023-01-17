@@ -6,13 +6,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 //("/report/list-filter")
 public class ReportListFilterAction implements ControllerAction {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String statusFilterParam = req.getParameter("reportStatusFilter");
         String redirectPath = req.getParameter("redirectPath");
 
@@ -22,7 +20,6 @@ public class ReportListFilterAction implements ControllerAction {
             req.getSession().removeAttribute("reportStatusFilter");
         }
 
-        return req.getContextPath() + "/pages/" + redirectPath;
-//        return redirectPath;
+        return PREFIX_PATH + redirectPath;
     }
 }

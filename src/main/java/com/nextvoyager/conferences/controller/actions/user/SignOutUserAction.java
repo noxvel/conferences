@@ -6,18 +6,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-
 //("/user/sign-out")
 public class SignOutUserAction implements ControllerAction {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
 
         HttpSession httpSession = req.getSession(false);
         if (httpSession != null) {
             req.getSession().invalidate();
         }
 
-        return req.getContextPath() + "/pages/home";
+        return PREFIX_PATH + HOME;
     }
 }

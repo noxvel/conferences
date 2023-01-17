@@ -7,8 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 //("/report/view")
 public class ReportViewAction implements ControllerAction {
 
@@ -19,7 +17,7 @@ public class ReportViewAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
 
         Report report = reportService.find(reportID);

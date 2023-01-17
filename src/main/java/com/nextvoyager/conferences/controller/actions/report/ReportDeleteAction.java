@@ -8,8 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 //("/report/delete")
 public class ReportDeleteAction implements ControllerAction {
 
@@ -22,13 +20,13 @@ public class ReportDeleteAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         Integer reportID = Integer.valueOf(req.getParameter("reportID"));
 
         Report report = reportService.find(reportID);
         reportService.delete(report);
 
-        return req.getContextPath() + "/pages/event/view?eventID=" + report.getEvent().getId();
+        return PREFIX_PATH + "/event/view?eventID=" + report.getEvent().getId();
     }
 
 }

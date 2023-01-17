@@ -43,7 +43,6 @@ public class ReportCreateGetAction implements ControllerAction {
         req.setAttribute("speakers", speakers);
         req.setAttribute("eventID", eventID);
         return REPORT_CREATE;
-
     }
 
 }

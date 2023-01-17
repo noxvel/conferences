@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class RegistrationUserPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String firstNameParam = req.getParameter("firstName");
         String lastNameParam = req.getParameter("lastName");
         String emailParam = req.getParameter("email");
@@ -47,7 +46,7 @@ public class RegistrationUserPostAction implements ControllerAction {
 
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("userRole", user.getRole());
-            return req.getContextPath() + "/pages/home";
+            return PREFIX_PATH + HOME;
         }
     }
 

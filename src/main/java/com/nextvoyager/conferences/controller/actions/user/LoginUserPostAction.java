@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class LoginUserPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String emailParam = req.getParameter("email");
         String passwordParam = req.getParameter("password");
 
@@ -41,7 +40,7 @@ public class LoginUserPostAction implements ControllerAction {
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("userRole", user.getRole());
             logger.info("user is login - " + user.getEmail());
-            return req.getContextPath() + "/pages/home";
+            return PREFIX_PATH + HOME;
         }
     }
 

@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface ControllerAction {
 
+    String PREFIX_PATH = "/pages";
+
     String HOME = "/home";
     String CHANGE_LANGUAGE = "/change-language";
 

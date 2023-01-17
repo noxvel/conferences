@@ -16,7 +16,8 @@ public class ServletRequestListener implements jakarta.servlet.ServletRequestLis
         HttpServletRequest servletRequest = (HttpServletRequest) sre.getServletRequest();
         HttpSession currentSession = servletRequest.getSession();
 
-        currentSession.setAttribute("originRequestURL", servletRequest.getRequestURL());
+//        currentSession.setAttribute("originRequestURL", servletRequest.getRequestURL());
+        currentSession.setAttribute("originRequestURL", servletRequest.getPathInfo());
         currentSession.setAttribute("originRequestQuery", servletRequest.getQueryString());
 
         LOGGER.info("Request initialized to address - " + servletRequest.getRequestURI() +

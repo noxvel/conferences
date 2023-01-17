@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class EventCreatePostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         String nameParam = req.getParameter("name");
         String placeParam = req.getParameter("place");
         String beginDateParam = req.getParameter("beginDate");
@@ -40,7 +39,7 @@ public class EventCreatePostAction implements ControllerAction {
 
         eventService.create(event);
 
-        return req.getContextPath() + "/pages/event/view?eventID=" + event.getId();
+        return PREFIX_PATH + "/event/view?eventID=" + event.getId();
     }
 
     private void validate(String name, String place, String beginDate, String endDate, String description) throws ServletException{

@@ -19,7 +19,7 @@ public class EventListFilterAction implements ControllerAction {
 
         req.getSession().setAttribute("filterByEventParticipated", showEventParticipatedParam != null);
         req.getSession().setAttribute("eventTimeFilter", EventDAO.TimeFilter.valueOf(timeFilterParam));
-        return redirectPath;
+        return PREFIX_PATH + redirectPath;
     }
 
 }
