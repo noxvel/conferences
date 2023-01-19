@@ -46,7 +46,7 @@ public class ControllerActionFactory {
 
         actions.put(GET + REPORT_CREATE, new ReportCreateGetAction(userService));
         actions.put(POST + REPORT_CREATE, new ReportCreatePostAction(reportService,userService));
-        actions.put(GET + REPORT_DELETE, new ReportDeleteAction(reportService,userService));
+        actions.put(GET + REPORT_DELETE, new ReportDeleteAction(reportService));
         actions.put(GET + REPORT_EDIT, new ReportEditGetAction(reportService,userService));
         actions.put(POST + REPORT_EDIT, new ReportEditPostAction(reportService));
         actions.put(GET + REPORT_LIST, new ReportListAction(reportService,userService));

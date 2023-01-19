@@ -1,7 +1,8 @@
-package com.nextvoyager.conferences.controller.actions.event;
+package com.nextvoyager.conferences.controller.actions.report;
 
 import com.nextvoyager.conferences.model.entity.Event;
-import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.model.entity.Report;
+import com.nextvoyager.conferences.service.ReportService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -11,35 +12,34 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.nextvoyager.conferences.controller.frontcontroller.ControllerAction.EVENT_EDIT;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EventEditGetActionTest {
+public class ReportDeleteActionTest {
     @Mock
     HttpServletRequest req;
     @Mock
     HttpServletResponse resp;
     @Mock
-    EventService eventService;
+    ReportService reportService;
 
     @InjectMocks
-    EventEditGetAction action;
-
-    Event event = new Event(1, "test");
+    ReportDeleteAction action;
 
     @Test
     public void testExecute() {
-        when(req.getParameter("eventID")).thenReturn("1");
-        when(eventService.find(anyInt())).thenReturn(event);
+        Report report = new Report();
+        report.setEvent(new Event(1));
 
-        String result = assertDoesNotThrow(() -> action.execute(req,resp));
-        Mockito.verify(eventService, Mockito.times(1)).find(anyInt());
-        assertEquals(EVENT_EDIT, result);
+        when(req.getParameter("reportID")).thenReturn("1");
+        when(reportService.find(anyInt())).thenReturn(report);
+
+        assertDoesNotThrow(() -> action.execute(req,resp));
+        Mockito.verify(reportService, Mockito.times(1)).find(anyInt());
+        Mockito.verify(reportService, Mockito.times(1)).delete(any(Report.class));
     }
 
 }
