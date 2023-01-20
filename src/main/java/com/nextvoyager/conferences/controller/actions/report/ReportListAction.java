@@ -6,6 +6,7 @@ import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.util.PaginationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,16 +29,8 @@ public class ReportListAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-
-        String pageParam = req.getParameter("page");
-
-        // Default values for list of reports
-        int page = 1;
-        int limit = 6;
-
-        if (pageParam != null) {
-            page = Integer.parseInt(pageParam);
-        }
+        int page = PaginationUtil.handlePaginationPageParameter(req);
+        int limit = PaginationUtil.handlePaginationLimitParameter(req);
 
         ListWithCount<Report> countAndList;
 
@@ -71,10 +64,11 @@ public class ReportListAction implements ControllerAction {
                     report.setSpeaker(userService.find(report.getSpeaker().getId()));
                 });
 
+        req.setAttribute("page", page);
+        req.setAttribute("limit", limit);
         req.setAttribute("reports", listOfReports);
         req.setAttribute("reportStatusFilter", reportStatusFilter.orElse(null));
         req.setAttribute("reportStatuses", Report.Status.values());
-        req.setAttribute("page", page);
         req.setAttribute("numOfPages", numOfPages);
 
         return REPORT_LIST;

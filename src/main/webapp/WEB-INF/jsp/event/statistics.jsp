@@ -81,7 +81,8 @@
                         </button>
                         <ul class="dropdown-menu">
                             <c:forEach var="format" items="${fileFormats}">
-                                <li><a class="dropdown-item" href="${contextPath}/pages/event/save-statistics?fileFormat=${format}">${format}</a></li>
+                                <li><a class="dropdown-item" 
+                                    href="${contextPath}/pages/event/save-statistics?page=${page}&limit=${limit}&fileFormat=${format}">${format}</a></li>
                             </c:forEach>
                         </ul>
                     </div>
@@ -122,7 +123,7 @@
                 </div>
 
                 <mytag:pagination arialLabel="Event statistics navigation" page="${page}" numOfPages="${numOfPages}" 
-                                linkPath="${contextPath}/pages/event/statistics?" />
+                                linkPath="${contextPath}/pages/event/statistics" showLimitSelect="true"/>
 
             </div>
         </div>

@@ -7,6 +7,7 @@ import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.util.PaginationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,15 +25,8 @@ public class HomePageAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        String pageParam = req.getParameter("page");
-
-        // Default values for list of events
-        int page = 1;
-        int limit = 6;
-
-        if (pageParam != null) {
-            page = Integer.parseInt(pageParam);
-        }
+        int page = PaginationUtil.handlePaginationPageParameter(req);
+        int limit = PaginationUtil.handlePaginationLimitParameter(req);
 
         ListWithCount<Event> countAndList;
 
@@ -42,7 +36,7 @@ public class HomePageAction implements ControllerAction {
                         .getAttribute("eventListSortType")).orElse(EventDAO.SortType.Date);
 
         EventDAO.SortDirection eventListSortDirection = Optional.ofNullable((EventDAO.SortDirection) currentSession
-                        .getAttribute("eventListSortDirection")).orElse(EventDAO.SortDirection.Ascending);
+                        .getAttribute("eventListSortDirection")).orElse(EventDAO.SortDirection.Descending);
 
         EventDAO.TimeFilter eventTimeFilter = Optional.ofNullable((EventDAO.TimeFilter) currentSession
                 .getAttribute("eventTimeFilter")).orElse(EventDAO.TimeFilter.AllTime);
@@ -72,8 +66,9 @@ public class HomePageAction implements ControllerAction {
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
-        req.setAttribute("events", countAndList.getList());
         req.setAttribute("page", page);
+        req.setAttribute("limit", limit);
+        req.setAttribute("events", countAndList.getList());
         req.setAttribute("sortType", eventListSortType);
         req.setAttribute("sortDirection", eventListSortDirection);
         req.setAttribute("showEventParticipated", showEventParticipated);

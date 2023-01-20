@@ -24,7 +24,7 @@ public class ProfileUserPostAction implements ControllerAction {
         String receiveNotifications = req.getParameter("receiveNotifications");
 //        String emailParam = req.getParameter("email");
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
         user.setFirstName(firstNameParam);

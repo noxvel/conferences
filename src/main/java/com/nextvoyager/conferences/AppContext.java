@@ -30,18 +30,6 @@ public class AppContext {
         return appContext;
     }
 
-    public EventDAO getEventDAO() {
-        return eventDAO;
-    }
-
-    public ReportDAO getReportDAO() {
-        return reportDAO;
-    }
-
-    public UserDAO getUserDAO() {
-        return userDAO;
-    }
-
     public EventService getEventService() {
         return eventService;
     }

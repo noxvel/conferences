@@ -136,7 +136,8 @@
                     
                 </div>
 
-                <mytag:pagination arialLabel="Home page navigation" page="${page}" numOfPages="${numOfPages}" linkPath="home?" />
+                <mytag:pagination arialLabel="Home page navigation" page="${page}" numOfPages="${numOfPages}" 
+                        linkPath="home" showLimitSelect="true"/>
 
             </div>
         </div>

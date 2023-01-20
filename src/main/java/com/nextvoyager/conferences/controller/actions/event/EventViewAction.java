@@ -8,6 +8,7 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.util.PaginationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,16 +33,9 @@ public class EventViewAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int page = PaginationUtil.handlePaginationPageParameter(req);
+        int limit = PaginationUtil.handlePaginationLimitParameter(req);
         Integer eventID = Integer.valueOf(req.getParameter("eventID"));
-        String pageParam = req.getParameter("page");
-
-        // Default values for list of reports
-        int page = 1;
-        int limit = 6;
-
-        if (pageParam != null) {
-            page = Integer.parseInt(pageParam);
-        }
 
         Event event = eventService.find(eventID);
 
@@ -96,10 +90,11 @@ public class EventViewAction implements ControllerAction {
                 });
         event.setReports(listOfReports);
 
+        req.setAttribute("page", page);
+        req.setAttribute("limit", limit);
         req.setAttribute("reportStatusFilter", reportStatusFilter.orElse(null));
         req.setAttribute("reportStatuses", Report.Status.values());
         req.setAttribute("event", event);
-        req.setAttribute("page", page);
         req.setAttribute("numOfPages", numOfPages);
 
         return EVENT_VIEW;

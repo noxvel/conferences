@@ -4,6 +4,8 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 
+import static com.nextvoyager.conferences.util.PaginationUtil.getPaginationLimitList;
+
 @WebListener
 public class ContextListener implements ServletContextListener {
     @Override
@@ -11,6 +13,7 @@ public class ContextListener implements ServletContextListener {
 
         // initialize controller actions
         try {
+            sce.getServletContext().setAttribute("paginationLimitList", getPaginationLimitList());
             Class.forName("com.nextvoyager.conferences.controller.frontcontroller.ControllerActionFactory");
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);

@@ -21,12 +21,12 @@
 
   <error-page>
     <error-code>404</error-code>
-    <location>/error.jsp</location>
+    <location>/WEB-INF/error.jsp</location>
   </error-page>
 
   <error-page>
     <exception-type>jakarta.servlet.ServletException</exception-type>
-    <location>/error.jsp</location>
+    <location>/WEB-INF/error.jsp</location>
   </error-page>
 
 <!--  <session-config>-->

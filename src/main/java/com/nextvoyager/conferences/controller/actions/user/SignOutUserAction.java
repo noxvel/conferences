@@ -11,7 +11,7 @@ public class SignOutUserAction implements ControllerAction {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
 
-        HttpSession httpSession = req.getSession(false);
+        HttpSession httpSession = req.getSession();
         if (httpSession != null) {
             req.getSession().invalidate();
         }

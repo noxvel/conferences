@@ -5,6 +5,7 @@ import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.util.PaginationUtil;
 import com.nextvoyager.conferences.util.filecreator.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,16 +28,10 @@ public class EventStatisticsSaveAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        String pageParam = req.getParameter("page");
+        int page = PaginationUtil.handlePaginationPageParameter(req);
+        int limit = PaginationUtil.handlePaginationLimitParameter(req, 12);
+
         ExportFileFormat fileFormatParam = ExportFileFormat.valueOf(req.getParameter("fileFormat"));
-
-        // Default values for list of events
-        int page = 1;
-        int limit = 10;
-
-        if (pageParam != null) {
-            page = Integer.parseInt(pageParam);
-        }
 
         HttpSession currentSession = req.getSession();
         String lang = (String) currentSession.getAttribute("lang");

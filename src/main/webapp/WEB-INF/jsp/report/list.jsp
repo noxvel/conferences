@@ -73,7 +73,7 @@
             </div>
 
             <mytag:pagination arialLabel="Report list page navigation" page="${page}" numOfPages="${numOfPages}" 
-                            linkPath="list?" />
+                    linkPath="list" showLimitSelect="true"/>
 
 
         </div>

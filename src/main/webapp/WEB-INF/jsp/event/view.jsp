@@ -154,7 +154,7 @@
                     </div>
 
                     <mytag:pagination arialLabel="Event page navigation" page="${page}" numOfPages="${numOfPages}" 
-                                linkPath="view?eventID=${event.id}&" />
+                                linkPath="view" queryString="&eventID=${event.id}" />
 
                 </div>
                 <div class="tab-pane fade" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab" tabindex="0">

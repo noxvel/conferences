@@ -5,6 +5,7 @@ import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
+import com.nextvoyager.conferences.util.PaginationUtil;
 import com.nextvoyager.conferences.util.filecreator.ExportFileFormat;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,15 +25,8 @@ public class EventStatisticsAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        String pageParam = req.getParameter("page");
-
-        // Default values for list of events
-        int page = 1;
-        int limit = 10;
-
-        if (pageParam != null) {
-            page = Integer.parseInt(pageParam);
-        }
+        int page = PaginationUtil.handlePaginationPageParameter(req);
+        int limit = PaginationUtil.handlePaginationLimitParameter(req, 12);
 
         HttpSession currentSession = req.getSession();
 
@@ -50,8 +44,9 @@ public class EventStatisticsAction implements ControllerAction {
 
         int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
 
-        req.setAttribute("events", countAndList.getList());
         req.setAttribute("page", page);
+        req.setAttribute("limit", limit);
+        req.setAttribute("events", countAndList.getList());
         req.setAttribute("numOfPages", numOfPages);
         req.setAttribute("fileFormats", ExportFileFormat.values());
         req.setAttribute("sortType", eventListSortType);

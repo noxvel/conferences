@@ -22,7 +22,7 @@ public class ChangeUserPasswordPostAction implements ControllerAction {
         String currentPasswordParam = req.getParameter("currentPassword");
         String newPasswordParam = req.getParameter("newPassword");
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         user.setPassword(currentPasswordParam);
 
@@ -32,7 +32,7 @@ public class ChangeUserPasswordPostAction implements ControllerAction {
         } else {
             user.setPassword(newPasswordParam);
             userService.changePassword(user);
-            return PREFIX_PATH + "/user/profile";
+            return PREFIX_PATH + USER_PROFILE;
         }
     }
 

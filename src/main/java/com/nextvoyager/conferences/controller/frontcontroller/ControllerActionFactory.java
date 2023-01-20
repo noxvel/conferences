@@ -27,7 +27,6 @@ public class ControllerActionFactory {
     private static final String POST = "POST";
     private static final String GET = "GET";
 
-
     static{
         actions.put(GET + HOME, new HomePageAction(eventService));
         actions.put(POST + CHANGE_LANGUAGE, new ChangeLanguageAction());
