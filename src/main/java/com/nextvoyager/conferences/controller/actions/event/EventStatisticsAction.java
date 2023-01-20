@@ -42,7 +42,7 @@ public class EventStatisticsAction implements ControllerAction {
         ListWithCount<Event> countAndList = eventService.listWithPagination(page, limit, eventListSortType,
                 eventListSortDirection, eventTimeFilter);
 
-        int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
+        int numOfPages = PaginationUtil.getNumOfPages(countAndList.getCount(),limit);
 
         req.setAttribute("page", page);
         req.setAttribute("limit", limit);

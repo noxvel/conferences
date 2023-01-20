@@ -55,7 +55,7 @@ public class ReportListAction implements ControllerAction {
 
         req.getSession().removeAttribute("reportStatusFilter");
 
-        int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
+        int numOfPages = PaginationUtil.getNumOfPages(countAndList.getCount(),limit);
 
         List<Report> listOfReports = countAndList.getList();
         listOfReports.stream()

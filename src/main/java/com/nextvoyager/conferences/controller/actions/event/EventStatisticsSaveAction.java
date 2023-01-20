@@ -48,7 +48,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
         ListWithCount<Event> countAndList = eventService.listWithPagination(page, limit, eventListSortType,
                 eventListSortDirection, eventTimeFilter);
 
-        int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
+        int numOfPages = PaginationUtil.getNumOfPages(countAndList.getCount(),limit);
 
         Optional<FileCreator> fileCreator = FileCreatorFactory.getFileCreator(fileFormatParam);
         fileCreator.ifPresent((fc -> {

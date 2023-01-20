@@ -1,6 +1,11 @@
 package com.nextvoyager.conferences.model.dao.exeption;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class DAOException extends RuntimeException{
+    private static final Logger LOG = LogManager.getLogger(DAOException.class);
+
     public DAOException() {
         super();
     }
@@ -14,7 +19,6 @@ public class DAOException extends RuntimeException{
     }
 
     public DAOException(Throwable cause) {
-//        super(cause);
-        System.out.println(cause.toString());
+        LOG.error(cause.toString());
     }
 }

@@ -59,4 +59,8 @@ public class PaginationUtil {
             }
         }
     }
+
+    public static int getNumOfPages(Integer elementsCount, int limit) {
+        return  (int)Math.ceil((double)elementsCount/limit);
+    }
 }

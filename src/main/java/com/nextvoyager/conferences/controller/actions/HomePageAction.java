@@ -64,7 +64,7 @@ public class HomePageAction implements ControllerAction {
         }
         //------------------------------------------------------------------------------------------------
 
-        int numOfPages = (int)Math.ceil((double)countAndList.getCount()/limit);
+        int numOfPages = PaginationUtil.getNumOfPages(countAndList.getCount(),limit);
 
         req.setAttribute("page", page);
         req.setAttribute("limit", limit);

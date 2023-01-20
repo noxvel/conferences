@@ -58,7 +58,7 @@ public class RegistrationUserPostAction implements ControllerAction {
         if (firstName == null || firstName.trim().isEmpty()) {
             errorMessages.add("Please enter first name");
         } else if (!firstName.matches("[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\\s'-]{1,60}")) {
-            errorMessages.add("Please enter alphabetical characters from 1 to 60 for first name.");
+            errorMessages.add("Please enter alphabetical characters from 1 to 60 for field first name.");
         }
 
         // Get and validate last name
