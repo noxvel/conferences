@@ -6,13 +6,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 //("/event/list-filter")
 public class EventListFilterAction implements ControllerAction {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException{
         String showEventParticipatedParam = req.getParameter("showInWhichParticipated");
         String timeFilterParam = req.getParameter("timeFilter");
         String redirectPath = req.getParameter("redirectPath");

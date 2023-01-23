@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.model.dao.user;
 
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
@@ -59,7 +60,7 @@ public interface UserDAO {
      * @return A list of all users from the database ordered by user ID.
      * @throws DAOException If something fails at database level.
      */
-    List<User> list() throws DAOException;
+    ListWithCount<User> list(int page, int limit) throws DAOException;
 
     List<User> listWithOneRole(User.Role userRole) throws DAOException;
 
@@ -84,4 +85,5 @@ public interface UserDAO {
 
     boolean checkPassword(User user) throws DAOException;
 
+    List<User> listOfEventParticipants(Integer eventID);
 }

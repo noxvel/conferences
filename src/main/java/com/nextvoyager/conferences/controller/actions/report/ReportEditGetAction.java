@@ -5,14 +5,23 @@ import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.util.validation.ParameterValidator;
+import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_REPORT_ID;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
+
 //("/report/edit")
 public class ReportEditGetAction implements ControllerAction {
+
+    private static final ValidateObject[] validateObjects = {
+            new ValidateObject(PARAM_REPORT_ID, REGEXP_ID),
+    };
 
     private final ReportService reportService;
     private final UserService userService;
@@ -24,7 +33,8 @@ public class ReportEditGetAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        Integer reportID = Integer.valueOf(req.getParameter("reportID"));
+        ParameterValidator.validate(req,validateObjects);
+        Integer reportID = Integer.valueOf(req.getParameter(PARAM_REPORT_ID));
 
         List<User> speakers = userService.listWithOneRole(User.Role.SPEAKER);
 

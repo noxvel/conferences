@@ -3,15 +3,25 @@ package com.nextvoyager.conferences.controller.actions.user;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.util.validation.ParameterValidator;
+import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
 //("/user/registration")
 public class RegistrationUserPostAction implements ControllerAction {
+
+    private static final ValidateObject[] validateObjects = {
+            new ValidateObject(PARAM_USER_FIRST_NAME, REGEXP_USER_NAME),
+            new ValidateObject(PARAM_USER_LAST_NAME, REGEXP_USER_NAME),
+            new ValidateObject(PARAM_USER_EMAIL, REGEXP_EMAIL),
+            new ValidateObject(PARAM_USER_PASSWORD, REGEXP_PASSWORD),
+            new ValidateObject(PARAM_USER_ROLE, REGEXP_USER_ROLE)
+    };
 
     private final UserService userService;
 
@@ -21,20 +31,13 @@ public class RegistrationUserPostAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        String firstNameParam = req.getParameter("firstName");
-        String lastNameParam = req.getParameter("lastName");
-        String emailParam = req.getParameter("email");
-        String passwordParam = req.getParameter("password");
-        String userRoleParam = req.getParameter("userRole");
+        ParameterValidator.validate(req,validateObjects);
 
-        validate(firstNameParam,lastNameParam,emailParam,passwordParam);
-
-        User user = new User();
-        user.setFirstName(firstNameParam);
-        user.setLastName(lastNameParam);
-        user.setEmail(emailParam);
-        user.setPassword(passwordParam);
-        user.setRole(User.Role.valueOf(userRoleParam));
+        String firstNameParam = req.getParameter(PARAM_USER_FIRST_NAME);
+        String lastNameParam = req.getParameter(PARAM_USER_LAST_NAME);
+        String emailParam = req.getParameter(PARAM_USER_EMAIL);
+        String passwordParam = req.getParameter(PARAM_USER_PASSWORD);
+        User.Role userRoleParam = User.Role.valueOf(req.getParameter(PARAM_USER_ROLE));
 
         boolean exist = userService.existEmail(emailParam);
 
@@ -42,6 +45,13 @@ public class RegistrationUserPostAction implements ControllerAction {
             req.setAttribute("message", "The email you entered already exists. Please enter a different email.");
             return USER_REGISTRATION;
         } else {
+            User user = new User();
+            user.setFirstName(firstNameParam);
+            user.setLastName(lastNameParam);
+            user.setEmail(emailParam);
+            user.setPassword(passwordParam);
+            user.setRole(userRoleParam);
+
             userService.create(user);
 
             req.getSession().setAttribute("user", user);
@@ -50,41 +60,4 @@ public class RegistrationUserPostAction implements ControllerAction {
         }
     }
 
-    private void validate(String firstName, String lastName, String email, String password) throws ServletException{
-
-        List<String> errorMessages = new ArrayList<>();
-
-        // Get and validate first name
-        if (firstName == null || firstName.trim().isEmpty()) {
-            errorMessages.add("Please enter first name");
-        } else if (!firstName.matches("[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\\s'-]{1,60}")) {
-            errorMessages.add("Please enter alphabetical characters from 1 to 60 for field first name.");
-        }
-
-        // Get and validate last name
-        if (lastName == null || lastName.trim().isEmpty()) {
-            errorMessages.add("Please enter last name");
-        } else if (!lastName.matches("[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\\s'-]{1,60}")) {
-            errorMessages.add("Please enter alphabetical characters from 1 to 60 for last name.");
-        }
-
-        // Get and validate email
-        if (email == null || email.trim().isEmpty()) {
-            errorMessages.add("Please enter email");
-        } else if (!email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            errorMessages.add("Please enter correct email address");
-        }
-
-        // Get and validate password.
-        if (password == null || password.trim().isEmpty()) {
-            errorMessages.add("Please enter password");
-        } else if (!password.matches(".{3,60}")) {
-            errorMessages.add("Please enter from 3 to 60 symbols");
-        }
-
-        if (!errorMessages.isEmpty()) {
-            throw new ServletException("Invalid input values: " + String.join(",", errorMessages));
-        }
-
-    }
 }

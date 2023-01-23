@@ -22,7 +22,7 @@
                     <div class="col-md-8">
                         <label for="speaker" class="form-label"><fmt:message key="report-create.speaker.label"/></label>
                         <select name="speaker" id="speakerSelect" class="form-select">
-                            <option value=""><fmt:message key="report-create.speaker.select.vacant"/></option>
+                            <option value="0"><fmt:message key="report-create.speaker.select.vacant"/></option>
                             <c:forEach var="speaker" items="${speakers}">
                                 <option value="${speaker.id}">${speaker.firstName} ${speaker.lastName}(${speaker.email})</option>
                             </c:forEach>

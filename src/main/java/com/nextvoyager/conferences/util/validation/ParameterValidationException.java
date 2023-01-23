@@ -1,6 +1,6 @@
 package com.nextvoyager.conferences.util.validation;
 
-public class ParameterValidationException extends RuntimeException{
+public class ParameterValidationException extends Exception{
     public ParameterValidationException() {
         super();
     }

@@ -1,9 +1,11 @@
 package com.nextvoyager.conferences.model.dao.user;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.ValueDAO;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
+import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 
 import java.sql.*;
@@ -22,24 +24,25 @@ public class UserDAOMySQL implements UserDAO{
     public static final String FIELD_LAST_NAME = "last_name";
     public static final String FIELD_USER_ROLE_NAME = "user_role_name";
     public static final String FIELD_RECEIVE_NOTIFICATIONS = "receive_notifications";
+    public static final String FIELD_COUNT_ALL = "count_all";
 
-    private static final String SQL_FIND_BY_ID =
+    private static final String SQL_USER_SELECT =
             "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
-                    "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
+                    "LEFT JOIN user_role AS r ON u.user_role_id = r.id ";
+    private static final String SQL_FIND_BY_ID = SQL_USER_SELECT +
                     "WHERE u.id = ?";
-    private static final String SQL_FIND_BY_EMAIL_AND_PASSWORD =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
-                    "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
+    private static final String SQL_FIND_BY_EMAIL_AND_PASSWORD = SQL_USER_SELECT +
                     "WHERE email = ? AND password = MD5(?)";
-    private static final String SQL_LIST_ORDER_BY_ID =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
-                    "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
-                    "ORDER BY u.id";
-    private static final String SQL_LIST_WITH_ONLY_ONE_ROLE =
-            "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
-                    "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
+    private static final String SQL_LIST_ORDER_BY_ID = SQL_USER_SELECT +
+                    "ORDER BY u.id " +
+                    "LIMIT ?, ?";
+    private static final String SQL_LIST_WITH_ONLY_ONE_ROLE = SQL_USER_SELECT +
                     "WHERE u.user_role_id = ? " +
                     "ORDER BY u.id";
+    private static final String SQL_LIST_EVENT_PARTICIPANTS = SQL_USER_SELECT +
+                    "INNER JOIN event_has_participant AS ehp ON ehp.user_id = u.id " +
+                    "WHERE ehp.event_id = ? ";
+
     private static final String SQL_INSERT =
             "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
     private static final String SQL_UPDATE =
@@ -56,6 +59,7 @@ public class UserDAOMySQL implements UserDAO{
             "OR " +
             "EXISTS (SELECT ehp.user_id FROM event_has_participant AS ehp WHERE ehp.event_id = ? AND ehp.user_id = u.id)) " +
             "ORDER BY u.id";
+    private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM user AS u ";
 
     // Vars ---------------------------------------------------------------------------------------
 
@@ -108,8 +112,31 @@ public class UserDAOMySQL implements UserDAO{
     }
 
     @Override
-    public List<User> list() throws DAOException {
-        return list(SQL_LIST_ORDER_BY_ID);
+    public ListWithCount<User> list(int page, int limit) throws DAOException {
+        int offset;
+        offset = (page - 1) * limit;
+
+        ValueDAO[] values = {
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        ListWithCount<User> result = new ListWithCount<>();
+        result.setList(new ArrayList<>());
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, SQL_LIST_COUNT_ALL, false);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection,SQL_LIST_ORDER_BY_ID, false, values);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            processUserListRS(resultSetCountAll,resultSetList,result);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e.getMessage(),e);
+        }
+
+        return result;
     }
 
     @Override
@@ -118,6 +145,15 @@ public class UserDAOMySQL implements UserDAO{
                 new ValueDAO(userRole.getId(), Types.INTEGER)
         };
         return list(SQL_LIST_WITH_ONLY_ONE_ROLE, values);
+
+    }
+
+    @Override
+    public List<User> listOfEventParticipants(Integer eventID) {
+        ValueDAO[] values = {
+                new ValueDAO(eventID, Types.INTEGER)
+        };
+        return list(SQL_LIST_EVENT_PARTICIPANTS, values);
     }
 
     @Override
@@ -301,10 +337,16 @@ public class UserDAOMySQL implements UserDAO{
         return exist;
     }
 
+
+
     // Helpers ------------------------------------------------------------------------------------
 
     protected User processUserRS(ResultSet rs) throws SQLException {
         return processRS(rs, this::map);
+    }
+
+    protected void processUserListRS(ResultSet countRS, ResultSet listRS, ListWithCount<User> result) throws SQLException {
+        processListRS(countRS,listRS,result,FIELD_COUNT_ALL, this::map);
     }
 
     protected void processUserListRS(ResultSet listRS, List<User> result) throws SQLException {

@@ -1,58 +1,47 @@
 package com.nextvoyager.conferences.util.validation;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParameterValidator {
 
-    public static final String REGEXP_EMAIL = "^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-    public static final String REGEXP_USER_NAME = "[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\\s'-]{1,60}";
-    public static final String REGEXP_PASSWORD = ".{3,60}";
-
     private ParameterValidator(){};
 
-    public static String getCommonStringParameter(HttpServletRequest req,
-                                                  String fieldName, boolean allowEmpty) throws ParameterValidationException{
-        String param = req.getParameter(fieldName);
-        if (param == null ) {
-            throw new ParameterValidationException("Please enter - " + fieldName);
-        }
-        if (!allowEmpty) {
-            if (param.trim().isEmpty()) {
-                throw new ParameterValidationException("Please enter - " + fieldName);
+    public static void validate(HttpServletRequest req, ValidateObject... validateObjects) throws ServletException {
+        List<String> errorMessages = new ArrayList<>();
+
+        for (ValidateObject val: validateObjects) {
+            try {
+                validateParameter(req,val);
+            } catch (ParameterValidationException e) {
+                errorMessages.add(e.getMessage());
             }
         }
 
-        return param;
+        if (!errorMessages.isEmpty()) {
+            throw new ServletException("Invalid input values: " + String.join(",\\n", errorMessages));
+        }
     }
 
-    public static String getEmailParameter(HttpServletRequest req, String fieldName) throws ParameterValidationException{
-        String param = req.getParameter(fieldName);
-        if (param == null || param.trim().isEmpty()) {
-            throw new ParameterValidationException("Please enter email");
-        } else if (!param.matches(REGEXP_EMAIL)) {
-            throw new ParameterValidationException("Please enter correct email address");
+    private static void validateParameter(HttpServletRequest req, ValidateObject val) throws ParameterValidationException {
+        String param = req.getParameter(val.getParameter());
+        if (param == null ) {
+            throw new ParameterValidationException("Please enter - " + val.getParameter());
         }
-        return param;
-    }
-
-    public static String getUserNameParameter(HttpServletRequest req, String fieldName) throws ParameterValidationException{
-        String param = req.getParameter(fieldName);
-        if (param == null || param.trim().isEmpty()) {
-            throw new ParameterValidationException("Please enter - " + fieldName);
-        } else if (!param.matches(REGEXP_USER_NAME)) {
-            throw new ParameterValidationException("Please enter alphabetical characters from 1 to 60 for field - " + fieldName);
+        if (!val.isAllowEmpty()) {
+            if (param.trim().isEmpty()) {
+                throw new ParameterValidationException("Please enter - " + val.getParameter());
+            }
+            if (val.getRegExp() != null) {
+                if (!param.matches(val.getRegExp().getValue())) {
+                    throw new ParameterValidationException("Please enter " + val.getRegExp().getErrorMsg() +
+                            " for parameter - " + val.getParameter());
+                }
+            }
         }
-        return param;
-    }
-
-    public static String getPasswordParameter(HttpServletRequest req, String fieldName) throws ParameterValidationException{
-        String param = req.getParameter(fieldName);
-        if (param == null || param.trim().isEmpty()) {
-            throw new ParameterValidationException("Please enter - " + fieldName);
-        } else if (!param.matches(REGEXP_PASSWORD)) {
-            throw new ParameterValidationException("Please enter from 3 to 60 symbols - " + fieldName);
-        }
-        return param;
     }
 
 }

@@ -34,6 +34,7 @@ public interface ControllerAction {
     String USER_SIGN_OUT = "/user/sign-out";
     String MODERATOR_REPORT_APPROVAL = "/moderator-report-action";
     String SPEAKER_REPORT_APPROVAL = "/speaker-report-action";
+    String USER_LIST = "/user/list";
 
     String execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

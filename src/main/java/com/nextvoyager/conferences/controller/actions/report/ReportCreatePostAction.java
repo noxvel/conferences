@@ -5,41 +5,54 @@ import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
-import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.util.validation.ParameterValidator;
+import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
+
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 
 //("/report/create")
 public class ReportCreatePostAction implements ControllerAction {
 
-    private final ReportService reportService;
-    private final UserService userService;
+    private static final ValidateObject[] validateObjects = {
+            new ValidateObject(PARAM_REPORT_TOPIC),
+            new ValidateObject(PARAM_REPORT_EVENT, REGEXP_ID),
+            new ValidateObject(PARAM_REPORT_DESCRIPTION,true)
+    };
 
-    public ReportCreatePostAction(ReportService reportService, UserService userService) {
+    private static final ValidateObject[] validateObjectsModerator = {
+            new ValidateObject(PARAM_REPORT_TOPIC),
+            new ValidateObject(PARAM_REPORT_SPEAKER, REGEXP_ID),
+            new ValidateObject(PARAM_REPORT_EVENT, REGEXP_ID),
+            new ValidateObject(PARAM_REPORT_STATUS, REGEXP_REPORT_STATUS),
+            new ValidateObject(PARAM_REPORT_DESCRIPTION,true)
+    };
+
+    private final ReportService reportService;
+
+    public ReportCreatePostAction(ReportService reportService) {
         this.reportService = reportService;
-        this.userService = userService;
     }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-
-        String topicParam = req.getParameter("topic");
-        String speakerParam = req.getParameter("speaker");
-        String eventParam = req.getParameter("event");
-        String statusParam = req.getParameter("status");
-        String descriptionParam = req.getParameter("description");
-
         User currentUser = (User) req.getSession().getAttribute("user");
 
         if (currentUser.getRole() == User.Role.SPEAKER) {
-            validate(topicParam,eventParam,descriptionParam);
+            ParameterValidator.validate(req,validateObjects);
         } else {
-            validate(topicParam, eventParam, descriptionParam, speakerParam, statusParam);
+            ParameterValidator.validate(req,validateObjectsModerator);
         }
+
+        String topicParam = req.getParameter(PARAM_REPORT_TOPIC);
+        String speakerParam = req.getParameter(PARAM_REPORT_SPEAKER);
+        String eventParam = req.getParameter(PARAM_REPORT_EVENT);
+        String statusParam = req.getParameter(PARAM_REPORT_STATUS);
+        String descriptionParam = req.getParameter(PARAM_REPORT_DESCRIPTION);
 
         Report report = new Report();
         report.setTopic(topicParam);
@@ -53,7 +66,7 @@ public class ReportCreatePostAction implements ControllerAction {
             approvalAction = "offer-report-speaker";
             approvalSpeaker =  currentUser;
         }else{
-            if (!speakerParam.equals("")) {
+            if (!speakerParam.equals("0")) {
                 approvalSpeaker = new User(Integer.valueOf(speakerParam));
                 Report.Status status = Report.Status.valueOf(statusParam);
                 switch (status) {
@@ -77,48 +90,4 @@ public class ReportCreatePostAction implements ControllerAction {
         return PREFIX_PATH + "/report/view?reportID=" + report.getId();
     }
 
-    private void validate(String topic, String event, String description) throws ServletException{
-
-        List<String> errorMessages = new ArrayList<>();
-
-        if (topic == null || topic.trim().isEmpty()) {
-            errorMessages.add("Please enter topic");
-        }
-        if (event == null || event.trim().isEmpty()) {
-            errorMessages.add("Please enter event");
-        }
-        if (description == null) {
-            errorMessages.add("Please enter description");
-        }
-
-        if (!errorMessages.isEmpty()) {
-            throw new ServletException("Invalid input values: " + String.join(",", errorMessages));
-        }
-
-    }
-    private void validate(String topic, String event, String description, String speaker, String status) throws ServletException{
-
-        List<String> errorMessages = new ArrayList<>();
-
-        if (topic == null || topic.trim().isEmpty()) {
-            errorMessages.add("Please enter topic");
-        }
-        if (speaker == null) {
-            errorMessages.add("Please enter speaker");
-        }
-        if (event == null || event.trim().isEmpty()) {
-            errorMessages.add("Please enter event");
-        }
-        if (status == null || status.trim().isEmpty()) {
-            errorMessages.add("Please enter status");
-        }
-        if (description == null) {
-            errorMessages.add("Please enter description");
-        }
-
-        if (!errorMessages.isEmpty()) {
-            throw new ServletException("Invalid input values: " + String.join(",", errorMessages));
-        }
-
-    }
 }

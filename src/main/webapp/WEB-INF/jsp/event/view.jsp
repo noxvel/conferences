@@ -75,10 +75,15 @@
                             role="tab" aria-controls="nav-reports" aria-selected="false"><fmt:message key="event-view.tab-button.reports"/></button>
                     <button class="nav-link" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" 
                             role="tab" aria-controls="nav-description" aria-selected="true"><fmt:message key="event-view.tab-button.description"/></button>
-                    <%-- <c:if test="${isModerator}">
+                    <c:if test="${isModerator}">
                         <button class="nav-link" id="nav-participants-tab" data-bs-toggle="tab" data-bs-target="#nav-participants" type="button" 
-                            role="tab" aria-controls="nav-participants" aria-selected="true"><fmt:message key="event-view.tab-button.participants"/></button>
-                    </c:if> --%>
+                            role="tab" aria-controls="nav-participants" aria-selected="true">
+                            <fmt:message key="event-view.tab-button.participants"/>
+                            <span class="badge text-bg-primary">
+                                <c:out value="${event.participants.size()}" />
+                            </span>
+                        </button>
+                    </c:if>
                 </div>
             </nav>
             <div class="tab-content pt-3" id="nav-tabContent">
@@ -160,9 +165,17 @@
                 <div class="tab-pane fade" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab" tabindex="0">
                     <c:out value="${event.description}" />
                 </div>
-                <div class="tab-pane fade" id="nav-participants" role="tabpanel" aria-labelledby="nav-participants-tab" tabindex="0">
-                    Test text -- List of participants
-                </div>
+                <c:if test="${isModerator}">
+                    <div class="tab-pane fade" id="nav-participants" role="tabpanel" aria-labelledby="nav-participants-tab" tabindex="0">
+                        <ul class="list-group">
+                            <c:forEach var="participant" items="${event.participants}">
+                                <li class="list-group-item list-group-item-info">
+                                    <c:out value="${participant.firstName} ${participant.lastName} (${participant.email})" />
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </c:if>
             </div>
 
         </div>

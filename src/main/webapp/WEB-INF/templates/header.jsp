@@ -65,6 +65,7 @@
                                     </c:if>
                                     <c:if test="${isModerator}">
                                         <li><a class="dropdown-item" href="${contextPath}/pages/event/statistics"><fmt:message key="header.button.event-statistics"/></a></li>
+                                        <li><a class="dropdown-item" href="${contextPath}/pages/user/list"><fmt:message key="header.button.user-list"/></a></li>
                                     </c:if>
                                     <li><a class="dropdown-item" href="${contextPath}/pages/user/profile"><fmt:message key="header.button.profile"/></a></li>
                                     <li><hr class="dropdown-divider"></li>

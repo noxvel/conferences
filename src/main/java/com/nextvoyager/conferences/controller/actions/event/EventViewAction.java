@@ -9,6 +9,8 @@ import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.PaginationUtil;
+import com.nextvoyager.conferences.util.validation.ParameterValidator;
+import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,8 +20,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_EVENT_ID;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
+
 //("/event/view")
 public class EventViewAction implements ControllerAction {
+
+    private static final ValidateObject[] validateObjects = {
+            new ValidateObject(PARAM_EVENT_ID, REGEXP_ID),
+    };
 
     private final EventService eventService;
     private final ReportService reportService;
@@ -35,7 +44,9 @@ public class EventViewAction implements ControllerAction {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req);
-        Integer eventID = Integer.valueOf(req.getParameter("eventID"));
+
+        ParameterValidator.validate(req,validateObjects);
+        Integer eventID = Integer.valueOf(req.getParameter(PARAM_EVENT_ID));
 
         Event event = eventService.find(eventID);
 
@@ -89,6 +100,11 @@ public class EventViewAction implements ControllerAction {
                     report.setSpeaker(userService.find(report.getSpeaker().getId()));
                 });
         event.setReports(listOfReports);
+
+        if (userRole == User.Role.MODERATOR) {
+            List<User> participants = userService.listOfEventParticipants(event);
+            event.setParticipants(participants);
+        }
 
         req.setAttribute("page", page);
         req.setAttribute("limit", limit);

@@ -68,6 +68,7 @@ public class AuthorizationFilter implements Filter {
         moderatorAccess.add(USER_PROFILE);
         moderatorAccess.add(USER_CHANGE_PASSWORD);
         moderatorAccess.add(USER_SIGN_OUT);
+        moderatorAccess.add(USER_LIST);
         moderatorAccess.add(MODERATOR_REPORT_APPROVAL);
         moderatorAccess.add(EVENT_CREATE);
         moderatorAccess.add(EVENT_DELETE);

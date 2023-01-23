@@ -1,6 +1,8 @@
 package com.nextvoyager.conferences.service;
 
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -25,6 +28,7 @@ public class UserServiceTest {
 
     private final User testUser = new User();
     List<User> testList = new ArrayList<>();
+    ListWithCount<User> testListWithCount = new ListWithCount<>();
 
     @InjectMocks
     UserServiceImpl userService;
@@ -38,6 +42,8 @@ public class UserServiceTest {
         testUser.setPassword("123");
         testUser.setRole(User.Role.ORDINARY_USER);
         testList.add(testUser);
+        testListWithCount.setCount(1);
+        testListWithCount.setList(testList);
     }
 
     @Test
@@ -52,31 +58,40 @@ public class UserServiceTest {
     @Test
     public void create() {
         userService.create(testUser);
-        Mockito.verify(dao, Mockito.times(1)).create(testUser);
+        verify(dao, Mockito.times(1)).create(testUser);
     }
 
     @Test
     public void update() {
         userService.update(testUser);
-        Mockito.verify(dao, Mockito.times(1)).update(testUser);
+        verify(dao, Mockito.times(1)).update(testUser);
     }
 
     @Test
     public void delete() {
         userService.delete(testUser);
-        Mockito.verify(dao, Mockito.times(1)).delete(testUser);
+        verify(dao, Mockito.times(1)).delete(testUser);
     }
 
     @Test
     public void list() {
-        Mockito.when(dao.list()).thenReturn(testList);
-        assertEquals(testList, userService.list());
+        Mockito.when(dao.list(anyInt(), anyInt())).thenReturn(testListWithCount);
+        userService.list(1, 6);
+        verify(dao).list(1, 6);
     }
 
     @Test
     public void listWithOneRole() {
-        Mockito.when(dao.list()).thenReturn(testList);
-        assertEquals(testList, userService.list());
+        Mockito.when(dao.listWithOneRole(any(User.Role.class))).thenReturn(testList);
+        userService.listWithOneRole(User.Role.SPEAKER);
+        verify(dao).listWithOneRole(any(User.Role.class));
+    }
+
+    @Test
+    public void listOfEventParticipants() {
+        Mockito.when(dao.listOfEventParticipants(anyInt())).thenReturn(testList);
+        userService.listOfEventParticipants(new Event(1));
+        verify(dao).listOfEventParticipants(1);
     }
 
     @Test
@@ -88,7 +103,7 @@ public class UserServiceTest {
     @Test
     public void changePassword() {
         dao.changePassword(testUser);
-        Mockito.verify(dao,Mockito.times(1)).changePassword(testUser);
+        verify(dao,Mockito.times(1)).changePassword(testUser);
     }
 
     @Test

@@ -4,14 +4,33 @@ import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
+import com.nextvoyager.conferences.util.validation.ParameterValidator;
+import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_REPORT_DESCRIPTION;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_REPORT_STATUS;
 
 //("/report/edit")
 public class ReportEditPostAction implements ControllerAction {
+
+    private static final ValidateObject[] validateObjects = {
+            new ValidateObject(PARAM_REPORT_ID, REGEXP_ID),
+            new ValidateObject(PARAM_REPORT_TOPIC),
+            new ValidateObject(PARAM_REPORT_DESCRIPTION,true)
+    };
+
+    private static final ValidateObject[] validateObjectsModerator = {
+            new ValidateObject(PARAM_REPORT_ID, REGEXP_ID),
+            new ValidateObject(PARAM_REPORT_TOPIC),
+            new ValidateObject(PARAM_REPORT_DESCRIPTION,true),
+            new ValidateObject(PARAM_REPORT_SPEAKER, REGEXP_ID),
+            new ValidateObject(PARAM_REPORT_STATUS, REGEXP_REPORT_STATUS)
+    };
 
     private final ReportService reportService;
 
@@ -21,14 +40,19 @@ public class ReportEditPostAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        Integer reportID = Integer.valueOf(req.getParameter("reportID"));
-        String topicParam = req.getParameter("topic");
-        String speakerParam = req.getParameter("speaker");
-        String eventParam = req.getParameter("event");
-        String statusParam = req.getParameter("status");
-        String descriptionParam = req.getParameter("description");
-
         User currentUser = (User) req.getSession().getAttribute("user");
+
+        if (currentUser.getRole() == User.Role.SPEAKER) {
+            ParameterValidator.validate(req,validateObjects);
+        } else {
+            ParameterValidator.validate(req,validateObjectsModerator);
+        }
+
+        Integer reportID = Integer.valueOf(req.getParameter(PARAM_REPORT_ID));
+        String topicParam = req.getParameter(PARAM_REPORT_TOPIC);
+        String descriptionParam = req.getParameter(PARAM_REPORT_DESCRIPTION);
+        String speakerParam = req.getParameter(PARAM_REPORT_SPEAKER);
+        String statusParam = req.getParameter(PARAM_REPORT_STATUS);
 
         Report report = reportService.find(reportID);
 
@@ -39,7 +63,7 @@ public class ReportEditPostAction implements ControllerAction {
         String approvalAction = null;
         User approvalSpeaker = null;
         if (currentUser.getRole() == User.Role.MODERATOR) {
-            if (!speakerParam.equals("")) {
+            if (!speakerParam.equals("0")) {
                 approvalSpeaker = new User(Integer.valueOf(speakerParam));
                 Report.Status status = Report.Status.valueOf(statusParam);
                 switch (status) {

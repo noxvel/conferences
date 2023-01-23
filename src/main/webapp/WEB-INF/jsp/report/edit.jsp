@@ -21,7 +21,7 @@
                     <div class="col-md-8">
                         <label for="speaker" class="form-label"><fmt:message key="report-edit.speaker.label"/></label>
                         <select name="speaker" id="speakerSelect" class="form-select" >
-                            <option value=""><fmt:message key="report-edit.speaker.select.vacant"/></option>
+                            <option value="0"><fmt:message key="report-edit.speaker.select.vacant"/></option>
                             <c:forEach var="speaker" items="${speakers}">
                                 <option ${report.speaker.id == speaker.id ? 'selected' : ''} value="${speaker.id}">
                                     ${speaker.firstName} ${speaker.lastName}(${speaker.email})
@@ -57,7 +57,6 @@
                     <span class="input-group-text"><fmt:message key="report-edit.description.label"/></span>
                     <textarea name="description" class="form-control" rows="6 aria-label="Description" >${report.description}</textarea>
                 </div>
-                <input type="hidden" id="event" name="event" value="${report.event.id}" />
                 <input type="hidden" id="reportID" name="reportID" value="${report.id}" />
                 <div class="col-12">
                     <a role="button" href="${contextPath}/pages/report/view?reportID=${report.id}" class="btn btn-secondary">

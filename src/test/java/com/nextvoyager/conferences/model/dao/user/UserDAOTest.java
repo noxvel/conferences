@@ -1,6 +1,7 @@
 package com.nextvoyager.conferences.model.dao.user;
 
 import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -139,12 +140,24 @@ public class UserDAOTest {
         Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
+        Mockito.doNothing().when(dao).processUserListRS(any(ResultSet.class),any(ResultSet.class), any(ListWithCount.class));
+
+        dao.list(1, 12);
+        Mockito.verify(dao, Mockito.times(1)).processUserListRS(any(ResultSet.class),
+                any(ResultSet.class), any(ListWithCount.class));
+    }
+
+    @Test
+    public void additionalList() throws SQLException, ClassNotFoundException {
+        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
+        Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
         Mockito.doNothing().when(dao).processUserListRS(any(ResultSet.class), any(List.class));
 
-        dao.list();
         dao.listWithOneRole(role);
         dao.receiveEventNotificationsList(event);
-        Mockito.verify(dao, Mockito.times(3)).processUserListRS(any(ResultSet.class), any(List.class));
+        Mockito.verify(dao, Mockito.times(2)).processUserListRS(any(ResultSet.class), any(List.class));
 //        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
     }
 

@@ -1,7 +1,8 @@
 package com.nextvoyager.conferences.service.impl;
 
-import com.nextvoyager.conferences.model.dao.DAOFactory;
+import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 
@@ -41,13 +42,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> list() {
-        return userDAO.list();
+    public ListWithCount<User> list(int page, int limit) {
+        return userDAO.list(page,limit);
     }
 
     @Override
     public List<User> listWithOneRole(User.Role role) {
         return userDAO.listWithOneRole(role);
+    }
+
+    @Override
+    public List<User> listOfEventParticipants(Event event) {
+        return userDAO.listOfEventParticipants(event.getId());
     }
 
     @Override

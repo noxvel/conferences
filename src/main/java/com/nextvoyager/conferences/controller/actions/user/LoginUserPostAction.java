@@ -3,17 +3,25 @@ package com.nextvoyager.conferences.controller.actions.user;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
+import com.nextvoyager.conferences.util.validation.ParameterValidator;
+import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
 //("/user/login")
 public class LoginUserPostAction implements ControllerAction {
+
+    private static final ValidateObject[] validateObjects = {
+            new ValidateObject(PARAM_USER_EMAIL, REGEXP_EMAIL),
+            new ValidateObject(PARAM_USER_PASSWORD, REGEXP_PASSWORD)
+    };
 
     private final UserService userService;
     private static final Logger logger = LogManager.getLogger(LoginUserPostAction.class);
@@ -24,10 +32,10 @@ public class LoginUserPostAction implements ControllerAction {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        String emailParam = req.getParameter("email");
-        String passwordParam = req.getParameter("password");
+        ParameterValidator.validate(req,validateObjects);
 
-        validate(emailParam, passwordParam);
+        String emailParam = req.getParameter(PARAM_USER_EMAIL);
+        String passwordParam = req.getParameter(PARAM_USER_PASSWORD);
 
         // Obtain DAOFactory.
         User user = userService.find(emailParam,passwordParam);
@@ -44,25 +52,4 @@ public class LoginUserPostAction implements ControllerAction {
         }
     }
 
-    private void validate(String email, String password) throws ServletException{
-
-        List<String> errorMessages = new ArrayList<>();
-
-        // Get and validate email
-        if (email == null || email.trim().isEmpty()) {
-            errorMessages.add("Please enter email");
-        } else if (!email.matches("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            errorMessages.add("Please enter correct email address");
-        }
-
-        // Get and validate password.
-        if (password == null || password.trim().isEmpty()) {
-            errorMessages.add("Please enter password");
-        }
-
-        if (!errorMessages.isEmpty()) {
-            throw new ServletException("Invalid input values: " + String.join(",", errorMessages));
-        }
-
-    }
 }
