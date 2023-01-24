@@ -13,7 +13,13 @@ import jakarta.servlet.http.HttpSession;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_PASSWORD;
 
-//("/user/change-password")
+/**
+ * Change user password.
+ * Path "/user/change-password".
+ * POST Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ChangeUserPasswordPostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

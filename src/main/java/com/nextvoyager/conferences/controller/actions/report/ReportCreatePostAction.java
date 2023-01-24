@@ -15,7 +15,13 @@ import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 
-//("/report/create")
+/**
+ * Create new report
+ * Path "/report/create".
+ * POST Method
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportCreatePostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

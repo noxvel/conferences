@@ -6,7 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/report/list-filter")
+/**
+ * Set filter for list of reports.
+ * Path "/report/list-filter".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportListFilterAction implements ControllerAction {
 
     @Override

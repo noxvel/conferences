@@ -5,7 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/user/change-password")
+/**
+ * Change user password.
+ * Path "/user/change-password".
+ * GET Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ChangeUserPasswordGetAction implements ControllerAction {
 
     @Override

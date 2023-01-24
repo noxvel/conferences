@@ -5,7 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/event/create")
+/**
+ * Create new event.
+ * Path "/event/create".
+ * GET method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventCreateGetAction implements ControllerAction {
 
     @Override

@@ -15,7 +15,13 @@ import org.apache.logging.log4j.Logger;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
-//("/user/login")
+/**
+ * Login user.
+ * Path "/user/login".
+ * POST Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class LoginUserPostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

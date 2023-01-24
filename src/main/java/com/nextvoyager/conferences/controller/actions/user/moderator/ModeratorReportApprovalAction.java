@@ -13,7 +13,12 @@ import static com.nextvoyager.conferences.controller.actions.ControllerActionCon
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_USER_APPROVAL_ACTION;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/moderator-report-action")
+/**
+ * Approval action for the report by moderator.
+ * Path "/moderator-report-action".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ModeratorReportApprovalAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

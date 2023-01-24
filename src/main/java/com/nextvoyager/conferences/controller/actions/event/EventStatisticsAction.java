@@ -14,7 +14,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-//("/event/statistics")
+/**
+ * Go to page with event statistics.
+ * Path "/event/statistics".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventStatisticsAction implements ControllerAction {
 
     private final EventService eventService;

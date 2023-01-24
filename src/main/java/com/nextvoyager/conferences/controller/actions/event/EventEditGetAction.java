@@ -12,7 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_EVENT_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/event/edit")
+/**
+ * Edit event.
+ * Path "/event/edit".
+ * GET Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventEditGetAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

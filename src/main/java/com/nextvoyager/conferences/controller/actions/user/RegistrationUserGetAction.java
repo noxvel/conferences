@@ -5,7 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/user/registration")
+/**
+ * Go to the user registration page.
+ * Path "/user/registration".
+ * GET Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class RegistrationUserGetAction implements ControllerAction {
 
     @Override

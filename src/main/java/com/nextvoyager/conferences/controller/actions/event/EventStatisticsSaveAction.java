@@ -17,7 +17,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
-//("/event/save-statistics")
+/**
+ * Save event statistics to file in different formats.
+ * Path "/event/save-statistics".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventStatisticsSaveAction implements ControllerAction {
 
     private final EventService eventService;

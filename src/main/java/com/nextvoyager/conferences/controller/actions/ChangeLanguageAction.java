@@ -6,7 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-//("/change-language")
+/**
+ * Change interface language.
+ * Path "/change-language".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ChangeLanguageAction implements ControllerAction {
 
     @Override

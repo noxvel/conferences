@@ -5,7 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/user/login")
+/**
+ * Login user.
+ * Path "/user/login".
+ * GET Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class LoginUserGetAction implements ControllerAction {
 
     @Override

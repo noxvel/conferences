@@ -15,11 +15,14 @@
         <div class="container pt-5">
             <h1><fmt:message key="error.text.error-code"/>: ${status}</h1>
             <c:choose>
-            <c:when test="${status == 500}">
+            <%-- <c:when test="${status == 500}">
                 <h3><fmt:message key="error.text.error-message"/>: ${pageContext.exception.getMessage()}</h3>
-            </c:when >
+            </c:when > --%>
             <c:when test="${status == 404}">
                 <h3><fmt:message key="error.text.page-not-found"/></h3>
+            </c:when>
+            <c:when test="${status == 403}">
+                <h3><fmt:message key="error.text.forbidden"/></h3>
             </c:when>
             <c:otherwise>
                 <h2><fmt:message key="error.text.error-occurred"/>!</h2>

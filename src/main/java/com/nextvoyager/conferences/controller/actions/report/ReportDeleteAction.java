@@ -12,7 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_REPORT_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/report/delete")
+/**
+ * Delete existing event.
+ * Path "/report/delete".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportDeleteAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

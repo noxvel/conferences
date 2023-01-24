@@ -15,7 +15,8 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
 /**
- * Home page controller action "/home".
+ * Home page controller action.
+ * Path "/home".
  *
  * @author Stanislav Bozhevskyi
  */

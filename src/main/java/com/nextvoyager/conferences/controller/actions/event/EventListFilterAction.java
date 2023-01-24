@@ -6,7 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/event/list-filter")
+/**
+ * Set filter for list of events.
+ * Path "/event/list-filter".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventListFilterAction implements ControllerAction {
 
     @Override

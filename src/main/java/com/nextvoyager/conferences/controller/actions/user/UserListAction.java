@@ -2,21 +2,20 @@ package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
-import com.nextvoyager.conferences.model.dao.event.EventDAO;
-import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.PaginationUtil;
-import com.nextvoyager.conferences.util.filecreator.ExportFileFormat;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.Optional;
-
-//("/user/list")
+/**
+ * Get list of users.
+ * Path "/user/list".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class UserListAction implements ControllerAction {
 
     private final UserService userService;

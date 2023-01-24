@@ -14,7 +14,13 @@ import java.time.LocalDateTime;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
-//("/event/create")
+/**
+ * Create new event.
+ * Path "/event/create".
+ * POST Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventCreatePostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

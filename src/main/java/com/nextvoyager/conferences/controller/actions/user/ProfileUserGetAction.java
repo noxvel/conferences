@@ -6,7 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-//("/user/profile")
+/**
+ * Go to profile user page.
+ * Path "/user/profile".
+ * GET Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ProfileUserGetAction implements ControllerAction {
 
     @Override

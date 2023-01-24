@@ -1,5 +1,10 @@
 package com.nextvoyager.conferences.controller.actions;
 
+/**
+ * Different constant fields for controller actions(parameters, etc.).
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public interface ControllerActionConstants {
     String PARAM_USER_FIRST_NAME = "firstName";
     String PARAM_USER_LAST_NAME = "lastName";

@@ -12,7 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/event/delete")
+/**
+ * Delete event by id.
+ * Path "/event/delete".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventDeleteAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

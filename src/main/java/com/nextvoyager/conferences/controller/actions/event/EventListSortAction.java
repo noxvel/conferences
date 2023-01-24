@@ -6,7 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//("/event/list-sort")
+/**
+ * Set sort type and direction for list of events.
+ * Path "/event/list-sort".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventListSortAction implements ControllerAction {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {

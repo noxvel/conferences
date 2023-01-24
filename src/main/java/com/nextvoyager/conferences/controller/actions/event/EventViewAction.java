@@ -23,7 +23,12 @@ import java.util.Optional;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_EVENT_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/event/view")
+/**
+ * View existing event.
+ * Path "/event/view".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventViewAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

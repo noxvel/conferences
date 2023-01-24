@@ -12,7 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_REPORT_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/report/view")
+/**
+ * View existing report.
+ * Path "/report/view".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportViewAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

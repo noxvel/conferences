@@ -14,7 +14,13 @@ import static com.nextvoyager.conferences.controller.actions.ControllerActionCon
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_USER_ROLE;
 
-//("/user/profile")
+/**
+ * Change the user data that is entered on the profile page.
+ * Path "/event/view".
+ * POST Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ProfileUserPostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

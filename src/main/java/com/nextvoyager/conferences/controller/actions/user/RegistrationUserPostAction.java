@@ -12,7 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
-//("/user/registration")
+/**
+ * Registration for the new user.
+ * Path "/user/registration".
+ * POST Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class RegistrationUserPostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

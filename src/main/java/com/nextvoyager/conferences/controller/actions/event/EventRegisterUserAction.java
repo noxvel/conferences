@@ -12,7 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
-//("/event/register")
+/**
+ * Register ordinary user to event.
+ * Path "/event/register".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventRegisterUserAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

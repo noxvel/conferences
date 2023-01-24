@@ -15,7 +15,13 @@ import static com.nextvoyager.conferences.controller.actions.ControllerActionCon
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_REPORT_STATUS;
 
-//("/report/edit")
+/**
+ * Edit existing report
+ * Path "/report/edit".
+ * POST Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportEditPostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

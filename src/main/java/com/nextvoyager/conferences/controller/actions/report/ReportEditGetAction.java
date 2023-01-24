@@ -16,7 +16,13 @@ import java.util.List;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_REPORT_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 
-//("/report/edit")
+/**
+ * Edit existing report.
+ * Path "/report/edit".
+ * GET Method.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportEditGetAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {

@@ -25,6 +25,11 @@
   </error-page>
 
   <error-page>
+    <error-code>403</error-code>
+    <location>/WEB-INF/error.jsp</location>
+  </error-page>
+
+  <error-page>
     <exception-type>jakarta.servlet.ServletException</exception-type>
     <location>/WEB-INF/error.jsp</location>
   </error-page>
