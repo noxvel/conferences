@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 
 @ExtendWith(MockitoExtension.class)
 public class EventEditPostActionTest {
@@ -35,9 +36,10 @@ public class EventEditPostActionTest {
         Mockito.when(req.getParameter("endDate")).thenReturn("2022-01-05T00:00");
         Mockito.when(req.getParameter("description")).thenReturn("test description");
         Mockito.when(req.getParameter("participantsCame")).thenReturn("100");
+        Mockito.when(req.getParameter("sendNotification")).thenReturn("true");
 
         assertDoesNotThrow(() -> action.execute(req,resp));
-        Mockito.verify(eventService, Mockito.times(1)).update(any(Event.class));
+        Mockito.verify(eventService, Mockito.times(1)).update(any(Event.class), anyBoolean());
     }
 
 }

@@ -1,14 +1,17 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="text" />
+<!DOCTYPE html>
+<html lang="${lang}">
+    <jsp:include page="/WEB-INF/templates/_head.jsp"/>
+    <body class="d-flex flex-column min-vh-100">
+        <jsp:include page="/WEB-INF/templates/_header.jsp"/>
 
-    <jsp:include page="/WEB-INF/templates/header.jsp"/>
-
-        <div class="container">
+        <main class="container flex-fill">
 
             <section class="w-100 p-4 d-flex justify-content-center pb-4">
                 <div class="d-flex flex-column">
@@ -59,8 +62,13 @@
                 </div>
             </section>
 
-        <script>
 
+        </main>
+
+        <jsp:include page="/WEB-INF/templates/_footer.jsp"/>
+        <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
+
+        <script>
             $(document).ready(function() {
 
                 $("#changePassword").submit(function( event ) {
@@ -80,6 +88,7 @@
                     event.target.classList.add('was-validated')
                 });
             });
-
         </script>
-    <jsp:include page="/WEB-INF/templates/footer.jsp"/>
+        
+    </body>
+</html>

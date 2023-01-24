@@ -12,7 +12,7 @@ public interface EventService {
 
     Event find(Integer eventID);
 
-    void update(Event event);
+    void update(Event event, boolean sendNotification);
 
     void create(Event event);
 

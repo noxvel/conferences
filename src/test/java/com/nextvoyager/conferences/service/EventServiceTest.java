@@ -82,13 +82,13 @@ public class EventServiceTest {
     @Test
     public void update() {
         Mockito.when(userDAO.receiveEventNotificationsList(testEvent)).thenReturn(emtpyUserList);
-        eventService.update(testEvent);
+        eventService.update(testEvent, true);
         Mockito.verify(dao, Mockito.times(1)).update(testEvent);
     }
 
     @Test
     public void delete() {
-        Mockito.when(userDAO.receiveEventNotificationsList(testEvent)).thenReturn(emtpyUserList);
+//        Mockito.when(userDAO.receiveEventNotificationsList(testEvent)).thenReturn(emtpyUserList);
         eventService.delete(testEvent);
         Mockito.verify(dao, Mockito.times(1)).delete(testEvent);
     }

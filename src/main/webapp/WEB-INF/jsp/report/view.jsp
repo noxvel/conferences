@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="mytag" tagdir="/WEB-INF/tags" %>
@@ -8,10 +8,14 @@
 
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="text" />
+<!DOCTYPE html>
+<html lang="${lang}">
+    <jsp:include page="/WEB-INF/templates/_head.jsp"/>
+    <body class="d-flex flex-column min-vh-100">
+        <jsp:include page="/WEB-INF/templates/_header.jsp"/>
 
-    <jsp:include page="/WEB-INF/templates/header.jsp"/>
+        <main class="container flex-fill">
 
-        <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="${contextPath}/pages/home"><fmt:message key="report-view.breadcrumb-home-text"/></a></li>
@@ -158,13 +162,15 @@
                 <p class="mt-1">${not empty report.description ? report.description : textNoDescription}</p>
             </div>
 
-        </div>   
+        </main>
 
+        <jsp:include page="/WEB-INF/templates/_footer.jsp"/>
+        <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
         <script>
             $(document).ready(() => {
                 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
                 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
             });
         </script>
-
-    <jsp:include page="/WEB-INF/templates/footer.jsp"/>
+    </body>
+</html>

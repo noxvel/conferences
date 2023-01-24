@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" isErrorPage="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="status" value="${pageContext.response.status}" />
 
 <fmt:setLocale value="${lang}" />
@@ -8,17 +9,10 @@
 
 <!DOCTYPE html>
 <html lang="${lang}">
-    <head>
-        <meta charset="UTF-8">
-        <title>Conferences</title>
-        <link href="${contextPath}/css/bootstrap.min.css" rel="stylesheet">
-        
-        <script type="text/javascript" src="${contextPath}/js/bootstrap.bundle.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/js/jquery-3.6.1.min.js"></script>
-    </head>
+    <jsp:include page="/WEB-INF/templates/_head.jsp"/>
     <body class="d-flex flex-column h-100">
 
-        <div class="container">
+        <div class="container pt-5">
             <h1><fmt:message key="error.text.error-code"/>: ${status}</h1>
             <c:choose>
             <c:when test="${status == 500}">
@@ -33,5 +27,6 @@
             </c:choose>
         </div>
 
+        <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
     </body>
 </html>

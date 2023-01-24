@@ -19,6 +19,7 @@ public interface ControllerActionConstants {
     String PARAM_EVENT_DESCRIPTION = "description";
     String PARAM_EVENT_PARTICIPANTS_CAME = "participantsCame";
     String PARAM_EVENT_REGISTER_USER = "register";
+    String PARAM_EVENT_SEND_NOTIFICATION = "sendNotification";
 
     String PARAM_REPORT_ID = "reportID";
     String PARAM_REPORT_TOPIC = "topic";

@@ -44,6 +44,7 @@ public class EventEditPostAction implements ControllerAction {
         LocalDateTime endDateParam = LocalDateTime.parse(req.getParameter(PARAM_EVENT_END_DATE));
         String descriptionParam = req.getParameter(PARAM_EVENT_DESCRIPTION);
         String participantsCameParam = req.getParameter(PARAM_EVENT_PARTICIPANTS_CAME);
+        String sendNotification = req.getParameter(PARAM_EVENT_SEND_NOTIFICATION);
 
         Event event = new Event();
         event.setId(idParam);
@@ -54,7 +55,7 @@ public class EventEditPostAction implements ControllerAction {
         event.setDescription(descriptionParam);
         event.setParticipantsCame(Integer.valueOf(participantsCameParam));
 
-        eventService.update(event);
+        eventService.update(event, sendNotification != null);
 
         return PREFIX_PATH + "/event/view?eventID=" + event.getId();
     }

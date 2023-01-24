@@ -25,10 +25,12 @@ public class EventServiceImpl implements EventService {
         return eventDAO.find(id);
     }
     @Override
-    public void update(Event event) {
+    public void update(Event event, boolean sendNotification) {
         eventDAO.update(event);
-        List<User> userList = userDAO.receiveEventNotificationsList(event);
-        EventNotificationManager.notify(userList, event, EventNotificationManager.NotificationType.UPDATE);
+        if (sendNotification) {
+            List<User> userList = userDAO.receiveEventNotificationsList(event);
+            EventNotificationManager.notify(userList, event, EventNotificationManager.NotificationType.UPDATE);
+        }
     }
 
     @Override
@@ -38,9 +40,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void delete(Event event) {
-        List<User> userList = userDAO.receiveEventNotificationsList(event);
+//        List<User> userList = userDAO.receiveEventNotificationsList(event);
         eventDAO.delete(event);
-        EventNotificationManager.notify(userList, event, EventNotificationManager.NotificationType.DELETE);
+//        EventNotificationManager.notify(userList, event, EventNotificationManager.NotificationType.DELETE);
     }
 
     @Override

@@ -6,12 +6,22 @@
 
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="text" />
+<!DOCTYPE html>
+<html lang="${lang}">
+    <jsp:include page="/WEB-INF/templates/_head.jsp"/>
+    <body class="d-flex flex-column min-vh-100">
+        <jsp:include page="/WEB-INF/templates/_header.jsp"/>
 
-    <jsp:include page="/WEB-INF/templates/header.jsp"/>
+        <main class="container flex-fill">
 
-        <div class="container d-flex flex-column">
-            <h1 class="mb-3"><fmt:message key="about.header.text"/></h2>
-            <p><fmt:message key="about.body.text"/></p>
-        </div>
+            <div class="container d-flex flex-column">
+                <h1 class="mb-3"><fmt:message key="about.header.text"/></h2>
+                <p><fmt:message key="about.body.text"/></p>
+            </div>
 
-    <jsp:include page="/WEB-INF/templates/footer.jsp"/>
+        </main>
+        
+        <jsp:include page="/WEB-INF/templates/_footer.jsp"/>
+        <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
+    </body>
+</html>

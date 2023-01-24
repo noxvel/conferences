@@ -14,7 +14,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
-//("/home")
+/**
+ * Home page controller action "/home".
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class HomePageAction implements ControllerAction {
 
     private final EventService eventService;

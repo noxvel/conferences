@@ -45,7 +45,7 @@ public class EmailCreator {
     }
 
     public static void send(String sendToEmails, String subject, String body) {
-//        new SendEmail(sendToEmails, subject, body).start();
+        new SendEmail(sendToEmails, subject, body).start();
     }
 
     private static class SendEmail extends Thread{

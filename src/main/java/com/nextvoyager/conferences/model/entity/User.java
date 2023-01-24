@@ -66,7 +66,7 @@ public class User implements Serializable {
 
         MODERATOR(1,"Moderator"),
         SPEAKER(2,"Speaker"),
-        ORDINARY_USER(3,"OrdinaryUser");
+        ORDINARY_USER(3,"Ordinary user");
 
         private static final long serialVersionUID = 1L;
 
