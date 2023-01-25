@@ -19,6 +19,12 @@ import java.util.Objects;
 
 import static com.nextvoyager.conferences.controller.frontcontroller.ControllerAction.*;
 
+/**
+ * Factory method for getting the controller action that matches the HTTP method
+ * and request path of the received request.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ControllerActionFactory {
 
     private static final UserService userService = AppContext.getInstance().getUserService();

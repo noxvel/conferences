@@ -73,25 +73,25 @@ public class EventViewAction implements ControllerAction {
 
         // Get list of all confirmed reports for not registered or the ordinary user
         if (userRole == null || userRole == User.Role.ORDINARY_USER) {
-            countAndList = reportService.listWithPagination(page, limit, eventID, Report.Status.CONFIRMED);
+            countAndList = reportService.listWithPagination(page, limit, event, Report.Status.CONFIRMED);
         }  else {
             reportStatusFilter = Optional.ofNullable((Report.Status) session.getAttribute("reportStatusFilter"));
             if (userRole == User.Role.SPEAKER) {
                 if (reportStatusFilter.isEmpty()) {
-                    countAndList = reportService.listWithPagination(page, limit, eventID, currentUser);
+                    countAndList = reportService.listWithPagination(page, limit, event, currentUser);
                 } else {
                     Report.Status filterStatus= reportStatusFilter.get();
                     if (filterStatus == Report.Status.FREE || filterStatus == Report.Status.CONFIRMED) {
-                        countAndList = reportService.listWithPagination(page, limit, eventID, filterStatus);
+                        countAndList = reportService.listWithPagination(page, limit, event, filterStatus);
                     } else {
-                        countAndList = reportService.listWithPagination(page, limit, eventID, currentUser, reportStatusFilter.get());
+                        countAndList = reportService.listWithPagination(page, limit, event, currentUser, reportStatusFilter.get());
                     }
                 }
             } else {
                 if (reportStatusFilter.isEmpty()) {
-                    countAndList = reportService.listWithPagination(page, limit, eventID);
+                    countAndList = reportService.listWithPagination(page, limit, event);
                 } else {
-                    countAndList = reportService.listWithPagination(page, limit, eventID, reportStatusFilter.get());
+                    countAndList = reportService.listWithPagination(page, limit, event, reportStatusFilter.get());
                 }
             }
         }

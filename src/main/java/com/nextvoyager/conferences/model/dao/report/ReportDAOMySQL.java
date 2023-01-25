@@ -15,6 +15,11 @@ import java.util.List;
 
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.*;
 
+/**
+ * Implementation of ReportDAO for MySQL database
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ReportDAOMySQL implements ReportDAO {
 
     // Constants ----------------------------------------------------------------------------------
@@ -53,7 +58,6 @@ public class ReportDAOMySQL implements ReportDAO {
     private static final String SQL_STATUS_UPDATE =
             "UPDATE report SET report_status_id = ? WHERE id = ? ";
 
-
     // Vars ---------------------------------------------------------------------------------------
 
     private final DAOFactory daoFactory;
@@ -61,8 +65,7 @@ public class ReportDAOMySQL implements ReportDAO {
     // Constructors -------------------------------------------------------------------------------
 
     /**
-     * Construct a Report DAO for the given DAOFactory. Package private so that it can be constructed
-     * inside the DAO package only.
+     * Construct a Report DAO for the given DAOFactory.
      *
      * @param daoFactory The DAOFactory to construct this Report DAO for.
      */
@@ -71,6 +74,35 @@ public class ReportDAOMySQL implements ReportDAO {
     }
 
     // Actions ------------------------------------------------------------------------------------
+
+    @Override
+    public Report find(Integer id) throws DAOException {
+        return find(SQL_FIND_BY_ID, new ValueDAO(id,Types.INTEGER));
+    }
+
+    /**
+     * Returns the report from the database matching the given SQL query with the given values.
+     *
+     * @param sql The SQL query to be executed in the database.
+     * @param values The ValueDAO values to be set.
+     * @return The report from the database matching the given SQL query with the given values.
+     * @throws DAOException If something fails at database level.
+     */
+    private Report find(String sql, ValueDAO... values) throws DAOException {
+        Report report = null;
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, sql, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            report = processReportRS(resultSet);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return report;
+    }
 
     @Override
     public void create(Report report) throws IllegalArgumentException, DAOException {
@@ -169,35 +201,6 @@ public class ReportDAOMySQL implements ReportDAO {
     }
 
     @Override
-    public Report find(Integer id) throws DAOException {
-        return find(SQL_FIND_BY_ID, new ValueDAO(id,Types.INTEGER));
-    }
-
-    /**
-     * Returns the report from the database matching the given SQL query with the given values.
-     *
-     * @param sql    The SQL query to be executed in the database.
-     * @param values The PreparedStatement values to be set.
-     * @return The report from the database matching the given SQL query with the given values.
-     * @throws DAOException If something fails at database level.
-     */
-    private Report find(String sql, ValueDAO... values) throws DAOException {
-        Report report = null;
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, sql, false, values);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            report = processReportRS(resultSet);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return report;
-    }
-
-    @Override
     public List<Report> list() throws DAOException {
         List<Report> reports = new ArrayList<>();
 
@@ -215,7 +218,7 @@ public class ReportDAOMySQL implements ReportDAO {
     }
 
     @Override
-    public List<Report> list(Integer eventID) throws DAOException {
+    public List<Report> list(Event event) throws DAOException {
         List<Report> reports = new ArrayList<>();
 
         String currentSQL = new SelectQueryBuilder(SQL_LIST)
@@ -223,7 +226,8 @@ public class ReportDAOMySQL implements ReportDAO {
                 .build();
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, currentSQL, false, new ValueDAO(eventID, Types.INTEGER));
+                PreparedStatement statement = prepareStatement(connection, currentSQL,
+                        false, new ValueDAO(event.getId(), Types.INTEGER));
                 ResultSet resultSet = statement.executeQuery()
         ) {
             processReportListRS(resultSet,reports);
@@ -249,76 +253,6 @@ public class ReportDAOMySQL implements ReportDAO {
         ValueDAO[] valuesAllCount = {};
 
         ValueDAO[] valuesPagination = {
-                new ValueDAO(offset, Types.INTEGER),
-                new ValueDAO(limit, Types.INTEGER)
-        };
-
-        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
-    }
-
-    @Override
-    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker) {
-        int offset;
-        offset = (page - 1) * limit;
-
-        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
-                .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
-                .build();
-
-        String currentSQL = new SelectQueryBuilder(SQL_LIST)
-                .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
-                .setLimit()
-                .build();
-
-        ValueDAO[] valuesAllCount = {
-                new ValueDAO(eventID, Types.INTEGER),
-                new ValueDAO(speaker.getId(), Types.INTEGER),
-                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
-                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER)
-        };
-
-        ValueDAO[] valuesPagination = {
-                new ValueDAO(eventID, Types.INTEGER),
-                new ValueDAO(speaker.getId(), Types.INTEGER),
-                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
-                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER),
-                new ValueDAO(offset, Types.INTEGER),
-                new ValueDAO(limit, Types.INTEGER)
-        };
-
-        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
-    }
-
-    @Override
-    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status) {
-        int offset;
-        offset = (page - 1) * limit;
-
-        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
-                .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER)
-                .setFilter(SQL_ADD_WHERE_STATUS)
-                .build();
-
-        String currentSQL = new SelectQueryBuilder(SQL_LIST)
-                .setFilter(SQL_ADD_WHERE_EVENT)
-                .setFilter(SQL_ADD_WHERE_SPEAKER)
-                .setFilter(SQL_ADD_WHERE_STATUS)
-                .setLimit()
-                .build();
-
-        ValueDAO[] valuesAllCount = {
-                new ValueDAO(eventID, Types.INTEGER),
-                new ValueDAO(speaker.getId(), Types.INTEGER),
-                new ValueDAO(status.getId(), Types.INTEGER)
-        };
-
-        ValueDAO[] valuesPagination = {
-                new ValueDAO(eventID, Types.INTEGER),
-                new ValueDAO(speaker.getId(), Types.INTEGER),
-                new ValueDAO(status.getId(), Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
@@ -412,7 +346,7 @@ public class ReportDAOMySQL implements ReportDAO {
     }
 
     @Override
-    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID) throws DAOException {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Event event) throws DAOException {
         int offset;
         offset = (page - 1) * limit;
 
@@ -426,11 +360,11 @@ public class ReportDAOMySQL implements ReportDAO {
                 .build();
 
         ValueDAO[] valuesAllCount = {
-                new ValueDAO(eventID, Types.INTEGER)
+                new ValueDAO(event.getId(), Types.INTEGER)
         };
 
         ValueDAO[] valuesPagination = {
-                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(event.getId(), Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
         };
@@ -439,7 +373,7 @@ public class ReportDAOMySQL implements ReportDAO {
     }
 
     @Override
-    public ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, Report.Status status) throws DAOException {
+    public ListWithCount<Report> listWithPagination(int page, int limit, Event event, Report.Status status) throws DAOException {
         int offset;
         offset = (page - 1) * limit;
 
@@ -455,12 +389,82 @@ public class ReportDAOMySQL implements ReportDAO {
                 .build();
 
         ValueDAO[] valuesAllCount = {
-                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(event.getId(), Types.INTEGER),
                 new ValueDAO(status.getId(), Types.INTEGER)
         };
 
         ValueDAO[] valuesPagination = {
-                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
+    }
+
+    @Override
+    public ListWithCount<Report> listWithPagination(int page, int limit, Event event, User speaker) {
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER_EVENT_VIEW)
+                .setLimit()
+                .build();
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.FREE.getId(), Types.INTEGER),
+                new ValueDAO(Report.Status.CONFIRMED.getId(), Types.INTEGER),
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        return listWithPagination(currentAllCount, currentSQL, valuesAllCount, valuesPagination);
+    }
+
+    @Override
+    public ListWithCount<Report> listWithPagination(int page, int limit, Event event, User speaker, Report.Status status) {
+        int offset;
+        offset = (page - 1) * limit;
+
+        String currentAllCount = new SelectQueryBuilder(SQL_LIST_COUNT_ALL)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER)
+                .setFilter(SQL_ADD_WHERE_STATUS)
+                .build();
+
+        String currentSQL = new SelectQueryBuilder(SQL_LIST)
+                .setFilter(SQL_ADD_WHERE_EVENT)
+                .setFilter(SQL_ADD_WHERE_SPEAKER)
+                .setFilter(SQL_ADD_WHERE_STATUS)
+                .setLimit()
+                .build();
+
+        ValueDAO[] valuesAllCount = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
+                new ValueDAO(status.getId(), Types.INTEGER)
+        };
+
+        ValueDAO[] valuesPagination = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(speaker.getId(), Types.INTEGER),
                 new ValueDAO(status.getId(), Types.INTEGER),
                 new ValueDAO(offset, Types.INTEGER),
                 new ValueDAO(limit, Types.INTEGER)
@@ -512,23 +516,14 @@ public class ReportDAOMySQL implements ReportDAO {
      */
     private Report map(ResultSet reportRS) throws SQLException{
         Report report = new Report();
-        report.setId(reportRS.getInt("id"));
-        report.setTopic(reportRS.getString("topic"));
-        int speakerID = reportRS.getInt("speaker_id");
+        report.setId(reportRS.getInt(FIELD_ID));
+        report.setTopic(reportRS.getString(FIELD_TOPIC));
+        int speakerID = reportRS.getInt(FIELD_SPEAKER_ID);
         report.setSpeaker(speakerID != 0 ? new User(speakerID) : null);
-        report.setEvent(new Event(reportRS.getInt("event_id"),reportRS.getString("event_name")));
-        report.setStatus(Report.Status.valueOf(reportRS.getString("report_status_name")));
-        report.setDescription(reportRS.getString("description"));
+        report.setEvent(new Event(reportRS.getInt(FIELD_EVENT_ID),reportRS.getString(FIELD_EVENT_NAME)));
+        report.setStatus(Report.Status.valueOf(reportRS.getString(FIELD_REPORT_STATUS_NAME)));
+        report.setDescription(reportRS.getString(FILED_DESCRIPTION));
         return report;
-//        return new Event.EventBuilder()
-//                .setId(eventRS.getInt(FIELD_ID))
-//                .setName(eventRS.getString(FIELD_NAME))
-//                .setPlace(eventRS.getString(FIELD_PLACE))
-//                .setBeginDate(eventRS.getTimestamp(FIELD_BEGIN_DATE).toLocalDateTime())
-//                .setEndDate(eventRS.getTimestamp(FIELD_END_DATE).toLocalDateTime())
-//                .setDescription(eventRS.getString(FIELD_DESCRIPTION))
-//                .setParticipantsCame(eventRS.getInt(FIELD_PARTICIPANTS_CAME))
-//                .build();
     }
 
 }

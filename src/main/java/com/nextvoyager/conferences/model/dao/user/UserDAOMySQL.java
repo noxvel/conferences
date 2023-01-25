@@ -14,6 +14,11 @@ import java.util.List;
 
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.*;
 
+/**
+ * Implementation of UserDAO for MySQL database
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class UserDAOMySQL implements UserDAO{
 
     // Constants ----------------------------------------------------------------------------------
@@ -68,8 +73,7 @@ public class UserDAOMySQL implements UserDAO{
     // Constructors -------------------------------------------------------------------------------
 
     /**
-     * Construct a User DAO for the given DAOFactory. Package private so that it can be constructed
-     * inside the DAO package only.
+     * Construct a User DAO for the given DAOFactory.
      * @param daoFactory The DAOFactory to construct this User DAO for.
      */
     public UserDAOMySQL(DAOFactory daoFactory) {
@@ -91,7 +95,7 @@ public class UserDAOMySQL implements UserDAO{
     /**
      * Returns the user from the database matching the given SQL query with the given values.
      * @param sql The SQL query to be executed in the database.
-     * @param values The PreparedStatement values to be set.
+     * @param values The ValueDAO values to be set.
      * @return The user from the database matching the given SQL query with the given values.
      * @throws DAOException If something fails at database level.
      */
@@ -109,76 +113,6 @@ public class UserDAOMySQL implements UserDAO{
         }
 
         return user;
-    }
-
-    @Override
-    public ListWithCount<User> list(int page, int limit) throws DAOException {
-        int offset;
-        offset = (page - 1) * limit;
-
-        ValueDAO[] values = {
-                new ValueDAO(offset, Types.INTEGER),
-                new ValueDAO(limit, Types.INTEGER)
-        };
-
-        ListWithCount<User> result = new ListWithCount<>();
-        result.setList(new ArrayList<>());
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement stmtCount = prepareStatement(connection, SQL_LIST_COUNT_ALL, false);
-                ResultSet resultSetCountAll = stmtCount.executeQuery();
-                PreparedStatement statementList = prepareStatement(connection,SQL_LIST_ORDER_BY_ID, false, values);
-                ResultSet resultSetList = statementList.executeQuery()
-        ) {
-            processUserListRS(resultSetCountAll,resultSetList,result);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e.getMessage(),e);
-        }
-
-        return result;
-    }
-
-    @Override
-    public List<User> listWithOneRole(User.Role userRole) throws DAOException {
-        ValueDAO[] values = {
-                new ValueDAO(userRole.getId(), Types.INTEGER)
-        };
-        return list(SQL_LIST_WITH_ONLY_ONE_ROLE, values);
-
-    }
-
-    @Override
-    public List<User> listOfEventParticipants(Integer eventID) {
-        ValueDAO[] values = {
-                new ValueDAO(eventID, Types.INTEGER)
-        };
-        return list(SQL_LIST_EVENT_PARTICIPANTS, values);
-    }
-
-    @Override
-    public List<User> receiveEventNotificationsList(Event event) {
-        ValueDAO[] values = {
-                new ValueDAO(event.getId(), Types.INTEGER),
-                new ValueDAO(event.getId(), Types.INTEGER)
-        };
-        return list(SQL_LIST_WHO_RECEIVE_NOTIFICATIONS, values);
-    }
-
-    private List<User> list(String sql, ValueDAO... values) {
-        List<User> users = new ArrayList<>();
-
-        try (
-                Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, sql, false, values);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            processUserListRS(resultSet,users);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DAOException(e);
-        }
-
-        return users;
     }
 
     @Override
@@ -266,6 +200,75 @@ public class UserDAOMySQL implements UserDAO{
     }
 
     @Override
+    public ListWithCount<User> list(int page, int limit) throws DAOException {
+        int offset;
+        offset = (page - 1) * limit;
+
+        ValueDAO[] values = {
+                new ValueDAO(offset, Types.INTEGER),
+                new ValueDAO(limit, Types.INTEGER)
+        };
+
+        ListWithCount<User> result = new ListWithCount<>();
+        result.setList(new ArrayList<>());
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement stmtCount = prepareStatement(connection, SQL_LIST_COUNT_ALL, false);
+                ResultSet resultSetCountAll = stmtCount.executeQuery();
+                PreparedStatement statementList = prepareStatement(connection,SQL_LIST_ORDER_BY_ID, false, values);
+                ResultSet resultSetList = statementList.executeQuery()
+        ) {
+            processUserListRS(resultSetCountAll,resultSetList,result);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e.getMessage(),e);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<User> listWithOneRole(User.Role userRole) throws DAOException {
+        ValueDAO[] values = {
+                new ValueDAO(userRole.getId(), Types.INTEGER)
+        };
+        return list(SQL_LIST_WITH_ONLY_ONE_ROLE, values);
+
+    }
+
+    @Override
+    public List<User> listOfEventParticipants(Event event) {
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER)
+        };
+        return list(SQL_LIST_EVENT_PARTICIPANTS, values);
+    }
+
+    @Override
+    public List<User> receiveEventNotificationsList(Event event) {
+        ValueDAO[] values = {
+                new ValueDAO(event.getId(), Types.INTEGER),
+                new ValueDAO(event.getId(), Types.INTEGER)
+        };
+        return list(SQL_LIST_WHO_RECEIVE_NOTIFICATIONS, values);
+    }
+
+    private List<User> list(String sql, ValueDAO... values) {
+        List<User> users = new ArrayList<>();
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, sql, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            processUserListRS(resultSet,users);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return users;
+    }
+    @Override
     public boolean existEmail(String email) throws DAOException {
         ValueDAO[] values = {
                 new ValueDAO(email,Types.VARCHAR)
@@ -336,8 +339,6 @@ public class UserDAOMySQL implements UserDAO{
 
         return exist;
     }
-
-
 
     // Helpers ------------------------------------------------------------------------------------
 

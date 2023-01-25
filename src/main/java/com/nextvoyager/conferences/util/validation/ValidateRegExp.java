@@ -7,6 +7,11 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Enumeration of regular expressions and error messages to them.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @Getter
 public enum ValidateRegExp {
 

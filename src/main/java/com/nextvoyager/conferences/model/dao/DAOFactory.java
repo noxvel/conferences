@@ -12,54 +12,38 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * This class represents a DAO factory for a SQL database. You can use {@link #getInstance(String)}
- * to obtain a new instance for the given database name. The specific instance returned depends on
- * the properties file configuration. You can obtain DAO's for the DAO factory instance using the
- * DAO getters.
+ * This abstract class represents a DAO factory for a SQL database. You can use {@link #getInstance(String)}
+ * to obtain an instance for the given database name. The specific instance returned depends on
  * <p>
  * This class requires a properties file named 'dao.properties' in the classpath with among others
  * the following properties:
  * <pre>
- * name.url *
- * name.driver
+ * name.url
  * name.username
  * name.password
  * </pre>
- * Those marked with * are required, others are optional and can be left away or empty. Only the
- * username is required when any password is specified.
+ * Properties username and password are optional.
  * <ul>
  * <li>The 'name' must represent the database name in {@link #getInstance(String)}.</li>
- * <li>The 'name.url' must represent either the JDBC URL or JNDI name of the database.</li>
- * <li>The 'name.driver' must represent the full qualified class name of the JDBC driver.</li>
+ * <li>The 'name.url' must represent either the JNDI name of the database.</li>
  * <li>The 'name.username' must represent the username of the database login.</li>
  * <li>The 'name.password' must represent the password of the database login.</li>
  * </ul>
- * If you specify the driver property, then the url property will be assumed as JDBC URL. If you
- * omit the driver property, then the url property will be assumed as JNDI name. When using JNDI
- * with username/password preconfigured, you can omit the username and password properties as well.
+ * When using JNDI with username/password preconfigured, you can omit the username and password properties as well.
  * <p>
- * Here are basic examples of valid properties for a database with the name 'javabase':
+ * Here are basic example of valid property for a database with the name 'base':
  * <pre>
- * javabase.jdbc.url = jdbc:mysql://localhost:3306/javabase
- * javabase.jdbc.driver = com.mysql.jdbc.Driver
- * javabase.jdbc.username = java
- * javabase.jdbc.password = d$7hF_r!9Y
- * </pre>
- * <pre>
- * javabase.jndi.url = jdbc/javabase
+ * base.jndi.url = java:comp/env/jdbc/base
  * </pre>
  * Here is a basic use example:
  * <pre>
- * DAOFactory javabase = DAOFactory.getInstance("javabase.jdbc");
- * UserDAO userDAO = javabase.getUserDAO();
+ * DAOFactory base = DAOFactory.getInstance("base.jndi");
+ * Report reportDAO = base.getReportDAO();
  * </pre>
- *
  */
-
 public abstract class DAOFactory {
 
     private static DAOFactory instance;
@@ -115,8 +99,7 @@ public abstract class DAOFactory {
     }
 
     /**
-     * Returns a connection to the database. Package private so that it can be used inside the DAO
-     * package only.
+     * Returns a connection to the database.
      * @return A connection to the database.
      * @throws SQLException If acquiring the connection fails.
      */

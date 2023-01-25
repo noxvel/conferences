@@ -1,5 +1,9 @@
 package com.nextvoyager.conferences.util.emailcreator;
 
+/**
+ * This class represents an exception in the {@link EmailCreator}.
+ *
+ */
 public class EmailConfigException extends RuntimeException{
     public EmailConfigException() {
         super();

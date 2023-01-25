@@ -3,6 +3,11 @@ package com.nextvoyager.conferences.controller.frontcontroller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Interface for a controller action. Contains constants with action paths.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public interface ControllerAction {
 
     String PREFIX_PATH = "/pages";

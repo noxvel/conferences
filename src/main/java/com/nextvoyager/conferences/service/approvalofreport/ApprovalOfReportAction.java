@@ -5,6 +5,11 @@ import com.nextvoyager.conferences.model.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * This class represents an abstraction for report approval action.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public abstract class ApprovalOfReportAction {
 
     private static final Logger LOGGER = LogManager.getLogger(ApprovalOfReportAction.class);

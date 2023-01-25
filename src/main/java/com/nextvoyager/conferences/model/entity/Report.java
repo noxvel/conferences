@@ -1,10 +1,16 @@
 package com.nextvoyager.conferences.model.entity;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
-@Data
+/**
+ * Report entity class
+ *
+ * @author Stanislav Bozhevskyi
+ */
+@Getter
+@Setter
 public class Report {
 
     private Integer id;
@@ -23,6 +29,26 @@ public class Report {
                 ", status=" + status +
                 ", event=" + event +
                 '}';
+    }
+
+    /**
+     * The report ID is unique for each Report. So this should compare Report by ID only.
+     */
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Report) && (id != null)
+                ? id.equals(((Report) other).id)
+                : (other == this);
+    }
+
+    /**
+     * The report ID is unique for each Report. So Report with same ID should return same hashcode.
+     */
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 
     @Getter

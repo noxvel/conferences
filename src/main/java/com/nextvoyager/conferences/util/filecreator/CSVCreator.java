@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.*;
 
+/**
+ * Create files in CSV format.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class CSVCreator implements FileCreator{
     @Override
     public ByteArrayOutputStream generateStatisticsFile(List<Event> eventsList, String lang) {

@@ -6,6 +6,11 @@ import jakarta.servlet.annotation.WebListener;
 
 import static com.nextvoyager.conferences.util.PaginationUtil.getPaginationLimitList;
 
+/**
+ * Context listener
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @WebListener
 public class ContextListener implements ServletContextListener {
     @Override

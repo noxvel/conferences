@@ -6,6 +6,11 @@ import com.nextvoyager.conferences.model.entity.User;
 
 import java.util.List;
 
+/**
+ * User service interface
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public interface UserService {
 
     User find(String emailParam, String passwordParam);

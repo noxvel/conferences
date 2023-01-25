@@ -4,6 +4,12 @@ import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
 
+/**
+ * Action to approve the report.
+ * The moderator propose the report to the selected speaker.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ProposeToSpeakerByModerator extends ApprovalOfReportAction {
     @Override
     public void execute(Report report, User speaker) {

@@ -8,6 +8,11 @@ import com.nextvoyager.conferences.model.entity.User;
 
 import java.util.List;
 
+/**
+ * Event service interface
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public interface EventService {
 
     Event find(Integer eventID);
@@ -20,7 +25,7 @@ public interface EventService {
 
     boolean isUserRegisterEvent(Event event, User user);
 
-    void registerUser(Integer eventID, User user, boolean register);
+    void registerUser(Event event, User user, boolean register);
 
     List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
 

@@ -4,10 +4,16 @@ import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.UserService;
 
 import java.util.List;
 
+/**
+ * The class which implements {@link UserService} interface
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
@@ -53,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listOfEventParticipants(Event event) {
-        return userDAO.listOfEventParticipants(event.getId());
+        return userDAO.listOfEventParticipants(event);
     }
 
     @Override

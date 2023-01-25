@@ -1,9 +1,12 @@
 package com.nextvoyager.conferences.model.dao.utils.querybuilder;
 
-import com.nextvoyager.conferences.model.dao.utils.DAOUtil;
-
 import java.util.StringJoiner;
 
+/**
+ * Utility class to help create SQL queries
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class SelectQueryBuilder {
 
     protected final StringBuilder stringBuilder;

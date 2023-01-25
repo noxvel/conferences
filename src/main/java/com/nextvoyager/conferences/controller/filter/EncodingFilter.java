@@ -6,6 +6,11 @@ import jakarta.servlet.annotation.WebInitParam;
 
 import java.io.IOException;
 
+/**
+ * Encoding filter for requests
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @WebFilter(urlPatterns = "/*", initParams = @WebInitParam(name="encoding", value = "UTF-8"))
 public class EncodingFilter implements Filter {
 

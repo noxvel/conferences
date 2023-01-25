@@ -29,6 +29,7 @@ public class ReportServiceTest {
 
     private final Report testReport = new Report();
     List<Report> testList = new ArrayList<>();
+    private final Event testEvent = new Event(1);
 
     @Mock
     User mockSpeaker;
@@ -92,8 +93,8 @@ public class ReportServiceTest {
 
     @Test
     public void list() {
-        Mockito.when(reportDAO.list(1)).thenReturn(testList);
-        assertEquals(testList, reportService.list(1));
+        Mockito.when(reportDAO.list(testEvent)).thenReturn(testList);
+        assertEquals(testList, reportService.list(testEvent));
     }
 
     @Test
@@ -102,18 +103,18 @@ public class ReportServiceTest {
         Mockito.when(reportDAO.listWithPagination(1, 6, reportStatus)).thenReturn(testListWithCount);
         Mockito.when(reportDAO.listWithPagination(1, 6, mockSpeaker)).thenReturn(testListWithCount);
         Mockito.when(reportDAO.listWithPagination(1, 6, mockSpeaker, reportStatus)).thenReturn(testListWithCount);
-        Mockito.when(reportDAO.listWithPagination(1, 6, 1)).thenReturn(testListWithCount);
-        Mockito.when(reportDAO.listWithPagination(1, 6, 1, reportStatus)).thenReturn(testListWithCount);
-        Mockito.when(reportDAO.listWithPagination(1, 6, 1, mockSpeaker)).thenReturn(testListWithCount);
-        Mockito.when(reportDAO.listWithPagination(1, 6, 1, mockSpeaker, reportStatus)).thenReturn(testListWithCount);
+        Mockito.when(reportDAO.listWithPagination(1, 6, testEvent)).thenReturn(testListWithCount);
+        Mockito.when(reportDAO.listWithPagination(1, 6, testEvent, reportStatus)).thenReturn(testListWithCount);
+        Mockito.when(reportDAO.listWithPagination(1, 6, testEvent, mockSpeaker)).thenReturn(testListWithCount);
+        Mockito.when(reportDAO.listWithPagination(1, 6, testEvent, mockSpeaker, reportStatus)).thenReturn(testListWithCount);
 
         assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6));
         assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, reportStatus));
         assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, mockSpeaker));
         assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, mockSpeaker, reportStatus));
-        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, 1));
-        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, 1, reportStatus));
-        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, 1, mockSpeaker));
-        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, 1, mockSpeaker, reportStatus));
+        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, testEvent));
+        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, testEvent, reportStatus));
+        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, testEvent, mockSpeaker));
+        assertEquals(testListWithCount, reportDAO.listWithPagination( 1, 6, testEvent, mockSpeaker, reportStatus));
     }
 }

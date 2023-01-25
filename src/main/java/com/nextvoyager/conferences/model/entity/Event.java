@@ -6,6 +6,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Event entity class
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @Getter
 @Setter
 public class Event {
@@ -23,14 +28,6 @@ public class Event {
     private List<Report> reports;
     private List<User> participants;
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
     public Event() {
     }
 
@@ -41,6 +38,33 @@ public class Event {
     public Event(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+    /**
+     * The event ID is unique for each Event. So this should compare Event by ID only.
+     */
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Event) && (id != null)
+                ? id.equals(((Event) other).id)
+                : (other == this);
+    }
+
+    /**
+     * The event ID is unique for each Event. So Event with same ID should return same hashcode.
+     */
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public static class EventBuilder{

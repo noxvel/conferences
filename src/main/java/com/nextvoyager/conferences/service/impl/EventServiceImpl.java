@@ -11,6 +11,11 @@ import com.nextvoyager.conferences.service.notification.EventNotificationManager
 
 import java.util.List;
 
+/**
+ * The class which implements {@link EventService} interface
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventServiceImpl implements EventService {
 
     private final EventDAO eventDAO;
@@ -21,9 +26,11 @@ public class EventServiceImpl implements EventService {
         this.userDAO = userDAO;
     }
 
-    public Event find(Integer id) {
-        return eventDAO.find(id);
+    @Override
+    public void create(Event event) {
+        eventDAO.create(event);
     }
+
     @Override
     public void update(Event event, boolean sendNotification) {
         eventDAO.update(event);
@@ -34,25 +41,26 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void create(Event event) {
-        eventDAO.create(event);
-    }
-
-    @Override
     public void delete(Event event) {
 //        List<User> userList = userDAO.receiveEventNotificationsList(event);
         eventDAO.delete(event);
 //        EventNotificationManager.notify(userList, event, EventNotificationManager.NotificationType.DELETE);
     }
 
-    @Override
-    public boolean isUserRegisterEvent(Event event, User user) {
-        return eventDAO.isUserRegisterEvent(event, user);
+    public Event find(Integer id) {
+        return eventDAO.find(id);
     }
 
     @Override
-    public void registerUser(Integer eventID, User user, boolean register) {
-        eventDAO.registerUser(eventID,user,register);
+    public void registerUser(Event event, User user, boolean register) {
+        if (event != null) {
+            eventDAO.registerUser(event,user,register);
+        }
+    }
+
+    @Override
+    public boolean isUserRegisterEvent(Event event, User user) {
+        return eventDAO.isUserRegisterEvent(event, user);
     }
 
     @Override

@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.time.Year;
 import java.util.StringJoiner;
 
+/**
+ * Custom tag to show the company label with current year value.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class CompanyLabelTag extends SimpleTagSupport {
 
     public static final String COMPANY_NAME = "Company, Inc";

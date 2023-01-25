@@ -4,6 +4,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * File creator factory method class
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class FileCreatorFactory {
     public static Optional<FileCreator> getFileCreator(ExportFileFormat format) {
         switch (format) {

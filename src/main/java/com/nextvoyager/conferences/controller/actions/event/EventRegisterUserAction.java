@@ -1,6 +1,7 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
@@ -40,7 +41,8 @@ public class EventRegisterUserAction implements ControllerAction {
 
         User user = (User) req.getSession().getAttribute("user");
 
-        eventService.registerUser(eventID, user, register);
+        Event event = eventService.find(eventID);
+        eventService.registerUser(event, user, register);
 
         return PREFIX_PATH + "/event/view?eventID=" + eventID;
     }

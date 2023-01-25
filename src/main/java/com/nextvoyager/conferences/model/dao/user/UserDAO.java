@@ -7,9 +7,12 @@ import com.nextvoyager.conferences.model.entity.User;
 
 import java.util.List;
 
+/**
+ * Operations with database for User entity
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public interface UserDAO {
-
-    // Actions ------------------------------------------------------------------------------------
 
     /**
      * Returns the user from the database matching the given ID, otherwise null.
@@ -55,16 +58,36 @@ public interface UserDAO {
     void delete(User user) throws DAOException;
 
     /**
-     * Returns a list of all users from the database ordered by user ID. The list is never null and
-     * is empty when the database does not contain any user.
-     * @return A list of all users from the database ordered by user ID.
+     * Returns a list of part of users from the database. Number of page and limit size are use for pagination.
+     * The list is never null and is empty when the database does not contain any user.
+     * @return A list of users from the database.
      * @throws DAOException If something fails at database level.
      */
     ListWithCount<User> list(int page, int limit) throws DAOException;
 
+    /**
+     * Returns a list of all users from the database that have the user role. The list is never null and
+     * is empty when the database does not contain any user.
+     * @return A list of users from the database.
+     * @throws DAOException If something fails at database level.
+     */
     List<User> listWithOneRole(User.Role userRole) throws DAOException;
 
+    /**
+     * Returns a list of users that want to receive notifications about changes in the event.
+     * The list is never null and is empty when the database does not contain any user.
+     * @return A list of users from the database.
+     * @throws DAOException If something fails at database level.
+     */
     List<User> receiveEventNotificationsList(Event event);
+
+    /**
+     * Returns a list of users that are participants of the event.
+     * The list is never null and is empty when the database does not contain any user.
+     * @return A list of users from the database.
+     * @throws DAOException If something fails at database level.
+     */
+    List<User> listOfEventParticipants(Event event);
 
     /**
      * Returns true if the given email address exist in the database.
@@ -83,7 +106,12 @@ public interface UserDAO {
      */
     void changePassword(User user) throws DAOException;
 
+    /**
+     * Check if user password compare to his password in the database.
+     * @param user The user which password is to be checked in the database.
+     * @return True if the given user password equals to the password in the database.
+     * @throws DAOException If something fails at database level.
+     */
     boolean checkPassword(User user) throws DAOException;
 
-    List<User> listOfEventParticipants(Integer eventID);
 }

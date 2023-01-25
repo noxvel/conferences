@@ -2,6 +2,11 @@ package com.nextvoyager.conferences.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * Utility class to handle pagination parameters in controller
+ *
+ * @author Stanislav Bozhevskyi
+ */
 import java.util.Arrays;
 
 public class PaginationUtil {

@@ -2,6 +2,11 @@ package com.nextvoyager.conferences.util.validation;
 
 import lombok.Data;
 
+/**
+ * The data class containing the parameter and regular expression for validation process.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @Data
 public class ValidateObject {
 

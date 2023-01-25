@@ -89,9 +89,9 @@ public class UserServiceTest {
 
     @Test
     public void listOfEventParticipants() {
-        Mockito.when(dao.listOfEventParticipants(anyInt())).thenReturn(testList);
+        Mockito.when(dao.listOfEventParticipants(any(Event.class))).thenReturn(testList);
         userService.listOfEventParticipants(new Event(1));
-        verify(dao).listOfEventParticipants(1);
+        verify(dao).listOfEventParticipants(any(Event.class));
     }
 
     @Test

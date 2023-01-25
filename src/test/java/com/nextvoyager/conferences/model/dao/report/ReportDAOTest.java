@@ -37,6 +37,7 @@ public class ReportDAOTest {
     User mockUser;
 
     private Report testReport = new Report();
+    private final Event testEvent = new Event(1);
     List<Report> testList = new ArrayList<>();
 
     @Spy
@@ -48,7 +49,7 @@ public class ReportDAOTest {
         testReport.setId(1);
         testReport.setTopic("New in Java");
         testReport.setSpeaker(new User(1));
-        testReport.setEvent(new Event(1));
+        testReport.setEvent(testEvent);
         testReport.setStatus(Report.Status.CONFIRMED);
         testReport.setDescription("New description for report");
         testList.add(testReport);
@@ -110,7 +111,7 @@ public class ReportDAOTest {
 
         Mockito.doNothing().when(dao).processReportListRS(any(ResultSet.class), any(List.class));
         dao.list();
-        dao.list(1);
+        dao.list(testEvent);
         Mockito.verify(dao, Mockito.times(2)).processReportListRS(any(ResultSet.class), any(List.class));
 //        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
 
@@ -128,10 +129,10 @@ public class ReportDAOTest {
         dao.listWithPagination(1, 6, reportStatus);
         dao.listWithPagination(1, 6, mockUser);
         dao.listWithPagination(1, 6, mockUser, reportStatus);
-        dao.listWithPagination(1, 6, 1);
-        dao.listWithPagination(1, 6, 1, reportStatus);
-        dao.listWithPagination(1, 6, 1, mockUser);
-        dao.listWithPagination(1, 6, 1, mockUser, reportStatus);
+        dao.listWithPagination(1, 6, testEvent);
+        dao.listWithPagination(1, 6, testEvent, reportStatus);
+        dao.listWithPagination(1, 6, testEvent, mockUser);
+        dao.listWithPagination(1, 6, testEvent, mockUser, reportStatus);
 
         Mockito.verify(dao, Mockito.times(8)).processReportListRS(any(ResultSet.class),
                 any(ResultSet.class), any(ListWithCount.class));

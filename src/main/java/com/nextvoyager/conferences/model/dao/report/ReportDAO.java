@@ -2,15 +2,26 @@ package com.nextvoyager.conferences.model.dao.report;
 
 import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
+import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
-import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Operations with database for Report entity
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public interface ReportDAO {
 
-    // Actions ------------------------------------------------------------------------------------
+    /**
+     * Returns the report from the database matching the given ID, otherwise null.
+     * @param id The ID of the report to be returned.
+     * @return The report from the database matching the given ID, otherwise null.
+     * @throws DAOException If something fails at database level.
+     */
+    Report find(Integer id) throws DAOException;
 
     /**
      * Create the given report in the database. The report ID must be null, otherwise it will throw
@@ -23,7 +34,7 @@ public interface ReportDAO {
 
     /**
      * Update the given report in the database. The report ID must not be null, otherwise it will throw
-     * IllegalArgumentException. Note: the password will NOT be updated. Use changePassword() instead.
+     * IllegalArgumentException.
      * @param report The report to be updated in the database.
      * @throws IllegalArgumentException If the report ID is null.
      * @throws DAOException If something fails at database level.
@@ -37,32 +48,31 @@ public interface ReportDAO {
      * @throws DAOException If something fails at database level.
      */
     void delete(Report report) throws DAOException;
+
     /**
-     * Returns the report from the database matching the given ID, otherwise null.
-     * @param id The ID of the report to be returned.
-     * @return The report from the database matching the given ID, otherwise null.
+     * Returns a list of all reports from the database. The list is never null and
+     * is empty when the database does not contain any report.
+     * @return A list of all reports from the database.
      * @throws DAOException If something fails at database level.
      */
-
-    Report find(Integer id) throws DAOException;
-
     List<Report> list() throws DAOException;
 
     /**
-     * Returns a list of all reports from the database ordered by report ID. The list is never null and
+     * Returns a list of all reports that connected to the event from the database. The list is never null and
      * is empty when the database does not contain any report.
-     * @return A list of all reports from the database ordered by report ID.
+     * @param event The event that selected reports have connection.
+     * @return A list of all reports from the database.
      * @throws DAOException If something fails at database level.
      */
-    List<Report> list(Integer eventID) throws DAOException;
+    List<Report> list(Event event) throws DAOException;
 
     ListWithCount<Report> listWithPagination(int page, int limit) throws DAOException;
     ListWithCount<Report> listWithPagination(int page, int limit, Report.Status status);
     ListWithCount<Report> listWithPagination(int page, int limit, User speaker) throws DAOException;
     ListWithCount<Report> listWithPagination(int page, int limit, User speaker, Report.Status status) throws DAOException;
-    ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID) throws DAOException;
-    ListWithCount<Report> listWithPagination(int page, int limit,Integer eventID, Report.Status status) throws DAOException;
-    ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker);
-    ListWithCount<Report> listWithPagination(int page, int limit, Integer eventID, User speaker, Report.Status status);
+    ListWithCount<Report> listWithPagination(int page, int limit, Event event) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit, Event event, Report.Status status) throws DAOException;
+    ListWithCount<Report> listWithPagination(int page, int limit, Event event, User speaker);
+    ListWithCount<Report> listWithPagination(int page, int limit, Event event, User speaker, Report.Status status);
 
 }

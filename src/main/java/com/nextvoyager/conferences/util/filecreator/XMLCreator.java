@@ -10,6 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Create files in XML format.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class XMLCreator implements FileCreator{
 
     @Override

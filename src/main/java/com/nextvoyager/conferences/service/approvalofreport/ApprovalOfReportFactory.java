@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class represents a factory to get the appropriate action to approve the report
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ApprovalOfReportFactory {
     private static final Map<String, ApprovalOfReportAction> changeReportActionMap = new HashMap<>();
 

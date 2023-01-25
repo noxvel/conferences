@@ -101,8 +101,8 @@ public class EventServiceTest {
 
     @Test
     public void registerUser() {
-        eventService.registerUser(1,mockUser,true);
-        Mockito.verify(dao, Mockito.times(1)).registerUser(1,mockUser,true);
+        eventService.registerUser(testEvent,mockUser,true);
+        Mockito.verify(dao, Mockito.times(1)).registerUser(testEvent,mockUser,true);
     }
 
     @Test

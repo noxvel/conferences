@@ -39,6 +39,8 @@ public class AuthorizationFilterTest {
     private static List<String> speakerAccess;
     private static List<String> moderatorAccess;
 
+    private final User testUser = new User();
+
     @BeforeAll
     public static void setUp(){
         allUserAccess = AuthorizationFilter.getAllUserAccess();
@@ -51,7 +53,7 @@ public class AuthorizationFilterTest {
     @Test
     public void unauthorizedUser() throws ServletException, IOException {
         when(req.getSession()).thenReturn(session);
-        when(session.getAttribute("userRole")).thenReturn(null);
+        when(session.getAttribute("user")).thenReturn(null);
 
         for (String path: allUserAccess) {
             when(req.getPathInfo()).thenReturn(path);
@@ -65,7 +67,7 @@ public class AuthorizationFilterTest {
     @Test
     public void unauthorizedUserDenyAccess() throws ServletException, IOException {
         when(req.getSession()).thenReturn(session);
-        when(session.getAttribute("userRole")).thenReturn(null);
+        when(session.getAttribute("user")).thenReturn(null);
 
         for (String path: authorizedUserAccess) {
             when(req.getPathInfo()).thenReturn(path);
@@ -79,7 +81,8 @@ public class AuthorizationFilterTest {
     @Test
     public void authorizedOrdinaryUser() throws ServletException, IOException {
         when(req.getSession()).thenReturn(session);
-        when(session.getAttribute("userRole")).thenReturn(User.Role.ORDINARY_USER);
+        testUser.setRole(User.Role.ORDINARY_USER);
+        when(session.getAttribute("user")).thenReturn(testUser);
 
         for (String path: ordinaryUserAccess) {
             when(req.getPathInfo()).thenReturn(path);
@@ -93,7 +96,8 @@ public class AuthorizationFilterTest {
     @Test
     public void authorizedSpeaker() throws ServletException, IOException {
         when(req.getSession()).thenReturn(session);
-        when(session.getAttribute("userRole")).thenReturn(User.Role.SPEAKER);
+        testUser.setRole(User.Role.SPEAKER);
+        when(session.getAttribute("user")).thenReturn(testUser);
 
         for (String path: speakerAccess) {
             when(req.getPathInfo()).thenReturn(path);
@@ -107,7 +111,8 @@ public class AuthorizationFilterTest {
     @Test
     public void authorizedModerator() throws ServletException, IOException {
         when(req.getSession()).thenReturn(session);
-        when(session.getAttribute("userRole")).thenReturn(User.Role.MODERATOR);
+        testUser.setRole(User.Role.MODERATOR);
+        when(session.getAttribute("user")).thenReturn(testUser);
 
         for (String path: moderatorAccess) {
             when(req.getPathInfo()).thenReturn(path);

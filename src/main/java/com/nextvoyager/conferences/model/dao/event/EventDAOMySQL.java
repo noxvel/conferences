@@ -15,6 +15,11 @@ import java.util.List;
 
 import static com.nextvoyager.conferences.model.dao.utils.DAOUtil.*;
 
+/**
+ * Implementation of EventDAO for MySQL database
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventDAOMySQL implements EventDAO{
 
     // Constants ----------------------------------------------------------------------------------
@@ -79,8 +84,7 @@ public class EventDAOMySQL implements EventDAO{
     // Constructors -------------------------------------------------------------------------------
 
     /**
-     * Construct an Event DAO for the given DAOFactory. Package private so that it can be constructed
-     * inside the DAO package only.
+     * Construct an Event DAO for the given DAOFactory.
      *
      * @param daoFactory The DAOFactory to construct this Event DAO for.
      */
@@ -98,8 +102,8 @@ public class EventDAOMySQL implements EventDAO{
     /**
      * Returns the event from the database matching the given SQL query with the given values.
      *
-     * @param sql    The SQL query to be executed in the database.
-     * @param values The PreparedStatement values to be set.
+     * @param sql The SQL query to be executed in the database.
+     * @param values The ValueDAO values to be set.
      * @return The event from the database matching the given SQL query with the given values.
      * @throws DAOException If something fails at database level.
      */
@@ -206,7 +210,7 @@ public class EventDAOMySQL implements EventDAO{
     }
 
     @Override
-    public void registerUser(Integer eventID, User user, boolean register) {
+    public void registerUser(Event event, User user, boolean register) {
 
         String currentSql = SQL_REGISTER_USER_TO_EVENT;
         if (!register) {
@@ -214,7 +218,7 @@ public class EventDAOMySQL implements EventDAO{
         }
 
         ValueDAO[] values = {
-                new ValueDAO(eventID, Types.INTEGER),
+                new ValueDAO(event.getId(), Types.INTEGER),
                 new ValueDAO(user.getId(), Types.INTEGER)
         };
 

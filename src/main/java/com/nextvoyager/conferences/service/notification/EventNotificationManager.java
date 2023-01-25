@@ -8,6 +8,11 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class for work with notifications for event changes
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class EventNotificationManager {
 
     private EventNotificationManager(){};

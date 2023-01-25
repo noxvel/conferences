@@ -6,6 +6,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for validate request parameters.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class ParameterValidator {
 
     private ParameterValidator(){};

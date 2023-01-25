@@ -15,6 +15,11 @@ import org.apache.logging.log4j.Logger;
 
 import static com.nextvoyager.conferences.controller.frontcontroller.ControllerAction.*;
 
+/**
+ * Authorization filter for requests
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @WebFilter(urlPatterns = {"/pages/*"})
 public class AuthorizationFilter implements Filter {
 

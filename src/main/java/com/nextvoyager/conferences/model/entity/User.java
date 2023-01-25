@@ -5,9 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
+/**
+ * User entity class
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @Getter
 @Setter
 public class User implements Serializable {
@@ -36,17 +40,24 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    /**
+     * The user ID is unique for each User. So this should compare User by ID only.
+     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
+    public boolean equals(Object other) {
+        return (other instanceof User) && (id != null)
+                ? id.equals(((User) other).id)
+                : (other == this);
     }
 
+    /**
+     * The user ID is unique for each User. So User with same ID should return same hashcode.
+     */
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 
     @Override

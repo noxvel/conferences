@@ -46,15 +46,6 @@ public class DAOProperties {
         this.specificKey = specificKey;
     }
 
-    /**
-     * Returns the DAOProperties instance specific property value associated with the given key with
-     * the option to indicate whether the property is mandatory or not.
-     * @param key The key to be associated with a DAOProperties instance specific value.
-     * @param mandatory Sets whether the returned property value should not be null nor empty.
-     * @return The DAOProperties instance specific property value associated with the given key.
-     * @throws DAOConfigurationException If the returned property value is null or empty while
-     * it is mandatory.
-     */
     public String getProperty(String key, boolean mandatory) throws DAOConfigurationException {
         String fullKey = specificKey + "." + key;
         String property = PROPERTIES.getProperty(fullKey);

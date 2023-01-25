@@ -7,6 +7,11 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Filter for set default language on the page
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @WebFilter("/*")
 public class LanguageFilter implements Filter {
 

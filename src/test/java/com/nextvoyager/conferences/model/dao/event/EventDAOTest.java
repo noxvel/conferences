@@ -122,7 +122,7 @@ public class EventDAOTest {
         Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        assertDoesNotThrow(() -> dao.registerUser(1,testUser,true));
+        assertDoesNotThrow(() -> dao.registerUser(testEvent,testUser,true));
     }
 
     @Test

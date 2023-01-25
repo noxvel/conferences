@@ -13,6 +13,8 @@ import java.util.Properties;
 
 /**
  * Utility class for send emails in another thread
+ *
+ * @author Stanislav Bozhevskyi
  */
 public class EmailCreator {
     public static final String PROPERTIES_FILE = "email.properties";

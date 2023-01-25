@@ -1,13 +1,17 @@
 package com.nextvoyager.conferences.controller.listener;
 
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
 import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Session listener
+ *
+ * @author Stanislav Bozhevskyi
+ */
 @WebListener
 public class SessionListener implements HttpSessionListener {
     private static final Logger LOGGER = LogManager.getLogger(SessionListener.class);

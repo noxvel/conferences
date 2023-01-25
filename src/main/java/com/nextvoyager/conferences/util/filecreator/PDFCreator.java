@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Create files in PDF format.
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class PDFCreator implements FileCreator{
 
     @Override

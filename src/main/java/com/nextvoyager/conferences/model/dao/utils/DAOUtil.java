@@ -8,15 +8,14 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Utility class for work with JDBC objects
+ *
+ * @author Stanislav Bozhevskyi
+ */
 public class DAOUtil {
 
-    // Constructors -------------------------------------------------------------------------------
-
-    private DAOUtil() {
-        // Utility class, hide constructor.
-    }
-
-    // Actions ------------------------------------------------------------------------------------
+    private DAOUtil() {}
 
     /**
      * Returns a PreparedStatement of the given connection, set with the given SQL query and the
