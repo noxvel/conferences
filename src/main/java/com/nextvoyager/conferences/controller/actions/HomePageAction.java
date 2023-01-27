@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.controller.actions;
 
+import com.nextvoyager.conferences.controller.actions.event.EventListViewForm;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
@@ -49,6 +50,9 @@ public class HomePageAction implements ControllerAction {
         Boolean showEventParticipated = Optional.ofNullable((Boolean) currentSession
                 .getAttribute("filterByEventParticipated")).orElse(Boolean.FALSE);
 
+        EventListViewForm eventListViewForm = Optional.ofNullable((EventListViewForm) currentSession
+                .getAttribute("eventListViewForm")).orElse(EventListViewForm.BLOCK);
+
         User currentUser = (User) currentSession.getAttribute("user");
         if (currentUser != null) {
             if (currentUser.getRole() == User.Role.MODERATOR) {
@@ -78,6 +82,7 @@ public class HomePageAction implements ControllerAction {
         req.setAttribute("sortDirection", eventListSortDirection);
         req.setAttribute("showEventParticipated", showEventParticipated);
         req.setAttribute("eventTimeFilter", eventTimeFilter);
+        req.setAttribute("eventListViewForm", eventListViewForm);
         req.setAttribute("numOfPages", numOfPages);
 
         return HOME;

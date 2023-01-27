@@ -10,12 +10,10 @@ import com.nextvoyager.conferences.controller.actions.user.speaker.SpeakerReport
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
-import com.nextvoyager.conferences.service.approvalofreport.moderatorapproval.NoApprovalAction;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.nextvoyager.conferences.controller.frontcontroller.ControllerAction.*;
 
@@ -51,6 +49,7 @@ public class ControllerActionFactory {
         actions.put(GET + EVENT_VIEW, new EventViewAction(eventService,reportService,userService));
         actions.put(POST + EVENT_LIST_FILTER, new EventListFilterAction());
         actions.put(POST + EVENT_LIST_SORT, new EventListSortAction());
+        actions.put(POST + EVENT_LIST_VIEW_FORM, new EventListViewFormAction());
 
         actions.put(GET + REPORT_CREATE, new ReportCreateGetAction(userService));
         actions.put(POST + REPORT_CREATE, new ReportCreatePostAction(reportService));

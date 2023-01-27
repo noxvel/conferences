@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 /**
- * HttpServlet class that represents the Front controller pattern.
+ * This class extends HttpServlet class and represents the Front controller pattern.
  * It takes all requests that go to paths with the prefix "/pages".
  * When appropriate action was found, it compares the result of
  * execution with the request path, and if it equals, then it forwards to the JSP page.

@@ -24,6 +24,7 @@ public interface ControllerAction {
     String EVENT_VIEW = "/event/view";
     String EVENT_LIST_FILTER = "/event/list-filter";
     String EVENT_LIST_SORT = "/event/list-sort";
+    String EVENT_LIST_VIEW_FORM = "/event/list-view-form";
 
     String REPORT_CREATE = "/report/create";
     String REPORT_DELETE = "/report/delete";
