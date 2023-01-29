@@ -109,7 +109,7 @@ public class ReportServiceImpl implements ReportService {
 
         reportDAO.create(report);
 
-        approvalOfReportAction.commit(report);
+        approvalOfReportAction.commit(report, speaker);
 
     }
 
@@ -122,7 +122,7 @@ public class ReportServiceImpl implements ReportService {
 
         reportDAO.update(report);
 
-        approvalOfReportAction.commit(report);
+        approvalOfReportAction.commit(report, speaker);
 
     }
 

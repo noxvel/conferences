@@ -1,4 +1,4 @@
-package com.nextvoyager.conferences.service.approvalofreport.moderatorapproval;
+package com.nextvoyager.conferences.service.approvalofreport;
 
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;

@@ -6,7 +6,7 @@ import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportActi
 
 /**
  * Action to approve the report.
- * The moderator set free status to the report.
+ * Moderator set free status to the report.
  *
  * @author Stanislav Bozhevskyi
  */

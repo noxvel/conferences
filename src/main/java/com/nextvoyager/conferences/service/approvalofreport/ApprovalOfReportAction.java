@@ -16,7 +16,7 @@ public abstract class ApprovalOfReportAction {
 
     public abstract void execute(Report report, User speaker);
 
-    public void commit(Report report) {
+    public void commit(Report report, User speaker) {
         LOGGER.info("Approval of report action - {"
                 + this.getClass().getName()
                 + "} for report - "
