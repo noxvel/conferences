@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS `conferences`.`user` ;
 CREATE TABLE IF NOT EXISTS `conferences`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(168) NOT NULL,
   `user_role_id` INT NOT NULL,
   `first_name` VARCHAR(255) NULL,
   `last_name` VARCHAR(255) NULL,

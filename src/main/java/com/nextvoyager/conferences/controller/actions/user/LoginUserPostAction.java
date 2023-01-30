@@ -26,7 +26,6 @@ public class LoginUserPostAction implements ControllerAction {
 
     private static final ValidateObject[] validateObjects = {
             new ValidateObject(PARAM_USER_EMAIL, REGEXP_EMAIL),
-            new ValidateObject(PARAM_USER_PASSWORD, REGEXP_PASSWORD)
     };
 
     private final UserService userService;

@@ -5,8 +5,8 @@ import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.ValueDAO;
 import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
-import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.util.PasswordEncoder;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,9 +27,13 @@ public class UserDAOMySQL implements UserDAO{
     public static final String FIELD_EMAIL = "email";
     public static final String FIELD_FIRST_NAME = "first_name";
     public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_PASSWORD = "password";
     public static final String FIELD_USER_ROLE_NAME = "user_role_name";
     public static final String FIELD_RECEIVE_NOTIFICATIONS = "receive_notifications";
     public static final String FIELD_COUNT_ALL = "count_all";
+
+    private static final String SQL_USER_FOR_LOGIN =
+            "SELECT u.id, u.email, u.password FROM user AS u WHERE u.email = ?";
 
     private static final String SQL_USER_SELECT =
             "SELECT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
@@ -37,7 +41,7 @@ public class UserDAOMySQL implements UserDAO{
     private static final String SQL_FIND_BY_ID = SQL_USER_SELECT +
                     "WHERE u.id = ?";
     private static final String SQL_FIND_BY_EMAIL_AND_PASSWORD = SQL_USER_SELECT +
-                    "WHERE email = ? AND password = MD5(?)";
+                    "WHERE email = ? AND password = ?";
     private static final String SQL_LIST_ORDER_BY_ID = SQL_USER_SELECT +
                     "ORDER BY u.id " +
                     "LIMIT ?, ?";
@@ -49,13 +53,13 @@ public class UserDAOMySQL implements UserDAO{
                     "WHERE ehp.event_id = ? ";
 
     private static final String SQL_INSERT =
-            "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, MD5(?), ?, ?, ?)";
+            "INSERT INTO user (email, password, first_name, last_name, user_role_id) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE =
             "UPDATE user SET email = ?, first_name = ?, last_name = ?, user_role_id = ?, receive_notifications = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM user WHERE id = ?";
     private static final String SQL_EXIST_EMAIL = "SELECT id FROM user WHERE email = ?";
-    private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = MD5(?) WHERE id = ?";
-    private static final String SQL_CHECK_PASSWORD = "SELECT id FROM user WHERE id = ? AND password = MD5(?)";
+    private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = ? WHERE id = ?";
+    private static final String SQL_CHECK_PASSWORD = "SELECT id, password FROM user WHERE id = ?";
     private static final String SQL_LIST_WHO_RECEIVE_NOTIFICATIONS =
         "SELECT DISTINCT u.id, u.email, u.first_name, u.last_name, u.user_role_id, u.receive_notifications, r.name AS user_role_name FROM user AS u " +
             "LEFT JOIN user_role AS r ON u.user_role_id = r.id " +
@@ -87,9 +91,30 @@ public class UserDAOMySQL implements UserDAO{
         return find(SQL_FIND_BY_ID, new ValueDAO(id, Types.INTEGER));
     }
 
+//    @Override
+//    public User find(String email, String password) throws DAOException {
+//        return find(SQL_FIND_BY_EMAIL_AND_PASSWORD, new ValueDAO(email,Types.VARCHAR), new ValueDAO(password, Types.VARCHAR));
+//    }
+
     @Override
     public User find(String email, String password) throws DAOException {
-        return find(SQL_FIND_BY_EMAIL_AND_PASSWORD, new ValueDAO(email,Types.VARCHAR), new ValueDAO(password, Types.VARCHAR));
+        User user = null;
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_USER_FOR_LOGIN,
+                        false, new ValueDAO(email, Types.VARCHAR));
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            if (resultSet.next()) {
+                if (PasswordEncoder.check(password, resultSet.getString(FIELD_PASSWORD))) {
+                    user = find(SQL_FIND_BY_ID, new ValueDAO(resultSet.getInt(FIELD_ID), Types.INTEGER));
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return user;
     }
 
     /**
@@ -100,7 +125,7 @@ public class UserDAOMySQL implements UserDAO{
      * @throws DAOException If something fails at database level.
      */
     private User find(String sql, ValueDAO... values) throws DAOException {
-        User user = null;
+        User user;
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -123,7 +148,7 @@ public class UserDAOMySQL implements UserDAO{
 
         ValueDAO[] values = {
                 new ValueDAO(user.getEmail(), Types.VARCHAR),
-                new ValueDAO(user.getPassword(),Types.VARCHAR),
+                new ValueDAO(PasswordEncoder.hash(user.getPassword()),Types.VARCHAR),
                 new ValueDAO(user.getFirstName(),Types.VARCHAR),
                 new ValueDAO(user.getLastName(),Types.VARCHAR),
                 new ValueDAO(user.getRole().getId(),Types.INTEGER),
@@ -274,7 +299,7 @@ public class UserDAOMySQL implements UserDAO{
                 new ValueDAO(email,Types.VARCHAR)
         };
 
-        boolean exist = false;
+        boolean exist;
 
         try (
                 Connection connection = daoFactory.getConnection();
@@ -296,7 +321,7 @@ public class UserDAOMySQL implements UserDAO{
         }
 
         ValueDAO[] values = {
-                new ValueDAO(user.getPassword(),Types.VARCHAR),
+                new ValueDAO(PasswordEncoder.hash(user.getPassword()),Types.VARCHAR),
                 new ValueDAO(user.getId(),Types.VARCHAR)
         };
 
@@ -320,24 +345,24 @@ public class UserDAOMySQL implements UserDAO{
             throw new IllegalArgumentException("User is not created yet, the user ID is null.");
         }
 
-        ValueDAO[] values = {
-                new ValueDAO(user.getId(),Types.VARCHAR),
-                new ValueDAO(user.getPassword(),Types.VARCHAR)
-        };
-
-        boolean exist = false;
+        boolean match = false;
 
         try (
                 Connection connection = daoFactory.getConnection();
-                PreparedStatement statement = prepareStatement(connection, SQL_CHECK_PASSWORD, false, values);
+                PreparedStatement statement = prepareStatement(connection, SQL_CHECK_PASSWORD,
+                        false, new ValueDAO(user.getId(),Types.VARCHAR));
                 ResultSet resultSet = statement.executeQuery()
         ) {
-            exist = resultSet.next();
+            if (resultSet.next()) {
+                if (PasswordEncoder.check(user.getPassword(), resultSet.getString(FIELD_PASSWORD))) {
+                    match = true;
+                }
+            }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DAOException(e);
         }
 
-        return exist;
+        return match;
     }
 
     // Helpers ------------------------------------------------------------------------------------
