@@ -52,7 +52,7 @@ public class ControllerActionFactory {
         actions.put(POST + EVENT_LIST_VIEW_FORM, new EventListViewFormAction());
 
         actions.put(GET + REPORT_CREATE, new ReportCreateGetAction(userService));
-        actions.put(POST + REPORT_CREATE, new ReportCreatePostAction(reportService));
+        actions.put(POST + REPORT_CREATE, new ReportCreatePostAction(reportService,userService));
         actions.put(GET + REPORT_DELETE, new ReportDeleteAction(reportService));
         actions.put(GET + REPORT_EDIT, new ReportEditGetAction(reportService,userService));
         actions.put(POST + REPORT_EDIT, new ReportEditPostAction(reportService,userService));

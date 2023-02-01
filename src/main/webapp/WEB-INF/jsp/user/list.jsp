@@ -17,7 +17,7 @@
 
         <main class="container flex-fill">
 
-            <div class="container d-flex flex-column">
+            <div class="d-flex flex-column">
                 <div class="text-center">
                     <h2 class="mb-3"><fmt:message key="user-list.header.text"/></h2>
                 </div>

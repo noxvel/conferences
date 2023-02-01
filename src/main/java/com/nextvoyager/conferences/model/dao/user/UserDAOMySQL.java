@@ -40,8 +40,6 @@ public class UserDAOMySQL implements UserDAO{
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id ";
     private static final String SQL_FIND_BY_ID = SQL_USER_SELECT +
                     "WHERE u.id = ?";
-    private static final String SQL_FIND_BY_EMAIL_AND_PASSWORD = SQL_USER_SELECT +
-                    "WHERE email = ? AND password = ?";
     private static final String SQL_LIST_ORDER_BY_ID = SQL_USER_SELECT +
                     "ORDER BY u.id " +
                     "LIMIT ?, ?";
@@ -87,16 +85,6 @@ public class UserDAOMySQL implements UserDAO{
     // Actions ------------------------------------------------------------------------------------
 
     @Override
-    public User find(Integer id) throws DAOException {
-        return find(SQL_FIND_BY_ID, new ValueDAO(id, Types.INTEGER));
-    }
-
-//    @Override
-//    public User find(String email, String password) throws DAOException {
-//        return find(SQL_FIND_BY_EMAIL_AND_PASSWORD, new ValueDAO(email,Types.VARCHAR), new ValueDAO(password, Types.VARCHAR));
-//    }
-
-    @Override
     public User find(String email, String password) throws DAOException {
         User user = null;
         try (
@@ -107,7 +95,7 @@ public class UserDAOMySQL implements UserDAO{
         ) {
             if (resultSet.next()) {
                 if (PasswordEncoder.check(password, resultSet.getString(FIELD_PASSWORD))) {
-                    user = find(SQL_FIND_BY_ID, new ValueDAO(resultSet.getInt(FIELD_ID), Types.INTEGER));
+                    user = find(resultSet.getInt(FIELD_ID));
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -115,6 +103,11 @@ public class UserDAOMySQL implements UserDAO{
         }
 
         return user;
+    }
+
+    @Override
+    public User find(Integer id) throws DAOException {
+        return find(SQL_FIND_BY_ID, new ValueDAO(id, Types.INTEGER));
     }
 
     /**

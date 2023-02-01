@@ -5,12 +5,14 @@ import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
+import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import static com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
 
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
@@ -39,9 +41,11 @@ public class ReportCreatePostAction implements ControllerAction {
     };
 
     private final ReportService reportService;
+    private final UserService userService;
 
-    public ReportCreatePostAction(ReportService reportService) {
+    public ReportCreatePostAction(ReportService reportService, UserService userService) {
         this.reportService = reportService;
+        this.userService = userService;
     }
 
     @Override
@@ -66,28 +70,28 @@ public class ReportCreatePostAction implements ControllerAction {
         report.setDescription(descriptionParam);
 
         // Choose approval action for the new report
-        String approvalAction = null;
+        String approvalAction;
         User approvalSpeaker = null;
         if (currentUser.getRole() == User.Role.SPEAKER) {
-            approvalAction = "offer-report-speaker";
+            approvalAction = OFFER_REPORT_SPEAKER;
             approvalSpeaker =  currentUser;
         }else{
             if (!speakerParam.equals("0")) {
-                approvalSpeaker = new User(Integer.valueOf(speakerParam));
+                approvalSpeaker = userService.find(Integer.valueOf(speakerParam));
                 Report.Status status = Report.Status.valueOf(statusParam);
                 switch (status) {
                     case CONFIRMED:
-                        approvalAction = "consolidate-report-moderator";
+                        approvalAction = CONSOLIDATE_REPORT_MODERATOR;
                         break;
                     case PROPOSE_TO_SPEAKER:
-                        approvalAction = "propose-to-speaker-moderator";
+                        approvalAction = PROPOSE_TO_SPEAKER_MODERATOR;
                         break;
                     default:
-                        approvalAction = "no-approval-action";
+                        approvalAction = NO_APPROVAL_ACTION;
                         break;
                 }
             } else {
-                approvalAction = "set-free-report-moderator";
+                approvalAction = SET_FREE_REPORT_MODERATOR;
             }
         }
 

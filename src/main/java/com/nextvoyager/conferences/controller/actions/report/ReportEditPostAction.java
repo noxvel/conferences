@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_REPORT_DESCRIPTION;
+import static com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction.*;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_REPORT_STATUS;
 import static java.lang.Enum.valueOf;
@@ -78,17 +79,17 @@ public class ReportEditPostAction implements ControllerAction {
                 Report.Status status = Report.Status.valueOf(statusParam);
                 switch (status) {
                     case CONFIRMED:
-                        approvalAction = "consolidate-report-moderator";
+                        approvalAction = CONSOLIDATE_REPORT_MODERATOR;
                         break;
                     case PROPOSE_TO_SPEAKER:
-                        approvalAction = "propose-to-speaker-moderator";
+                        approvalAction = PROPOSE_TO_SPEAKER_MODERATOR;
                         break;
                     default:
-                        approvalAction = "no-approval-action";
+                        approvalAction = NO_APPROVAL_ACTION;
                         break;
                 }
             } else {
-                approvalAction = "set-free-report-moderator";
+                approvalAction = SET_FREE_REPORT_MODERATOR;
             }
         }
 

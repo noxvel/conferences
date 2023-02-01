@@ -20,7 +20,7 @@
 
         <main class="container flex-fill">
 
-            <section class="py-2 text-center container d-flex d-row justify-content-between">
+            <section class="py-2 text-center d-flex d-row justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <div class="d-grid gap-2 d-md-block">
                         <c:if test="${isModerator}">

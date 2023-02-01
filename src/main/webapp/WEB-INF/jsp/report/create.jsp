@@ -4,7 +4,6 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="isModerator" value="${sessionScope.userRole == 'MODERATOR'}" />
 
-
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="text" />
 <!DOCTYPE html>
@@ -15,12 +14,12 @@
 
         <main class="container flex-fill">
 
-            <div class="container d-flex flex-column">
+            <div class="d-flex flex-column">
 
                 <form id="createReport" class="row g-3" action="create" method="post">
                     <div class="col-12">
                         <label for="topic" class="form-label"><fmt:message key="report-create.topic.label"/></label>
-                        <input name="topic" type="text" class="form-control" id="topic" placeholder="Reports topic" value="Basic topic">
+                        <input name="topic" type="text" class="form-control" id="topic" placeholder="Reports topic" value="Basic topic" required>
                     </div>
                     <c:if test="${isModerator}">
                         <div class="col-md-8">
@@ -81,7 +80,7 @@
             $(document).ready(() => {
                 $('#speakerSelect').change(function(){ 
                     let actionBlock = $('#actionForSpeakerBlock');
-                    if($(this).val() === ''){
+                    if($(this).val() === '0'){
                         actionBlock.addClass('d-none');
                     }else{
                         actionBlock.removeClass('d-none');

@@ -4,6 +4,7 @@ import com.nextvoyager.conferences.model.dao.DAOFactory;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
+import com.nextvoyager.conferences.util.PasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDAOTest {
@@ -55,33 +58,46 @@ public class UserDAOTest {
     }
 
     @Test
-    public void find() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+    public void findByID() throws SQLException, ClassNotFoundException {
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
         Mockito.doReturn(testUser).when(dao).processUserRS(any(ResultSet.class));
         assertEquals(testUser, dao.find(1));
-        assertEquals(testUser, dao.find("email", "password"));
 
-        Mockito.verify(dao, Mockito.times(2)).processUserRS(any(ResultSet.class));
+        Mockito.verify(dao, Mockito.times(1)).processUserRS(any(ResultSet.class));
 
-//        // Mock scope for use static methods
-//        try (MockedStatic<EventDAOMySQL> mocked = mockStatic(EventDAOMySQL.class)) {
-//            // Mocking
-//            mocked.when(() -> EventDAOMySQL.map(resultSet)).thenReturn(testEvent);
-//            assertEquals(testEvent, dao.find(1));
-//        }
+    }
+
+    @Test
+    public void findByEmailAndPassword() throws SQLException, ClassNotFoundException {
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("password")).thenReturn("passwords hash");
+        when(resultSet.getInt("id")).thenReturn(1);
+
+        Mockito.doReturn(testUser).when(dao).processUserRS(any(ResultSet.class));
+
+        try (MockedStatic<PasswordEncoder> mocked = mockStatic(PasswordEncoder.class)) {
+            // Mocking
+            mocked.when(() -> PasswordEncoder.check(anyString(),anyString())).thenReturn(true);
+
+            assertEquals(testUser, dao.find("email", "password"));
+            Mockito.verify(dao, Mockito.times(1)).processUserRS(any(ResultSet.class));
+        }
     }
 
     @Test
     public void create() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
-        Mockito.when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-        Mockito.when(resultSet.next()).thenReturn(true);
-        Mockito.when(resultSet.getInt(anyInt())).thenReturn(1);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt(anyInt())).thenReturn(1);
 
         assertThrows(IllegalArgumentException.class, () -> dao.create(testUser));
         testUser.setId(null);
@@ -90,55 +106,60 @@ public class UserDAOTest {
 
     @Test
     public void update() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
         assertDoesNotThrow(() -> dao.update(testUser));
 
     }
 
     @Test
     public void delete() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
         assertDoesNotThrow(() -> dao.delete(testUser));
     }
 
     @Test
     public void existEmail() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        Mockito.when(resultSet.next()).thenReturn(true);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
 
         assertTrue(dao.existEmail("test@mail.com"));
     }
 
     @Test
     public void checkPassword() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        Mockito.when(resultSet.next()).thenReturn(true);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("password")).thenReturn("passwords hash");
 
-        assertTrue(dao.checkPassword(testUser));
+        try (MockedStatic<PasswordEncoder> mocked = mockStatic(PasswordEncoder.class)) {
+            // Mocking
+            mocked.when(() -> PasswordEncoder.check(anyString(),anyString())).thenReturn(true);
+            assertTrue(dao.checkPassword(testUser));
+        }
     }
 
     @Test
     public void changePassword() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeUpdate()).thenReturn(1);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(),eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
 
         assertDoesNotThrow(() -> dao.changePassword(testUser));
     }
 
     @Test
     public void list() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
         Mockito.doNothing().when(dao).processUserListRS(any(ResultSet.class),any(ResultSet.class), any(ListWithCount.class));
 
@@ -149,16 +170,15 @@ public class UserDAOTest {
 
     @Test
     public void additionalList() throws SQLException, ClassNotFoundException {
-        Mockito.when(daoFactory.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(daoFactory.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString(), eq(Statement.NO_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
         Mockito.doNothing().when(dao).processUserListRS(any(ResultSet.class), any(List.class));
 
         dao.listWithOneRole(role);
         dao.receiveEventNotificationsList(event);
         Mockito.verify(dao, Mockito.times(2)).processUserListRS(any(ResultSet.class), any(List.class));
-//        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
     }
 
 }

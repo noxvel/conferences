@@ -2,7 +2,6 @@ package com.nextvoyager.conferences.service.approvalofreport;
 
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction;
 
 /**
  * Action to approve the report.

@@ -19,7 +19,7 @@
 
         <main class="container flex-fill">
 
-            <section class="py-2 text-center container">
+            <section class="py-2 text-center">
                 <h2 class="mb-3"><fmt:message key="event-statistics.header.text"/></h2>
                 <div class="d-flex flex-row align-items-center">
                     <div class="ms-3 p-2 bg-info bg-opacity-10 border border-info rounded">

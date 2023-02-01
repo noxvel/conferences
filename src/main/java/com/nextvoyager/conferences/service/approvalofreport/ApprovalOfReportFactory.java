@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction.*;
+
 /**
  * This class represents a factory to get the appropriate action to approve the report
  *
@@ -16,23 +18,23 @@ public class ApprovalOfReportFactory {
     private static final Map<String, ApprovalOfReportAction> changeReportActionMap = new HashMap<>();
 
     static {
-        changeReportActionMap.put("accept-propose-speaker", new AcceptProposeBySpeaker());
-        changeReportActionMap.put("cancel-propose-speaker", new CancelProposeBySpeaker());
-        changeReportActionMap.put("cancel-offer-speaker", new CancelOfferBySpeaker());
-        changeReportActionMap.put("make-suggestion-speaker", new MakeSuggestionBySpeaker());
-        changeReportActionMap.put("cancel-suggestion-speaker", new CancelSuggestionBySpeaker());
-        changeReportActionMap.put("offer-report-speaker", new OfferReportBySpeaker());
+        changeReportActionMap.put(ACCEPT_PROPOSE_SPEAKER, new AcceptProposeBySpeaker());
+        changeReportActionMap.put(CANCEL_PROPOSE_SPEAKER, new CancelProposeBySpeaker());
+        changeReportActionMap.put(CANCEL_OFFER_SPEAKER, new CancelOfferBySpeaker());
+        changeReportActionMap.put(MAKE_SUGGESTION_SPEAKER, new MakeSuggestionBySpeaker());
+        changeReportActionMap.put(CANCEL_SUGGESTION_SPEAKER, new CancelSuggestionBySpeaker());
+        changeReportActionMap.put(OFFER_REPORT_SPEAKER, new OfferReportBySpeaker());
 
-        changeReportActionMap.put("consolidate-report-moderator", new ConsolidateReportByModerator());
-        changeReportActionMap.put("propose-to-speaker-moderator", new ProposeToSpeakerByModerator());
-        changeReportActionMap.put("set-free-report-moderator", new SetFreeReportByModerator());
-        changeReportActionMap.put("accept-offer-moderator", new AcceptOfferByModerator());
-        changeReportActionMap.put("deny-offer-moderator", new DenyOfferModerator());
-        changeReportActionMap.put("accept-suggestion-moderator", new AcceptSuggestionByModerator());
-        changeReportActionMap.put("deny-suggestion-moderator", new DenySuggestionByModerator());
-        changeReportActionMap.put("cancel-report-moderator", new CancelReportByModerator());
+        changeReportActionMap.put(CONSOLIDATE_REPORT_MODERATOR, new ConsolidateReportByModerator());
+        changeReportActionMap.put(PROPOSE_TO_SPEAKER_MODERATOR, new ProposeToSpeakerByModerator());
+        changeReportActionMap.put(SET_FREE_REPORT_MODERATOR, new SetFreeReportByModerator());
+        changeReportActionMap.put(ACCEPT_OFFER_MODERATOR, new AcceptOfferByModerator());
+        changeReportActionMap.put(DENY_OFFER_MODERATOR, new DenyOfferModerator());
+        changeReportActionMap.put(ACCEPT_SUGGESTION_MODERATOR, new AcceptSuggestionByModerator());
+        changeReportActionMap.put(DENY_SUGGESTION_MODERATOR, new DenySuggestionByModerator());
+        changeReportActionMap.put(CANCEL_REPORT_MODERATOR, new CancelReportByModerator());
 
-        changeReportActionMap.put("no-approval-action", new NoApprovalAction());
+        changeReportActionMap.put(NO_APPROVAL_ACTION, new NoApprovalAction());
     }
 
     public static ApprovalOfReportAction getChangeReportAction(String actionParam) {

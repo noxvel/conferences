@@ -13,24 +13,26 @@
 
         <main class="container flex-fill">
 
-            <div class="container d-flex flex-column">
+            <div class="d-flex flex-column">
 
                 <form id="createEvent" class="row g-3" action="edit" method="post">
                     <div class="col-12">
                         <label for="name" class="form-label"><fmt:message key="event-edit.name.label"/></label>
-                        <input name="name" type="text" class="form-control" id="name" placeholder="" value="${event.name}">
+                        <input name="name" type="text" class="form-control" id="name" placeholder="" value="${event.name}" required>
                     </div>
                     <div class="col-12">
                         <label for="place" class="form-label"><fmt:message key="event-edit.place.label"/></label>
-                        <input name="place" type="text" class="form-control" id="place" placeholder="New York..." value="${event.place}">
+                        <input name="place" type="text" class="form-control" id="place" placeholder="New York..." value="${event.place}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="beginDate" class="form-label"><fmt:message key="event-edit.begin-date.label"/></label>
-                        <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="${event.beginDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
+                        <input name="beginDate" type="datetime-local" class="form-control" id="beginDate" value="${event.beginDate}" 
+                                            min="2020-01-01T00:00" max="2100-01-01T00:00" required>
                     </div>
                     <div class="col-md-6">
                         <label for="endDate" class="form-label"><fmt:message key="event-edit.end-date.label"/></label>
-                        <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="${event.endDate}" min="2020-01-01T00:00" max="2100-01-01T00:00">
+                        <input name="endDate" type="datetime-local" class="form-control" id="endDate" value="${event.endDate}" 
+                                            min="2020-01-01T00:00" max="2100-01-01T00:00" required>
                     </div>
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="event-edit.description.label"/></span>

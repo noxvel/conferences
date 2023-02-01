@@ -19,7 +19,7 @@
 
         <main class="container flex-fill">
 
-            <div class="container d-flex flex-column">
+            <div class="d-flex flex-column">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="${contextPath}/pages/home"><fmt:message key="event-view.breadcrumb.home"/></a></li>
@@ -144,7 +144,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                             </h6>
-                                            <p class="card-text">${fn:substring(report.description, 0, 140)}...</p>
+                                            <p class="card-text" style="height: 4em;">${fn:substring(report.description, 0, 140)}...</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="btn-group">
                                                     <a role="button" href="${contextPath}/pages/report/view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">

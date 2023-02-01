@@ -17,7 +17,7 @@
 
         <main class="container flex-fill">
 
-            <div class="container d-flex flex-column">
+            <div class="d-flex flex-column">
                 <div class="text-center">
                     <h2 class="mb-3"><fmt:message key="report-list.header.text"/></h2>
                 </div>
@@ -43,19 +43,25 @@
                     </div>
                 </section>
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="row row-cols-1">
 
                     <c:forEach var="report" items="${reports}">
                         <mytag:report-status-color reportStatus="${report.status}"/>
                         
-                        <div class="col">
-                            <div class="card shadow-md ${empty reportColor ? '' : 'border-' += reportColor}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${report.topic}</h5>
-                                    <h6 class="card-subtitle mb-2 ${empty reportColor ? '' : 'text-' += reportColor}">
-                                        <mytag:report-status-i18n reportStatus="${report.status}"/>
-                                    </h6>
-                                    <h6><fmt:message key="report-view.text-speaker"/> 
+                        <%-- <div class="my-3 py-2 ${empty reportColor ? '' : 'border-' += reportColor}"> --%>
+                        <div class="my-2 py-2 border d-flex align-items-center">
+                            <div class="col-6 d-inline-block">
+                                <h6 class="text-muted">${report.event.name}</h6>
+                                <h5 class="">${report.topic}</h5>
+                            </div>
+                            <div class="col-2 d-inline-block">
+                                <div class="${empty reportColor ? '' : 'text-' += reportColor}">
+                                    <b><mytag:report-status-i18n reportStatus="${report.status}"/></b>
+                                </div>
+                            </div>
+                            <div class="col-2 d-inline-block">
+                                <div>
+                                    <b>
                                     <c:choose>
                                         <c:when test="${report.speaker != null}">
                                             ${report.speaker.firstName} ${report.speaker.lastName}
@@ -64,13 +70,14 @@
                                             <fmt:message key="report-view.text.no-speaker"/>
                                         </c:otherwise>
                                     </c:choose>
-                                    </h6>
-                                    <p class="card-text">${fn:substring(report.description, 0, 140)}...</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <a role="button" href="view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">
-                                            <fmt:message key="report-list.report.button.view"/>
-                                        </a>
-                                    </div>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="col-2 d-inline-block">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a role="button" href="view?reportID=${report.id}" class="btn btn-sm btn-outline-primary">
+                                        <fmt:message key="report-list.report.button.view"/>
+                                    </a>
                                 </div>
                             </div>
                         </div>

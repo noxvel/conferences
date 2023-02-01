@@ -34,7 +34,7 @@ public class FrontController extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + view);
             }
         } catch (Exception e) {
-            LOG.error("Executing failed: Exception - " + e.getClass().getName() + ", message: "+ e.getMessage());
+            LOG.error("Executing failed: Exception - ", e);
             throw new ServletException("Executing action failed.", e);
         }
     }
