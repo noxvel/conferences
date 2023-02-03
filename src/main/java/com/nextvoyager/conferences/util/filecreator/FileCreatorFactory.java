@@ -1,8 +1,6 @@
 package com.nextvoyager.conferences.util.filecreator;
 
-import java.util.Locale;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 /**
  * File creator factory method class
@@ -15,6 +13,7 @@ public class FileCreatorFactory {
             case XML: return Optional.of(new XMLCreator());
             case PDF: return Optional.of(new PDFCreator());
             case CSV: return Optional.of(new CSVCreator());
+            case Excel: return Optional.of(new ExcelCreator());
             default: return Optional.empty();
         }
     }

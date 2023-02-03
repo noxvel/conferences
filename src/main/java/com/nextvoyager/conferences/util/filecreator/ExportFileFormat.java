@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum ExportFileFormat {
     PDF("application/pdf"),
     XML("text/xml"),
-    CSV("text/csv");
+    CSV("text/csv"),
+    Excel("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
     private final String contentType;
     ExportFileFormat(String contentType) {
