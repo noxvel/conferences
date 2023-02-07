@@ -2,24 +2,21 @@ package com.nextvoyager.conferences.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Arrays;
+
 /**
  * Utility class to handle pagination parameters in controller
  *
  * @author Stanislav Bozhevskyi
  */
-import java.util.Arrays;
-
 public class PaginationUtil {
 
-    private static final int[] paginationLimitList = {3,6,9,12};
-
-    private static int DEFAULT_PAGINATION_PAGE = 1;
-    private static int DEFAULT_PAGINATION_LIMIT = 6;
+    private static final int[] paginationLimitList = {3,6,9,12,15,18};
 
     public static final String PAGINATION_PAGE_PARAMETER = "page";
     public static final String PAGINATION_LIMIT_PARAMETER = "limit";
 
-    private PaginationUtil(){};
+    private PaginationUtil(){}
 
     public static int[] getPaginationLimitList() {
         return Arrays.copyOf(paginationLimitList, paginationLimitList.length);
@@ -27,24 +24,26 @@ public class PaginationUtil {
 
     public static int handlePaginationPageParameter(HttpServletRequest req) {
         String param = req.getParameter(PAGINATION_PAGE_PARAMETER);
+        int defaultPaginationPage = 1;
         if (param == null) {
-            return DEFAULT_PAGINATION_PAGE;
+            return defaultPaginationPage;
         }else {
             try {
                 int paramVal = Integer.parseInt(param);
                 if (paramVal < 1) {
-                    return DEFAULT_PAGINATION_PAGE;
+                    return defaultPaginationPage;
                 } else {
                     return paramVal;
                 }
             } catch (NumberFormatException exception) {
-                return DEFAULT_PAGINATION_PAGE;
+                return defaultPaginationPage;
             }
         }
     }
 
     public static int handlePaginationLimitParameter(HttpServletRequest req) {
-        return handlePaginationLimitParameter(req, DEFAULT_PAGINATION_LIMIT);
+        int defaultPaginationLimit = 6;
+        return handlePaginationLimitParameter(req, defaultPaginationLimit);
     }
 
     public static int handlePaginationLimitParameter(HttpServletRequest req, int defaultLimit) {
@@ -66,6 +65,6 @@ public class PaginationUtil {
     }
 
     public static int getNumOfPages(Integer elementsCount, int limit) {
-        return  (int)Math.ceil((double)elementsCount/limit);
+        return (int)Math.ceil((double)elementsCount/limit);
     }
 }

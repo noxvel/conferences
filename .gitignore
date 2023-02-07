@@ -40,3 +40,4 @@ build/
 
 **/dao.properties
 **/email.properties
+log4j2.xml

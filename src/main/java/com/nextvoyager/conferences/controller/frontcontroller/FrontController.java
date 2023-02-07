@@ -25,17 +25,21 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         try {
             ControllerAction controllerAction = ControllerActionFactory.getAction(req);
             String view = controllerAction.execute(req, resp);
-            if (view.equals(req.getPathInfo())) {
-                req.getRequestDispatcher("/WEB-INF/jsp" + view + ".jsp").forward(req, resp);
-            } else {
-                resp.sendRedirect(req.getContextPath() + view);
+            if (!view.isEmpty()) {
+                if (view.equals(req.getPathInfo())) {
+                    req.getRequestDispatcher("/WEB-INF/jsp" + view + ".jsp").forward(req, resp);
+                } else {
+                    resp.sendRedirect(req.getContextPath() + view);
+                }
             }
         } catch (Exception e) {
             LOG.error("Executing failed: Exception - ", e);
             throw new ServletException("Executing action failed.", e);
         }
+        
     }
 }

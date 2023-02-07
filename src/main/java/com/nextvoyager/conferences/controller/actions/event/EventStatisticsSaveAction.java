@@ -53,8 +53,6 @@ public class EventStatisticsSaveAction implements ControllerAction {
         ListWithCount<Event> countAndList = eventService.listWithPagination(page, limit, eventListSortType,
                 eventListSortDirection, eventTimeFilter);
 
-        int numOfPages = PaginationUtil.getNumOfPages(countAndList.getCount(),limit);
-
         Optional<FileCreator> fileCreator = FileCreatorFactory.getFileCreator(fileFormatParam);
         fileCreator.ifPresent((fc -> {
             try (ByteArrayOutputStream fileByteArray = fc.generateStatisticsFile(countAndList.getList(), lang);
@@ -78,7 +76,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
             }
         }));
 
-        return PREFIX_PATH + "/event/statistics";
+        return "";
 
     }
 
