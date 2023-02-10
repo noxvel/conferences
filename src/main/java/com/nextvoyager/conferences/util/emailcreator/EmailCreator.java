@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.util.emailcreator;
 
-import com.nextvoyager.conferences.model.dao.exeption.DAOConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,9 +16,11 @@ import java.util.Properties;
  * @author Stanislav Bozhevskyi
  */
 public class EmailCreator {
-    public static final String PROPERTIES_FILE = "email.properties";
-    public static final Properties PROPERTIES = new Properties();
+    private static final String PROPERTIES_FILE = "email.properties";
+    private static final Properties PROPERTIES = new Properties();
     private static final Logger LOG = LogManager.getLogger(EmailCreator.class);
+
+    private EmailCreator(){}
 
     static {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -36,7 +37,7 @@ public class EmailCreator {
         }
     }
 
-    private static String getProperty(String key) throws DAOConfigurationException {
+    private static String getProperty(String key) throws EmailConfigException {
         String property = PROPERTIES.getProperty(key);
 
         if (property == null || property.trim().length() == 0) {
@@ -119,8 +120,7 @@ public class EmailCreator {
                 LOG.info(("Sent email about the event changes, to users - " + toEmails + ", text - " + body));
             }
             catch (MessagingException e) {
-                LOG.error("Error while send email");
-                e.printStackTrace();
+                LOG.error("Error while send email", e);
             }
         }
     }

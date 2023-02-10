@@ -40,4 +40,5 @@ build/
 
 **/dao.properties
 **/email.properties
+**/recaptcha.properties
 log4j2.xml

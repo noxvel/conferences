@@ -64,8 +64,6 @@ public class EventDAOTest {
         testEvent.setParticipantsCame(100);
         testEvent.setDescription("New description");
         testList.add(testEvent);
-
-//        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -76,13 +74,6 @@ public class EventDAOTest {
 
         Mockito.doReturn(testEvent).when(dao).processEventRS(any(ResultSet.class));
         assertEquals(testEvent, dao.find(1));
-
-//        // Mock scope for use static methods
-//        try (MockedStatic<EventDAOMySQL> mocked = mockStatic(EventDAOMySQL.class)) {
-//            // Mocking
-//            mocked.when(() -> EventDAOMySQL.map(resultSet)).thenReturn(testEvent);
-//            assertEquals(testEvent, dao.find(1));
-//        }
     }
 
     @Test

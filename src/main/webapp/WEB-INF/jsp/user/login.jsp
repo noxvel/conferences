@@ -19,8 +19,8 @@
                     <h2 class="fw-normal mb-3 pb-3 text-center"><fmt:message key="login.header.text"/></h2>      
                     <form id="loginUser" action="login" method="post">
                         <c:if test="${requestScope.message != null}">
-                            <div class="alert alert-danger" role="alert">
-                                ${requestScope.message}
+                            <div class="alert alert-danger text-center" role="alert">
+                                <fmt:message key="${requestScope.message}"/>
                             </div>
                         </c:if>
                         <!-- Email input -->
@@ -34,6 +34,10 @@
                             <label class="form-label" for="password"><fmt:message key="login.password.label"/></label>
                             <input name="password" type="password" id="password" class="form-control" autoComplete="off" required value="123"/>
                         </div>
+
+                        <c:if test="${not empty recaptchaSiteKey}">
+                            <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                        </c:if>
 
                         <!-- 2 column grid layout for inline styling -->
                         <div class="row mb-4">
@@ -65,5 +69,20 @@
 
         <jsp:include page="/WEB-INF/templates/_footer.jsp"/>
         <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <script>
+            $(document).ready(() => {
+                $('#speakerSelect').change(function(){ 
+                    let actionBlock = $('#actionForSpeakerBlock');
+                    if($(this).val() === '0'){
+                        actionBlock.addClass('d-none');
+                    }else{
+                        actionBlock.removeClass('d-none');
+                    }
+                });
+            });
+        </script>
+
     </body>
 </html>

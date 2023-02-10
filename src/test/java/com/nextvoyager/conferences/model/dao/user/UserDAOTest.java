@@ -38,7 +38,7 @@ public class UserDAOTest {
     @Mock
     Event event;
 
-    private User testUser = new User();
+    private final User testUser = new User();
     List<User> testList = new ArrayList<>();
 
     @Spy
@@ -54,7 +54,6 @@ public class UserDAOTest {
         testUser.setPassword("123");
         testUser.setRole(User.Role.ORDINARY_USER);
         testList.add(testUser);
-
     }
 
     @Test
@@ -67,7 +66,6 @@ public class UserDAOTest {
         assertEquals(testUser, dao.find(1));
 
         Mockito.verify(dao, Mockito.times(1)).processUserRS(any(ResultSet.class));
-
     }
 
     @Test

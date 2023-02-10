@@ -36,7 +36,7 @@ public class ReportDAOTest {
     @Mock
     User mockUser;
 
-    private Report testReport = new Report();
+    private final Report testReport = new Report();
     private final Event testEvent = new Event(1);
     List<Report> testList = new ArrayList<>();
 
@@ -63,13 +63,6 @@ public class ReportDAOTest {
 
         Mockito.doReturn(testReport).when(dao).processReportRS((any(ResultSet.class)));
         assertEquals(testReport, dao.find(1));
-
-//        // Mock scope for use static methods
-//        try (MockedStatic<EventDAOMySQL> mocked = mockStatic(EventDAOMySQL.class)) {
-//            // Mocking
-//            mocked.when(() -> EventDAOMySQL.map(resultSet)).thenReturn(testEvent);
-//            assertEquals(testEvent, dao.find(1));
-//        }
     }
 
     @Test
@@ -113,8 +106,6 @@ public class ReportDAOTest {
         dao.list();
         dao.list(testEvent);
         Mockito.verify(dao, Mockito.times(2)).processReportListRS(any(ResultSet.class), any(List.class));
-//        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
-
     }
 
     @Test

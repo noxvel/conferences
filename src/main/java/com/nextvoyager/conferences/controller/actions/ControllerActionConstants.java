@@ -15,6 +15,7 @@ public interface ControllerActionConstants {
     String PARAM_USER_NEW_PASSWORD = "newPassword";
     String PARAM_USER_CURRENT_PASSWORD = "currentPassword";
     String PARAM_USER_RECEIVE_NOTIFICATIONS = "receiveNotifications";
+    String PARAM_USER_RECAPTCHA = "g-recaptcha-response";
 
     String PARAM_EVENT_ID = "eventID";
     String PARAM_EVENT_NAME = "name";
