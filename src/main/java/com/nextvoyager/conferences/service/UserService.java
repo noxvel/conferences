@@ -16,11 +16,13 @@ public interface UserService {
     User find(String emailParam, String passwordParam);
 
     User find(Integer id);
+    
+    User findUserByEmail(String emailParam);
+    
     void create(User user);
     void update(User user);
 
     void delete(User user);
-
     ListWithCount<User> list(int page, int limit);
     List<User> listWithOneRole(User.Role speaker);
 
@@ -32,4 +34,7 @@ public interface UserService {
 
     boolean checkPassword(User user);
 
+    void createPasswordResetTokenForUser(User user, String token);
+
+    User.PasswordResetToken validatePasswordResetToken(String tokenParam);
 }

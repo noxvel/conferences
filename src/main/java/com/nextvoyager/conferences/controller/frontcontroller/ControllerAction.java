@@ -37,6 +37,8 @@ public interface ControllerAction {
     String USER_PROFILE = "/user/profile";
     String USER_REGISTRATION = "/user/registration";
     String USER_CHANGE_PASSWORD = "/user/change-password";
+    String USER_FORGOT_PASSWORD = "/user/forgot-password";
+    String USER_RESET_PASSWORD = "/user/reset-password";
     String USER_SIGN_OUT = "/user/sign-out";
     String MODERATOR_REPORT_APPROVAL = "/moderator-report-action";
     String SPEAKER_REPORT_APPROVAL = "/speaker-report-action";

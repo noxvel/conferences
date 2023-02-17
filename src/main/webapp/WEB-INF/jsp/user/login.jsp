@@ -44,10 +44,10 @@
                             <div class="col d-flex justify-content-center">
                             </div>
 
-                            <%-- <div class="col">
+                            <div class="col">
                             <!-- Simple link -->
-                            <a href="#!"><fmt:message key="login.text.forgot-password"/></a>
-                            </div> --%>
+                            <a href="${contextPath}/pages/user/forgot-password"><fmt:message key="login.text.forgot-password"/></a>
+                            </div>
                         </div>
 
                         <!-- Submit button -->
@@ -58,7 +58,7 @@
                         <!-- Register buttons -->
                         <div class="text-center">
                             <p><fmt:message key="login.text.not-member"/>
-                                <a href="/conferences/pages/user/registration"><fmt:message key="login.button.register"/></a>
+                                <a href="${contextPath}/pages/user/registration"><fmt:message key="login.button.register"/></a>
                             </p>
                         </div>
                     </form>
@@ -70,19 +70,6 @@
         <jsp:include page="/WEB-INF/templates/_footer.jsp"/>
         <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-        <script>
-            $(document).ready(() => {
-                $('#speakerSelect').change(function(){ 
-                    let actionBlock = $('#actionForSpeakerBlock');
-                    if($(this).val() === '0'){
-                        actionBlock.addClass('d-none');
-                    }else{
-                        actionBlock.removeClass('d-none');
-                    }
-                });
-            });
-        </script>
 
     </body>
 </html>

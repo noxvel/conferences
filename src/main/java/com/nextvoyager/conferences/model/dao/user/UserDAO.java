@@ -5,6 +5,7 @@ import com.nextvoyager.conferences.model.dao.exeption.DAOException;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,6 +31,14 @@ public interface UserDAO {
      * @throws DAOException If something fails at database level.
      */
     User find(String email, String password) throws DAOException;
+
+    /**
+     * Returns the user from the database matching the given email, otherwise null.
+     * @param email The email of the user to be returned.
+     * @return The user from the database matching the given email, otherwise null.
+     * @throws DAOException If something fails at database level.
+     */
+    User find(String email);
 
     /**
      * Create the given user in the database. The user ID must be null, otherwise it will throw
@@ -114,4 +123,7 @@ public interface UserDAO {
      */
     boolean checkPassword(User user) throws DAOException;
 
+    void createPasswordResetTokenForUser(User user, String token, LocalDateTime fiveMinutesLater);
+
+    User.PasswordResetToken getPasswordResetToken(String tokenParam);
 }

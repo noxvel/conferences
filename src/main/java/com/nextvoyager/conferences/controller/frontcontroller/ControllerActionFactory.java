@@ -68,6 +68,10 @@ public class ControllerActionFactory {
         actions.put(POST + USER_REGISTRATION, new RegistrationUserPostAction(userService));
         actions.put(GET + USER_CHANGE_PASSWORD, new ChangeUserPasswordGetAction());
         actions.put(POST + USER_CHANGE_PASSWORD, new ChangeUserPasswordPostAction(userService));
+        actions.put(GET + USER_FORGOT_PASSWORD, new ForgotUserPasswordGetAction());
+        actions.put(POST + USER_FORGOT_PASSWORD, new ForgotUserPasswordPostAction(userService));
+        actions.put(GET + USER_RESET_PASSWORD, new ResetUserPasswordGetAction(userService));
+        actions.put(POST + USER_RESET_PASSWORD, new ResetUserPasswordPostAction(userService));
         actions.put(GET + USER_SIGN_OUT, new SignOutUserAction());
         actions.put(GET + MODERATOR_REPORT_APPROVAL, new ModeratorReportApprovalAction(reportService));
         actions.put(GET + SPEAKER_REPORT_APPROVAL, new SpeakerReportApprovalAction(reportService));

@@ -9,6 +9,7 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.util.PasswordEncoder;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class UserDAOMySQL implements UserDAO{
                     "LEFT JOIN user_role AS r ON u.user_role_id = r.id ";
     private static final String SQL_FIND_BY_ID = SQL_USER_SELECT +
                     "WHERE u.id = ?";
+    private static final String SQL_FIND_BY_EMAIL = SQL_USER_SELECT +
+                    "WHERE u.email = ?";
     private static final String SQL_LIST_ORDER_BY_ID = SQL_USER_SELECT +
                     "ORDER BY u.id " +
                     "LIMIT ?, ?";
@@ -67,6 +70,10 @@ public class UserDAOMySQL implements UserDAO{
             "EXISTS (SELECT ehp.user_id FROM event_has_participant AS ehp WHERE ehp.event_id = ? AND ehp.user_id = u.id)) " +
             "ORDER BY u.id";
     private static final String SQL_LIST_COUNT_ALL = "SELECT COUNT(*) AS count_all FROM user AS u ";
+    private static final String SQL_INSERT_RESET_TOKEN =
+            "REPLACE INTO password_reset_token (user_id, token, expiration_date) VALUES (?, ?, ?)";
+    private static final String SQL_SELECT_PASSWORD_TOKEN =
+            "SELECT user_id, expiration_date FROM password_reset_token WHERE token = ?";
 
     // Vars ---------------------------------------------------------------------------------------
 
@@ -108,6 +115,11 @@ public class UserDAOMySQL implements UserDAO{
     @Override
     public User find(Integer id) throws DAOException {
         return find(SQL_FIND_BY_ID, new ValueDAO(id, Types.INTEGER));
+    }
+
+    @Override
+    public User find(String email) throws DAOException {
+        return find(SQL_FIND_BY_EMAIL, new ValueDAO(email, Types.VARCHAR));
     }
 
     /**
@@ -331,7 +343,6 @@ public class UserDAOMySQL implements UserDAO{
         }
     }
 
-
     @Override
     public boolean checkPassword(User user) throws DAOException {
         if (user.getId() == null) {
@@ -358,6 +369,49 @@ public class UserDAOMySQL implements UserDAO{
         return match;
     }
 
+    @Override
+    public void createPasswordResetTokenForUser(User user, String token, LocalDateTime expirationDate) {
+
+        ValueDAO[] values = {
+                new ValueDAO(user.getId(), Types.INTEGER),
+                new ValueDAO(token,Types.CHAR),
+                new ValueDAO(expirationDate,Types.TIMESTAMP),
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_INSERT_RESET_TOKEN, false, values)
+        ) {
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DAOException("Creating token failed, no rows affected.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public User.PasswordResetToken getPasswordResetToken(String tokenParam) {
+        User.PasswordResetToken token;
+
+        ValueDAO[] values = {
+                new ValueDAO(tokenParam,Types.CHAR),
+        };
+
+        try (
+                Connection connection = daoFactory.getConnection();
+                PreparedStatement statement = prepareStatement(connection, SQL_SELECT_PASSWORD_TOKEN, false, values);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            token = processTokenRS(resultSet);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DAOException(e);
+        }
+
+        return token;
+    }
+
     // Helpers ------------------------------------------------------------------------------------
 
     protected User processUserRS(ResultSet rs) throws SQLException {
@@ -371,6 +425,11 @@ public class UserDAOMySQL implements UserDAO{
     protected void processUserListRS(ResultSet listRS, List<User> result) throws SQLException {
         processListRS(listRS,result,this::map);
     }
+
+    protected User.PasswordResetToken processTokenRS(ResultSet rs) throws SQLException {
+        return processRS(rs,this::mapToken);
+    }
+
     /**
      * Map the current row of the given ResultSet to a User.
      * @param resultSet The ResultSet of which the current row is to be mapped to a User.
@@ -386,5 +445,12 @@ public class UserDAOMySQL implements UserDAO{
         user.setRole(User.Role.valueOf(resultSet.getString(FIELD_USER_ROLE_NAME)));
         user.setReceiveNotifications(resultSet.getBoolean(FIELD_RECEIVE_NOTIFICATIONS));
         return user;
+    }
+
+    private User.PasswordResetToken mapToken(ResultSet resultSet) throws SQLException {
+        User.PasswordResetToken token = new User.PasswordResetToken();
+        token.setUser(new User(resultSet.getInt("user_id")));
+        token.setExpirationDate(resultSet.getTimestamp("expiration_date").toLocalDateTime());
+        return token;
     }
 }

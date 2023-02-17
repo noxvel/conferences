@@ -4,9 +4,9 @@ import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.user.UserDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.model.entity.User;
-import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User find(Integer userID) {
         return userDAO.find(userID);
+    }
+
+    @Override
+    public User findUserByEmail(String emailParam) {
+        return userDAO.find(emailParam);
     }
 
     @Override
@@ -66,14 +71,33 @@ public class UserServiceImpl implements UserService {
     public boolean checkPassword(User user) {
         return userDAO.checkPassword(user);
     }
+
     @Override
     public void changePassword(User user) {
         userDAO.changePassword(user);
     }
+
     @Override
     public boolean existEmail(String emailParam) {
         return userDAO.existEmail(emailParam);
     }
 
+    @Override
+    public void createPasswordResetTokenForUser(User user, String token) {
+        LocalDateTime fiveMinutesLater = LocalDateTime.now().plusMinutes(5);
+        userDAO.createPasswordResetTokenForUser(user, token, fiveMinutesLater);
+    }
 
+    @Override
+    public User.PasswordResetToken validatePasswordResetToken(String tokenParam) {
+        User.PasswordResetToken token = userDAO.getPasswordResetToken(tokenParam);
+
+        if (token == null) {
+            return new User.PasswordResetToken();
+        } else {
+            token.setValid(token.getExpirationDate().isAfter(LocalDateTime.now()));
+        }
+
+        return token;
+    }
 }

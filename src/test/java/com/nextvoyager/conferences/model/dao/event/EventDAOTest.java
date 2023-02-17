@@ -134,8 +134,6 @@ public class EventDAOTest {
         Mockito.doNothing().when(dao).processEventListRS(any(ResultSet.class), any(List.class));
         dao.list(sortType, sortDirection, timeFilter);
         Mockito.verify(dao, Mockito.times(1)).processEventListRS(any(ResultSet.class), any(List.class));
-//        assertEquals(testList, dao.list(sortType,sortDirection,timeFilter));
-
     }
 
     @Test

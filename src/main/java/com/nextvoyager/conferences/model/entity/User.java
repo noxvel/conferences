@@ -1,10 +1,12 @@
 package com.nextvoyager.conferences.model.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -69,6 +71,13 @@ public class User implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    @Data
+    public static class PasswordResetToken{
+        boolean isValid;
+        LocalDateTime expirationDate;
+        User user;
     }
 
     @Getter

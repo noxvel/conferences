@@ -135,6 +135,23 @@ CREATE TABLE IF NOT EXISTS `conferences`.`event_has_participant` (
     ON UPDATE CASCADE);
 
 
+-- -----------------------------------------------------
+-- Table `conferences`.`password_reset_token`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `conferences`.`password_reset_token` ;
+
+CREATE TABLE IF NOT EXISTS `conferences`.`password_reset_token` (
+  `user_id` INT NOT NULL,
+  `token` CHAR(36) NULL,
+  `expiration_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`),
+  CONSTRAINT `fk_password_reset_token_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `conferences`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -49,6 +49,8 @@ public class AuthorizationFilter implements Filter {
         allUserAccess.add(EVENT_LIST_SORT);
         allUserAccess.add(EVENT_LIST_VIEW_FORM);
         allUserAccess.add(REPORT_VIEW);
+        allUserAccess.add(USER_RESET_PASSWORD);
+        allUserAccess.add(USER_FORGOT_PASSWORD);
 
         authorizedUserAccess.add(USER_PROFILE);
         authorizedUserAccess.add(USER_CHANGE_PASSWORD);
