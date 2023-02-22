@@ -33,7 +33,7 @@ public class ResetUserPasswordGetAction implements ControllerAction {
             req.setAttribute("token", tokenParam);
             return USER_RESET_PASSWORD;
         } else {
-            return PREFIX_PATH + USER_LOGIN;
+            return PREFIX_PATH + USER_SHOW_MESSAGE + "?message=" + ShowMessageAction.Message.ResetPasswordError;
         }
     }
 }

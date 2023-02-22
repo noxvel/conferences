@@ -60,8 +60,7 @@ public class ForgotUserPasswordPostAction implements ControllerAction {
                     "To reset your password, click the link below:\n" + tokenUrl);
         }
 
-        // Add success message to view
-        req.setAttribute("message", "forgot-password.message.send-message");
-        return PREFIX_PATH + USER_LOGIN;
+        // Show message to view
+        return PREFIX_PATH + USER_SHOW_MESSAGE + "?message=" + ShowMessageAction.Message.ForgotPasswordSendLink;
     }
 }

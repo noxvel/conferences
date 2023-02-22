@@ -19,7 +19,7 @@
                     <h2 class="fw-normal mb-3 pb-3 text-center"><fmt:message key="forgot-password.header.text"/></h2>      
                     <form id="loginUser" action="forgot-password" method="post">
                         <c:if test="${requestScope.message != null}">
-                            <div class="alert alert-danger text-center" role="alert">
+                            <div class="alert alert-info text-center" role="alert">
                                 <fmt:message key="${requestScope.message}"/>
                             </div>
                         </c:if>
@@ -42,7 +42,6 @@
 
         <jsp:include page="/WEB-INF/templates/_footer.jsp"/>
         <jsp:include page="/WEB-INF/templates/_scripts.jsp"/>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     </body>
 </html>

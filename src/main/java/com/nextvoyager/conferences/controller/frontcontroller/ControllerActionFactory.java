@@ -76,6 +76,7 @@ public class ControllerActionFactory {
         actions.put(GET + MODERATOR_REPORT_APPROVAL, new ModeratorReportApprovalAction(reportService));
         actions.put(GET + SPEAKER_REPORT_APPROVAL, new SpeakerReportApprovalAction(reportService));
         actions.put(GET + USER_LIST, new UserListAction(userService));
+        actions.put(GET + USER_SHOW_MESSAGE, new ShowMessageAction());
 
     }
 

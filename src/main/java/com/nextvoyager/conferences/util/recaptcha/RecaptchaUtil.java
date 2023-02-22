@@ -90,7 +90,6 @@ public class RecaptchaUtil {
 
             if (responseCode == 200) {
                 // print result
-                LOG.debug("response for verify reCAPTCHA: {}", response.body());
 
                 //parse JSON response and return 'success' value
                 JsonReader jsonReader = Json.createReader(new StringReader(response.body()));

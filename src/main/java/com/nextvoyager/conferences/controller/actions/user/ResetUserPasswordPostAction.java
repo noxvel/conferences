@@ -32,6 +32,7 @@ public class ResetUserPasswordPostAction implements ControllerAction {
 
         User.PasswordResetToken token = userService.validatePasswordResetToken(tokenParam);
 
+        ShowMessageAction.Message message;
         if (token.isValid()) {
 
             User user = token.getUser();
@@ -39,12 +40,12 @@ public class ResetUserPasswordPostAction implements ControllerAction {
             user.setPassword(newPasswordParam);
             userService.changePassword(user);
 
-            req.setAttribute("message", "reset-password.message.success");
+            message = ShowMessageAction.Message.ResetPasswordSuccess;
 
         } else {
-            req.setAttribute("message", "reset-password.message.error");
+            message = ShowMessageAction.Message.ResetPasswordError;
         }
 
-        return PREFIX_PATH + USER_LOGIN;
+        return PREFIX_PATH + USER_SHOW_MESSAGE + "?message=" + message;
     }
 }

@@ -43,6 +43,7 @@ public interface ControllerAction {
     String MODERATOR_REPORT_APPROVAL = "/moderator-report-action";
     String SPEAKER_REPORT_APPROVAL = "/speaker-report-action";
     String USER_LIST = "/user/list";
+    String USER_SHOW_MESSAGE = "/user/show-message";
 
     String execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

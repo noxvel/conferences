@@ -16,7 +16,7 @@
 
             <div class="container d-flex flex-column">
                 <h1 class="mb-3"><fmt:message key="about.header.text"/></h2>
-                <p><fmt:message key="about.body.text"/></p>
+                <pre style="font: inherit;"><fmt:message key="about.body.text"/></pre>
             </div>
 
         </main>
