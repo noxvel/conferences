@@ -4,7 +4,6 @@ import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.recaptcha.RecaptchaUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -40,7 +39,7 @@ public class LoginUserPostActionTest {
     String recaptchaResponse = "qwerty";
 
     @Test
-    public void correctLogin() throws ServletException {
+    public void correctLogin() throws Exception {
         when(req.getParameter(PARAM_USER_EMAIL)).thenReturn(email);
         when(req.getParameter(PARAM_USER_PASSWORD)).thenReturn(password);
         when(userService.find(email,password)).thenReturn(testUser);
@@ -53,7 +52,7 @@ public class LoginUserPostActionTest {
     }
 
     @Test
-    public void wrongLogin() throws ServletException {
+    public void wrongLogin() throws Exception {
         when(req.getParameter(PARAM_USER_EMAIL)).thenReturn(email);
         when(req.getParameter(PARAM_USER_PASSWORD)).thenReturn(password);
         when(userService.find(email,password)).thenReturn(null);
@@ -64,7 +63,7 @@ public class LoginUserPostActionTest {
     }
 
     @Test
-    public void tooManyLoginAttemptsAndCorrectRecaptcha() throws ServletException {
+    public void tooManyLoginAttemptsAndCorrectRecaptcha() throws Exception {
         when(req.getParameter(PARAM_USER_EMAIL)).thenReturn(email);
         when(req.getParameter(PARAM_USER_PASSWORD)).thenReturn(password);
         when(req.getParameter(PARAM_USER_RECAPTCHA)).thenReturn(recaptchaResponse);
@@ -84,7 +83,7 @@ public class LoginUserPostActionTest {
     }
 
     @Test
-    public void tooManyLoginAttemptsAndBadRecaptcha() throws ServletException {
+    public void tooManyLoginAttemptsAndBadRecaptcha() throws Exception {
         when(req.getParameter(PARAM_USER_EMAIL)).thenReturn(email);
         when(req.getParameter(PARAM_USER_RECAPTCHA)).thenReturn(null);
         when(req.getSession()).thenReturn(session);

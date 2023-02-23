@@ -7,7 +7,6 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.PaginationUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +31,7 @@ public class ReportListAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req);
 
@@ -64,9 +63,7 @@ public class ReportListAction implements ControllerAction {
         List<Report> listOfReports = countAndList.getList();
         listOfReports.stream()
                 .filter(report -> report.getSpeaker() != null)
-                .forEach(report -> {
-                    report.setSpeaker(userService.find(report.getSpeaker().getId()));
-                });
+                .forEach(report -> report.setSpeaker(userService.find(report.getSpeaker().getId())));
 
         req.setAttribute("page", page);
         req.setAttribute("limit", limit);

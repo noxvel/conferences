@@ -3,7 +3,6 @@ package com.nextvoyager.conferences.controller.actions.user;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -34,7 +33,7 @@ public class ChangeUserPasswordPostActionTest {
     User testUser = new User(1);
 
     @Test
-    public void wrongCurrentPassword() throws ServletException {
+    public void wrongCurrentPassword() throws Exception {
         when(req.getParameter("currentPassword")).thenReturn("123");
         when(req.getParameter("newPassword")).thenReturn("1234");
         when(req.getSession()).thenReturn(session);
@@ -47,7 +46,7 @@ public class ChangeUserPasswordPostActionTest {
     }
 
     @Test
-    public void goodCurrentPassword() throws ServletException {
+    public void goodCurrentPassword() throws Exception {
         when(req.getParameter("currentPassword")).thenReturn("123");
         when(req.getParameter("newPassword")).thenReturn("1234");
         when(req.getSession()).thenReturn(session);

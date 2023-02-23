@@ -1,7 +1,6 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -15,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class EventCreateGetAction implements ControllerAction {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         return EVENT_CREATE;
     }
 

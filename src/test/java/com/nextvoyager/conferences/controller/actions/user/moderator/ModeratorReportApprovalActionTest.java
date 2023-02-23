@@ -3,7 +3,6 @@ package com.nextvoyager.conferences.controller.actions.user.moderator;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ public class ModeratorReportApprovalActionTest {
     ModeratorReportApprovalAction action;
 
     @Test
-    public void testExecute() throws ServletException {
+    public void testExecute() throws Exception {
         User speaker = new User(1);
         Report report = new Report();
         report.setSpeaker(speaker);

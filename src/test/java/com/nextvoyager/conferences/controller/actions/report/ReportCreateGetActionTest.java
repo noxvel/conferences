@@ -3,7 +3,6 @@ package com.nextvoyager.conferences.controller.actions.report;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -34,9 +33,9 @@ public class ReportCreateGetActionTest {
     @InjectMocks
     ReportCreateGetAction action;
 
-    private User speaker = new User(1, User.Role.SPEAKER);
-    private User moderator = new User(2, User.Role.MODERATOR);
-    private List<User> userList = new ArrayList<>();
+    private final User speaker = new User(1, User.Role.SPEAKER);
+    private final User moderator = new User(2, User.Role.MODERATOR);
+    private final List<User> userList = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
@@ -44,7 +43,7 @@ public class ReportCreateGetActionTest {
     }
 
     @Test
-    public void testExecuteForSpeaker() throws ServletException {
+    public void testExecuteForSpeaker() throws Exception {
         Mockito.when(req.getParameter("eventID")).thenReturn("1");
         Mockito.when(req.getSession()).thenReturn(session);
         Mockito.when(session.getAttribute("user")).thenReturn(speaker);
@@ -56,7 +55,7 @@ public class ReportCreateGetActionTest {
     }
 
     @Test
-    public void testExecuteForModerator() throws ServletException {
+    public void testExecuteForModerator() throws Exception {
         Mockito.when(req.getParameter("eventID")).thenReturn("1");
         Mockito.when(req.getSession()).thenReturn(session);
         Mockito.when(userService.listWithOneRole(User.Role.SPEAKER)).thenReturn(userList);

@@ -8,7 +8,8 @@ import com.nextvoyager.conferences.util.validation.ValidateObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_USER_NEW_PASSWORD;
+import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.PARAM_USER_TOKEN;
 import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_PASSWORD;
 
 public class ResetUserPasswordPostAction implements ControllerAction {

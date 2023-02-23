@@ -2,7 +2,6 @@ package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -14,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class EventListSortAction implements ControllerAction {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         String sortTypeParam = req.getParameter("sortType");
         String sortDirectionParam = req.getParameter("sortDirection");
         String redirectPath = req.getParameter("redirectPath");

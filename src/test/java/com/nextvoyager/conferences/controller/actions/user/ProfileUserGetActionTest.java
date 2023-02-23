@@ -2,7 +2,6 @@ package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -30,7 +27,7 @@ public class ProfileUserGetActionTest {
     ProfileUserGetAction action;
 
     @Test
-    public void testExecute() throws ServletException {
+    public void testExecute() throws Exception {
         when(req.getSession()).thenReturn(session);
         when(session.getAttribute("user")).thenReturn(new User(1));
 

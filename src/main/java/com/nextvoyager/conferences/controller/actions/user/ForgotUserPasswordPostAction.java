@@ -57,7 +57,7 @@ public class ForgotUserPasswordPostAction implements ControllerAction {
 
             // Email message
             EmailCreator.send(user.getEmail(), "Password Reset Request",
-                    "To reset your password, click the link below:\n" + tokenUrl);
+                    "<p>To reset your password, click the link below:</p><a href='" + tokenUrl + "'>Reset link</a>");
         }
 
         // Show message to view

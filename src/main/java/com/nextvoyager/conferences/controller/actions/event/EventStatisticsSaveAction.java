@@ -6,8 +6,9 @@ import com.nextvoyager.conferences.model.dao.event.EventDAO;
 import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.util.PaginationUtil;
-import com.nextvoyager.conferences.util.filecreator.*;
-import jakarta.servlet.ServletException;
+import com.nextvoyager.conferences.util.filecreator.ExportFileFormat;
+import com.nextvoyager.conferences.util.filecreator.FileCreator;
+import com.nextvoyager.conferences.util.filecreator.FileCreatorFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Optional;
 
 /**
  * Save event statistics to file in different formats.
@@ -32,7 +33,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req, 12);
 

@@ -8,14 +8,13 @@ import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import static com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction.*;
-import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
-
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
+import static com.nextvoyager.conferences.service.approvalofreport.ApprovalOfReportAction.*;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_ID;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_REPORT_STATUS;
 
 /**
  * Create new report
@@ -49,7 +48,7 @@ public class ReportCreatePostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         User currentUser = (User) req.getSession().getAttribute("user");
 
         if (currentUser.getRole() == User.Role.SPEAKER) {

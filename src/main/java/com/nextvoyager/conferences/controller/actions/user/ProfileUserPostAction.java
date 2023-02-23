@@ -5,14 +5,12 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
-import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
-import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_USER_ROLE;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_USER_NAME;
 
 /**
  * Change the user data that is entered on the profile page.
@@ -36,7 +34,7 @@ public class ProfileUserPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         ParameterValidator.validate(req,validateObjects);
 
         String firstNameParam = req.getParameter(PARAM_USER_FIRST_NAME);

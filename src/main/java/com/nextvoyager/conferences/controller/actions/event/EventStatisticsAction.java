@@ -7,7 +7,6 @@ import com.nextvoyager.conferences.model.entity.Event;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.util.PaginationUtil;
 import com.nextvoyager.conferences.util.filecreator.ExportFileFormat;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -29,7 +28,7 @@ public class EventStatisticsAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req, 12);
 

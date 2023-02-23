@@ -11,12 +11,10 @@ import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.PaginationUtil;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +44,7 @@ public class EventViewAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req);
 
@@ -101,9 +99,7 @@ public class EventViewAction implements ControllerAction {
         List<Report> listOfReports = countAndList.getList();
         listOfReports.stream()
                 .filter(report -> report.getSpeaker() != null)
-                .forEach(report -> {
-                    report.setSpeaker(userService.find(report.getSpeaker().getId()));
-                });
+                .forEach(report -> report.setSpeaker(userService.find(report.getSpeaker().getId())));
         event.setReports(listOfReports);
 
         if (userRole == User.Role.MODERATOR) {

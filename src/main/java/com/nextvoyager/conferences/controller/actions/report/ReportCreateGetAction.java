@@ -6,7 +6,6 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -37,7 +36,7 @@ public class ReportCreateGetAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         ParameterValidator.validate(req,validateObjects);
         Integer eventID = Integer.valueOf(req.getParameter(PARAM_EVENT_ID));
 

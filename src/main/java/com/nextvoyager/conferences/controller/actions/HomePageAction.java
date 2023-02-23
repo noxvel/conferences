@@ -1,6 +1,6 @@
 package com.nextvoyager.conferences.controller.actions;
 
-import com.nextvoyager.conferences.controller.actions.event.EventListViewForm;
+import com.nextvoyager.conferences.controller.actions.event.EventListViewFormAction;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.dao.event.EventDAO;
@@ -9,7 +9,6 @@ import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.EventService;
 import com.nextvoyager.conferences.util.PaginationUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +29,7 @@ public class HomePageAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req);
 
@@ -50,8 +49,8 @@ public class HomePageAction implements ControllerAction {
         Boolean showEventParticipated = Optional.ofNullable((Boolean) currentSession
                 .getAttribute("filterByEventParticipated")).orElse(Boolean.FALSE);
 
-        EventListViewForm eventListViewForm = Optional.ofNullable((EventListViewForm) currentSession
-                .getAttribute("eventListViewForm")).orElse(EventListViewForm.BLOCK);
+        EventListViewFormAction.EventListViewForm eventListViewForm = Optional.ofNullable((EventListViewFormAction.EventListViewForm) currentSession
+                .getAttribute("eventListViewForm")).orElse(EventListViewFormAction.EventListViewForm.BLOCK);
 
         User currentUser = (User) currentSession.getAttribute("user");
         if (currentUser != null) {

@@ -5,7 +5,6 @@ import com.nextvoyager.conferences.model.dao.ListWithCount;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.PaginationUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -25,11 +24,9 @@ public class UserListAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int page = PaginationUtil.handlePaginationPageParameter(req);
         int limit = PaginationUtil.handlePaginationLimitParameter(req, 12);
-
-        HttpSession currentSession = req.getSession();
 
         ListWithCount<User> countAndList = userService.list(page, limit);
 

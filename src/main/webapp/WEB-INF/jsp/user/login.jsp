@@ -36,19 +36,8 @@
                         </div>
 
                         <c:if test="${not empty recaptchaSiteKey}">
-                            <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                            <div class="g-recaptcha mb-2" data-sitekey="${recaptchaSiteKey}"></div>
                         </c:if>
-
-                        <!-- 2 column grid layout for inline styling -->
-                        <div class="row mb-4">
-                            <div class="col d-flex justify-content-center">
-                            </div>
-
-                            <div class="col">
-                            <!-- Simple link -->
-                            <a href="${contextPath}/pages/user/forgot-password"><fmt:message key="login.text.forgot-password"/></a>
-                            </div>
-                        </div>
 
                         <!-- Submit button -->
                         <div class="d-grid gap-2">
@@ -60,6 +49,13 @@
                             <p><fmt:message key="login.text.not-member"/>
                                 <a href="${contextPath}/pages/user/registration"><fmt:message key="login.button.register"/></a>
                             </p>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col">
+                            <!-- Simple link -->
+                            <a href="${contextPath}/pages/user/forgot-password"><fmt:message key="login.text.forgot-password"/></a>
+                            </div>
                         </div>
                     </form>
                 </div>

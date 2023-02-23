@@ -1,7 +1,6 @@
 package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ public class RegistrationUserGetActionTest {
     RegistrationUserGetAction action;
 
     @Test
-    public void testExecute() throws ServletException {
+    public void testExecute() throws Exception {
         String result = action.execute(req,resp);
         assertEquals(ControllerAction.USER_REGISTRATION, result);
     }

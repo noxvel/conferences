@@ -1,6 +1,5 @@
 package com.nextvoyager.conferences.util.validation;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -13,9 +12,9 @@ import java.util.List;
  */
 public class ParameterValidator {
 
-    private ParameterValidator(){};
+    private ParameterValidator(){}
 
-    public static void validate(HttpServletRequest req, ValidateObject... validateObjects) throws ServletException {
+    public static void validate(HttpServletRequest req, ValidateObject... validateObjects) throws ParameterValidationException {
         List<String> errorMessages = new ArrayList<>();
 
         for (ValidateObject val: validateObjects) {
@@ -27,7 +26,7 @@ public class ParameterValidator {
         }
 
         if (!errorMessages.isEmpty()) {
-            throw new ServletException("Invalid input values: " + String.join(",\\n", errorMessages));
+            throw new ParameterValidationException("Invalid input values: " + String.join(",\\n", errorMessages));
         }
     }
 

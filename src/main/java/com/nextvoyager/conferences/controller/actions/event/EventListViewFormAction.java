@@ -1,7 +1,6 @@
 package com.nextvoyager.conferences.controller.actions.event;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -13,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class EventListViewFormAction implements ControllerAction {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         String viewFormParam = req.getParameter("viewForm");
 //        String redirectPath = req.getParameter("redirectPath");
 
@@ -24,5 +23,16 @@ public class EventListViewFormAction implements ControllerAction {
 
         req.getSession().setAttribute("eventListViewForm", viewForm);
         return PREFIX_PATH + HOME;
+    }
+
+    /**
+     * Type of view for list of events.
+     * Path "/event/list-sort".
+     *
+     * @author Stanislav Bozhevskyi
+     */
+    public enum EventListViewForm {
+        BLOCK,
+        LIST
     }
 }

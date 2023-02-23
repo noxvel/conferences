@@ -6,7 +6,6 @@ import com.nextvoyager.conferences.service.UserService;
 import com.nextvoyager.conferences.util.recaptcha.RecaptchaUtil;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 import static com.nextvoyager.conferences.controller.actions.ControllerActionConstants.*;
-import static com.nextvoyager.conferences.util.validation.ValidateRegExp.*;
+import static com.nextvoyager.conferences.util.validation.ValidateRegExp.REGEXP_EMAIL;
 
 /**
  * Login user.
@@ -39,7 +38,7 @@ public class LoginUserPostAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         ParameterValidator.validate(req,validateObjects);
 
         HttpSession currentSession = req.getSession();

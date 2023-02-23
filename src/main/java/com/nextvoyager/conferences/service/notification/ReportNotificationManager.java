@@ -11,7 +11,7 @@ import com.nextvoyager.conferences.util.emailcreator.EmailCreator;
  */
 public class ReportNotificationManager {
 
-    private ReportNotificationManager(){};
+    private ReportNotificationManager(){}
 
     public static void notifySpeaker(User speaker, Report report, String notifyMsg) {
         if (speaker.getReceiveNotifications()) {
@@ -19,6 +19,6 @@ public class ReportNotificationManager {
         }
     }
     private static String prepareNotificationSubject(Report report) {
-        return "Status of the report '" + report.getTopic() + "' changed";
+        return "Status of the report '" + report.getTopic() + "' changed.";
     }
 }

@@ -6,7 +6,6 @@ import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
 import com.nextvoyager.conferences.util.validation.ParameterValidator;
 import com.nextvoyager.conferences.util.validation.ValidateObject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -34,7 +33,7 @@ public class SpeakerReportApprovalAction implements ControllerAction {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         ParameterValidator.validate(req,validateObjects);
         Integer reportID = Integer.valueOf(req.getParameter(PARAM_REPORT_ID));
         String actionParam = req.getParameter(PARAM_USER_APPROVAL_ACTION);

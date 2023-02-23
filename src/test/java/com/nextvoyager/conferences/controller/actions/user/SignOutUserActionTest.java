@@ -1,8 +1,6 @@
 package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
-import com.nextvoyager.conferences.model.entity.User;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -29,7 +27,7 @@ public class SignOutUserActionTest {
     SignOutUserAction action;
 
     @Test
-    public void testExecute() throws ServletException {
+    public void testExecute() throws Exception {
         when(req.getSession()).thenReturn(session);
 
         String result = action.execute(req,resp);

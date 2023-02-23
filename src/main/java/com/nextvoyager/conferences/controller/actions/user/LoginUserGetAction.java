@@ -2,7 +2,6 @@ package com.nextvoyager.conferences.controller.actions.user;
 
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.util.recaptcha.RecaptchaUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class LoginUserGetAction implements ControllerAction {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
         Integer loginAttempts = Optional.ofNullable((Integer) req.getSession()
                 .getAttribute("loginAttempts")).orElse(0);

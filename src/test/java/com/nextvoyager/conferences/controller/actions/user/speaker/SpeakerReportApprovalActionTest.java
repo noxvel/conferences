@@ -3,7 +3,6 @@ package com.nextvoyager.conferences.controller.actions.user.speaker;
 import com.nextvoyager.conferences.model.entity.Report;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.ReportService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +33,7 @@ public class SpeakerReportApprovalActionTest {
     SpeakerReportApprovalAction action;
 
     @Test
-    public void testExecute() throws ServletException {
+    public void testExecute() throws Exception {
         User speaker = new User(1);
         Report report = new Report();
 

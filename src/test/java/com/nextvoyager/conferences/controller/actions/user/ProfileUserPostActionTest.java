@@ -3,7 +3,6 @@ package com.nextvoyager.conferences.controller.actions.user;
 import com.nextvoyager.conferences.controller.frontcontroller.ControllerAction;
 import com.nextvoyager.conferences.model.entity.User;
 import com.nextvoyager.conferences.service.UserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -38,7 +37,7 @@ public class ProfileUserPostActionTest {
     String receiveNotifications = "true";
 
     @Test
-    public void testExecute() throws ServletException {
+    public void testExecute() throws Exception {
         when(req.getParameter("firstName")).thenReturn(firstName);
         when(req.getParameter("lastName")).thenReturn(lastName);
         when(req.getParameter("receiveNotifications")).thenReturn(receiveNotifications);

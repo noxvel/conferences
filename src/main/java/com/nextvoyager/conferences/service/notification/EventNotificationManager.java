@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class EventNotificationManager {
 
-    private EventNotificationManager(){};
+    private EventNotificationManager(){}
 
     public static void notify(List<User> userList, Event event, NotificationType type) {
         if (!userList.isEmpty()) {
@@ -27,11 +27,11 @@ public class EventNotificationManager {
     }
 
     private static String prepareNotificationText(Event event, NotificationType type) {
-        return "Event '" + event.getName() + "', in which you participate, was " + type.getNotificationText();
+        return "Event '" + event.getName() + "', in which you participate, was " + type.getNotificationText() + ".";
     }
 
     private static String prepareNotificationSubject(Event event, NotificationType type) {
-        return "Changes in event '" + event.getName() + "'";
+        return "Changes in event '" + event.getName() + "'.";
     }
 
     @Getter
