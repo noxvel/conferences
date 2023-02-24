@@ -41,6 +41,7 @@ public class AuthorizationFilter implements Filter {
 
     static{
         allUserAccess.add(HOME);
+        allUserAccess.add(ABOUT);
         allUserAccess.add(CHANGE_LANGUAGE);
         allUserAccess.add(USER_LOGIN);
         allUserAccess.add(USER_REGISTRATION);

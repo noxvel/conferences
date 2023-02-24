@@ -13,6 +13,7 @@ public interface ControllerAction {
     String PREFIX_PATH = "/pages";
 
     String HOME = "/home";
+    String ABOUT = "/about";
     String CHANGE_LANGUAGE = "/change-language";
 
     String EVENT_CREATE = "/event/create";

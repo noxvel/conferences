@@ -16,7 +16,7 @@
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li><a href="${contextPath}/pages/home" class="nav-link px-2 link-dark fs-5"><fmt:message key="header.link.home"/></a></li>
-            <li><a href="${contextPath}/about.jsp" class="nav-link px-2 link-dark fs-5"><fmt:message key="header.link.about"/></a></li>
+            <li><a href="${contextPath}/pages/about" class="nav-link px-2 link-dark fs-5"><fmt:message key="header.link.about"/></a></li>
         </ul>
 
         <div class="d-flex flex-row align-items-center">

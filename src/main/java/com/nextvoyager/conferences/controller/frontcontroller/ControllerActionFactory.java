@@ -1,5 +1,6 @@
 package com.nextvoyager.conferences.controller.frontcontroller;
 import com.nextvoyager.conferences.AppContext;
+import com.nextvoyager.conferences.controller.actions.AboutPageAction;
 import com.nextvoyager.conferences.controller.actions.ChangeLanguageAction;
 import com.nextvoyager.conferences.controller.actions.HomePageAction;
 import com.nextvoyager.conferences.controller.actions.event.*;
@@ -36,6 +37,7 @@ public class ControllerActionFactory {
 
     static{
         actions.put(GET + HOME, new HomePageAction(eventService));
+        actions.put(GET + ABOUT, new AboutPageAction());
         actions.put(POST + CHANGE_LANGUAGE, new ChangeLanguageAction());
 
         actions.put(GET + EVENT_CREATE, new EventCreateGetAction());
