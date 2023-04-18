@@ -123,11 +123,11 @@ public class EventServiceTest {
         Mockito.when(dao.listWithPaginationReportStatusFilter(
                 1, 6, sortType, sortDirection,timeFilter, reportStatus)).thenReturn(testListWithCount);
 
-        assertEquals(testListWithCount, eventService.listWithPagination(
+        assertEquals(testListWithCount, eventService.listWithPaginationCommon(
                 1, 6, sortType, sortDirection, timeFilter));
         assertEquals(testListWithCount, eventService.listWithPaginationSpeaker(
                 1, 6, sortType, sortDirection, timeFilter, mockUser, true));
-        assertEquals(testListWithCount, eventService.listWithPaginationOridnaryUser(
+        assertEquals(testListWithCount, eventService.listWithPaginationOrdinaryUser(
                 1, 6, sortType, sortDirection, timeFilter, mockUser, true));
         assertEquals(testListWithCount, eventService.listWithPaginationReportStatusFilter(
                 1, 6, sortType, sortDirection,timeFilter, reportStatus));

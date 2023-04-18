@@ -51,7 +51,7 @@ public class EventStatisticsSaveAction implements ControllerAction {
         EventDAO.TimeFilter eventTimeFilter = Optional.ofNullable((EventDAO.TimeFilter) currentSession
                 .getAttribute("eventTimeFilter")).orElse(EventDAO.TimeFilter.AllTime);
 
-        ListWithCount<Event> countAndList = eventService.listWithPagination(page, limit, eventListSortType,
+        ListWithCount<Event> countAndList = eventService.listWithPaginationCommon(page, limit, eventListSortType,
                 eventListSortDirection, eventTimeFilter);
 
         Optional<FileCreator> fileCreator = FileCreatorFactory.getFileCreator(fileFormatParam);

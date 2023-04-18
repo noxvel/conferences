@@ -43,7 +43,7 @@ public class EventStatisticsAction implements ControllerAction {
         EventDAO.TimeFilter eventTimeFilter = Optional.ofNullable((EventDAO.TimeFilter) currentSession
                 .getAttribute("eventTimeFilter")).orElse(EventDAO.TimeFilter.AllTime);
 
-        ListWithCount<Event> countAndList = eventService.listWithPagination(page, limit, eventListSortType,
+        ListWithCount<Event> countAndList = eventService.listWithPaginationCommon(page, limit, eventListSortType,
                 eventListSortDirection, eventTimeFilter);
 
         int numOfPages = PaginationUtil.getNumOfPages(countAndList.getCount(),limit);

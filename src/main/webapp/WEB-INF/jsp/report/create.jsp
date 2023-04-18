@@ -46,12 +46,6 @@
                                         <fmt:message key="report-create.action.radio.propose"/>
                                     </label>
                                 </div>
-                                <%-- <label for="status" class="form-label">Status</label>
-                                <select name="status" id="status" class="form-select">
-                                    <c:forEach var="status" items="${statuses}">
-                                        <option value="${status}">${status.name}</option>
-                                    </c:forEach>
-                                </select> --%>
                             </div>
                         </div>
                     </c:if>

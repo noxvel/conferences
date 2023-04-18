@@ -70,6 +70,34 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public ListWithCount<Event> listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
+                                                   EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
+                                                   User currentUser, Boolean participated) {
+
+        ListWithCount<Event> countAndList;
+
+        if (currentUser != null) {
+            if (currentUser.getRole() == User.Role.MODERATOR) {
+                countAndList = listWithPaginationCommon(page, limit, sortType,
+                        sortDirection, timeFilter);
+            } else if (currentUser.getRole() == User.Role.SPEAKER) {
+                countAndList = listWithPaginationSpeaker(page, limit, sortType,
+                        sortDirection, timeFilter, currentUser, participated);
+            } else if (currentUser.getRole() == User.Role.ORDINARY_USER) {
+                countAndList = listWithPaginationOrdinaryUser(page, limit, sortType,
+                        sortDirection, timeFilter, currentUser, participated);
+            } else {
+                countAndList = listWithPaginationReportStatusFilter(page, limit, sortType,
+                        sortDirection, timeFilter, Report.Status.CONFIRMED);
+            }
+        } else {
+            countAndList = listWithPaginationReportStatusFilter(page, limit, sortType,
+                    sortDirection, timeFilter, Report.Status.CONFIRMED);
+        }
+        return countAndList;
+    }
+
+    @Override
+    public ListWithCount<Event> listWithPaginationCommon(Integer page, Integer limit, EventDAO.SortType sortType,
                                                    EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter) {
         return eventDAO.listWithPagination(page, limit, sortType, sortDirection, timeFilter);
     }
@@ -82,7 +110,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ListWithCount<Event> listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType sortType,
+    public ListWithCount<Event> listWithPaginationOrdinaryUser(int page, int limit, EventDAO.SortType sortType,
                                                                        EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
                                                                        User ordinaryUser, Boolean participated) {
         return eventDAO.listWithPaginationOrdinaryUser(page, limit, sortType, sortDirection, timeFilter, ordinaryUser, participated);

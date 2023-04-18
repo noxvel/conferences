@@ -30,8 +30,11 @@ public interface EventService {
     List<Event> list(EventDAO.SortType sortType, EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
 
     ListWithCount<Event> listWithPagination(Integer page, Integer limit, EventDAO.SortType sortType,
-                                            EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
+                                            EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter,
+                                            User user, Boolean participated);
 
+    ListWithCount<Event> listWithPaginationCommon(Integer page, Integer limit, EventDAO.SortType sortType,
+                                            EventDAO.SortDirection sortDirection, EventDAO.TimeFilter timeFilter);
     ListWithCount<Event> listWithPaginationSpeaker(int page, int limit, EventDAO.SortType sortType,
                                                                        EventDAO.SortDirection sortDirection,
                                                            EventDAO.TimeFilter timeFilter, User speaker, Boolean participated);
@@ -42,7 +45,7 @@ public interface EventService {
                                                                       EventDAO.TimeFilter timeFilter,
                                                                       Report.Status reportStatus);
 
-    ListWithCount<Event> listWithPaginationOridnaryUser(int page, int limit, EventDAO.SortType eventListSortType,
+    ListWithCount<Event> listWithPaginationOrdinaryUser(int page, int limit, EventDAO.SortType eventListSortType,
                                                                 EventDAO.SortDirection eventListSortDirection,
                                                                 EventDAO.TimeFilter timeFilter, User currentUser,
                                                                 Boolean showEventParticipated);

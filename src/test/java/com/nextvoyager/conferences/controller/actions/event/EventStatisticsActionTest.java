@@ -49,11 +49,11 @@ public class EventStatisticsActionTest {
         when(session.getAttribute("eventListSortType")).thenReturn(null);
         when(session.getAttribute("eventListSortDirection")).thenReturn(null);
         when(session.getAttribute("eventTimeFilter")).thenReturn(null);
-        when(eventService.listWithPagination(anyInt(), anyInt(), any(EventDAO.SortType.class),
+        when(eventService.listWithPaginationCommon(anyInt(), anyInt(), any(EventDAO.SortType.class),
                 any(EventDAO.SortDirection.class), any(EventDAO.TimeFilter.class))).thenReturn(listResult);
 
         String result = assertDoesNotThrow(() -> action.execute(req,resp));
-        Mockito.verify(eventService, times(1)) .listWithPagination(anyInt(), anyInt(),
+        Mockito.verify(eventService, times(1)) .listWithPaginationCommon(anyInt(), anyInt(),
                 any(EventDAO.SortType.class), any(EventDAO.SortDirection.class), any(EventDAO.TimeFilter.class));
         assertEquals(EVENT_STATISTICS, result);
     }

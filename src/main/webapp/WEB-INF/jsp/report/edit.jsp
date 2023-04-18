@@ -54,11 +54,11 @@
                     </c:if>
                     <div class="input-group">
                         <span class="input-group-text"><fmt:message key="report-edit.description.label"/></span>
-                        <textarea name="description" class="form-control" rows="6 aria-label="Description" >${report.description}</textarea>
+                        <textarea name="description" class="form-control" rows="6" aria-label="Description" >${report.description}</textarea>
                     </div>
                     <input type="hidden" id="reportID" name="reportID" value="${report.id}" />
                     <div class="col-12">
-                        <a role="button" href="${contextPath}/pages/report/view?reportID=${report.id}" class="btn btn-secondary">
+                        <a role="button" href="${contextPath}/pages/event/view?eventID=${report.event.id}" class="btn btn-secondary">
                             <fmt:message key="report-edit.button.back"/>
                         </a>
                         <button type="submit" class="btn btn-primary">
