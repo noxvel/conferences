@@ -22,6 +22,7 @@ public class CancelReportByModerator extends ApprovalOfReportAction {
     @Override
     public void commit(Report report, User speaker) {
         super.commit(report, speaker);
-        ReportNotificationManager.notifySpeaker(speaker, report, NOTIFY_MSG);
+        if (speaker != null)
+            ReportNotificationManager.notifySpeaker(speaker, report, NOTIFY_MSG);
     }
 }

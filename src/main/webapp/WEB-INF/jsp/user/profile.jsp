@@ -90,7 +90,7 @@
         <script>
 
             $(document).ready(function() {
-                $("#registerUser").submit(function( event ) {
+                $("#updateProfile").submit(function( event ) {
                   if (!event.target.checkValidity()) {
                     event.preventDefault()
                     event.stopPropagation()
