@@ -20,7 +20,7 @@
                     <form class="needs-validation" novalidate id="changePassword" action="change-password" method="post">
                         <c:if test="${requestScope.message != null}">
                             <div class="alert alert-danger" role="alert">
-                                ${requestScope.message}
+                                <fmt:message key="${requestScope.message}"/>
                             </div>
                         </c:if>
 

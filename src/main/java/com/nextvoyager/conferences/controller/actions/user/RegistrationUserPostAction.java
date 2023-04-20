@@ -47,7 +47,7 @@ public class RegistrationUserPostAction implements ControllerAction {
         boolean exist = userService.existEmail(emailParam);
 
         if (exist) {
-            req.setAttribute("message", "The email you entered already exists. Please enter a different email.");
+            req.setAttribute("message", "registration.message.exists-email");
             return USER_REGISTRATION;
         } else {
             User user = new User();

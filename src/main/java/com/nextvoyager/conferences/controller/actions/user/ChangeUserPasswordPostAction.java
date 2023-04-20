@@ -45,7 +45,7 @@ public class ChangeUserPasswordPostAction implements ControllerAction {
         user.setPassword(currentPasswordParam);
 
         if (!userService.checkPassword(user)) {
-            req.setAttribute("message", "Please type your current password.");
+            req.setAttribute("message", "change-password.message.type-current-password");
             return USER_CHANGE_PASSWORD;
         } else {
             user.setPassword(newPasswordParam);

@@ -22,7 +22,7 @@
                 <form class="needs-validation" novalidate id="registerUser" action="registration" method="post">
                     <c:if test="${requestScope.message != null}">
                         <div class="alert alert-danger" role="alert">
-                            ${requestScope.message}
+                            <fmt:message key="${requestScope.message}"/>
                         </div>
                     </c:if>
                     <!-- layout with text inputs for the first and last names -->
@@ -33,8 +33,8 @@
                             <fmt:message key="registration.firstname.label"/>
                           </label>
                           <input name="firstName" type="text" id="firstName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
-                          <div class="valid-feedback">
-                            <fmt:message key="registration.firstname.good-feedback"/>
+                          <div class="invalid-feedback">
+                            <fmt:message key="registration.firstname.bad-feedback"/>
                           </div>
                         </div>
                       </div>
@@ -44,8 +44,8 @@
                             <fmt:message key="registration.lastname.label"/>
                           </label>
                           <input name="lastName" type="text" id="lastName" class="form-control" autoComplete="off" pattern="[A-Za-zА-Яа-яёЁЇїІіЄєҐґ\s'-]{1,60}" required/>
-                          <div class="valid-feedback">
-                            <fmt:message key="registration.lastname.good-feedback"/>
+                          <div class="invalid-feedback">
+                            <fmt:message key="registration.lastname.bad-feedback"/>
                           </div>
                         </div>
                       </div>
